@@ -364,142 +364,138 @@
         </section>
 
 
-        <!-- =================================
-             CALENDAR
-             ================================= -->
+<!-- calendar -->
 
-        <section
-            class="calendar-panel"
-            data-calendar-page
-        >
+<section
+    class="calendar-panel nexus-calendar"
+    data-calendar-page
+>
 
-            <div class="calendar-header">
+    <!-- HEADER -->
 
-                <div>
+    <div class="calendar-header">
 
-                    <span class="page-kicker">
-                        EVENT TIME
-                    </span>
+        <div class="calendar-title">
 
-                    <h2
-                        data-calendar="month"
-                    >
-                        August 2026
-                    </h2>
+            <span
+                class="calendar-subtitle"
+                data-calendar="timezone"
+            >
+                DETECTING TIMEZONE...
+            </span>
 
-                </div>
+        </div>
 
 
-                <div class="calendar-navigation">
+        <div class="calendar-navigation">
 
-                    <button
-                        type="button"
-                        data-calendar="previous"
-                        aria-label="Previous month"
-                    >
-                        ‹
-                    </button>
+            <button
+                type="button"
+                data-calendar="previous"
+                aria-label="Previous month"
+            >
+                ‹
+            </button>
 
+            <button
+                type="button"
+                data-calendar="next"
+                aria-label="Next month"
+            >
+                ›
+            </button>
 
-                    <button
-                        type="button"
-                        data-calendar="next"
-                        aria-label="Next month"
-                    >
-                        ›
-                    </button>
+        </div>
 
-                </div>
-
-            </div>
-
-
-            <!-- TIMEZONE -->
-
-            <div class="timezone-controls">
-
-                <button
-                    type="button"
-                    data-calendar-timezone="local"
-                >
-                    LOCAL
-                </button>
+    </div>
 
 
-                <button
-                    type="button"
-                    data-calendar-timezone="tokyo"
-                >
-                    UTC+9
-                </button>
+    <!-- TIMEZONE -->
+
+    <div class="timezone-controls">
+
+        <div class="timezone-buttons">
+
+            <button
+                type="button"
+                data-calendar-timezone="local"
+                class="active"
+            >
+                LOCAL
+            </button>
+
+            <button
+                type="button"
+                data-calendar-timezone="tokyo"
+            >
+                UTC+9
+            </button>
+
+        </div>
+
+        <span class="timezone-label">
+            EVENT CLOCK
+        </span>
+
+    </div>
 
 
-                <span
-                    data-calendar="timezone"
-                >
-                    DETECTING...
-                </span>
+    <!-- WEEKDAYS -->
 
-            </div>
+    <div class="calendar-weekdays">
 
+        <span>SUN</span>
+        <span>MON</span>
+        <span>TUE</span>
+        <span>WED</span>
+        <span>THU</span>
+        <span>FRI</span>
+        <span>SAT</span>
 
-            <!-- WEEK -->
-
-            <div class="calendar-weekdays">
-
-                <span>
-                    SUN
-                </span>
-
-                <span>
-                    MON
-                </span>
-
-                <span>
-                    TUE
-                </span>
-
-                <span>
-                    WED
-                </span>
-
-                <span>
-                    THU
-                </span>
-
-                <span>
-                    FRI
-                </span>
-
-                <span>
-                    SAT
-                </span>
-
-            </div>
+    </div>
 
 
-            <!-- CALENDAR -->
+    <!-- CALENDAR GRID -->
 
-            <div
-                class="calendar-grid"
-                data-calendar="grid"
-            ></div>
-
-
-            <!-- EVENTS -->
-
-            <div
-                class="calendar-events"
-                data-calendar="events"
-            ></div>
+    <div
+        class="calendar-grid"
+        data-calendar="grid"
+    ></div>
 
 
-            <div
-                class="selected-calendar-event"
-                data-calendar="selected-event"
-            ></div>
+    <!-- EVENT AREA -->
 
-        </section>
+    <div class="calendar-event-section">
+
+        <div class="calendar-events-heading">
+
+            <span>
+                UPCOMING EVENTS
+            </span>
+
+            <span>
+                NEXUS / CALENDAR
+            </span>
+
+        </div>
+
+
+        <div
+            class="calendar-events"
+            data-calendar="events"
+        ></div>
+
+    </div>
+
+
+    <!-- SELECTED EVENT -->
+
+    <div
+        class="selected-calendar-event"
+        data-calendar="selected-event"
+    ></div>
+
+</section>
 
 
         <!-- =================================
