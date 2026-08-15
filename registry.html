@@ -1,0 +1,315 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+
+    <meta charset="UTF-8">
+
+    <meta
+        name="viewport"
+        content="width=device-width, initial-scale=1.0"
+    >
+
+    <title>
+        Shonen Nexus — Registry
+    </title>
+
+    <link
+        rel="stylesheet"
+        href="style.css"
+    >
+
+</head>
+
+
+<body>
+
+    <!-- =====================================
+         TOP BAR
+         ===================================== -->
+
+    <header class="topbar">
+
+        <button
+            id="menuToggle"
+            class="menu-toggle"
+            aria-label="Open navigation"
+            aria-expanded="false"
+        >
+
+            <span></span>
+            <span></span>
+            <span></span>
+
+        </button>
+
+
+        <div class="topbar-title">
+
+            <span>
+                SHONEN NEXUS
+            </span>
+
+            <small>
+                REGISTRY
+            </small>
+
+        </div>
+
+    </header>
+
+
+    <div
+        id="navOverlay"
+        class="nav-overlay"
+    ></div>
+
+
+    <!-- =====================================
+         SIDEBAR
+         ===================================== -->
+
+    <aside
+        id="sideNav"
+        class="side-nav"
+    >
+
+        <div class="nav-brand">
+
+            <img
+                src="https://images.chesscomfiles.com/uploads/v1/group/994818.7076cfad.160x160o.be2581528dae@2x.png"
+                alt="Shonen Nexus"
+            >
+
+            <strong>
+                SHONEN NEXUS
+            </strong>
+
+        </div>
+
+
+        <nav>
+
+            <a href="index.html" class="nav-link">
+                HOME
+            </a>
+
+            <a href="notes.html" class="nav-link">
+                NOTES
+            </a>
+
+            <a href="announcements.html" class="nav-link">
+                ANNOUNCEMENTS
+            </a>
+
+            <a href="forums.html" class="nav-link">
+                FORUMS
+            </a>
+
+            <a href="events.html" class="nav-link">
+                EVENTS
+            </a>
+
+            <a href="registry.html" class="nav-link">
+                REGISTRY
+            </a>
+
+            <a href="command.html" class="nav-link">
+                COMMAND
+            </a>
+
+            <a href="social.html" class="nav-link">
+                SOCIAL
+            </a>
+
+        </nav>
+
+    </aside>
+
+
+    <!-- =====================================
+         REGISTRY
+         ===================================== -->
+
+    <main
+        class="page-shell"
+        data-registry-page
+    >
+
+        <section class="page-header">
+
+            <span class="page-kicker">
+                MEMBER DATABASE
+            </span>
+
+            <h1>
+                REGISTRY
+            </h1>
+
+            <p>
+                A public-facing snapshot of the
+                Shonen Nexus membership.
+            </p>
+
+        </section>
+
+
+        <!-- MEMBER COUNT -->
+
+        <section class="member-count-card">
+
+            <div>
+
+                <span>
+                    CURRENT MEMBERS
+                </span>
+
+                <strong
+                    data-registry="member-count"
+                >
+                    —
+                </strong>
+
+            </div>
+
+
+            <div class="registry-live">
+
+                <span class="registry-dot"></span>
+
+                <span
+                    data-registry="status"
+                >
+                    SYNCING...
+                </span>
+
+            </div>
+
+        </section>
+
+
+        <!-- NEWEST MEMBERS -->
+
+        <section class="content-card">
+
+            <div class="section-heading">
+
+                <div>
+
+                    <span class="page-kicker">
+                        RECENT ARRIVALS
+                    </span>
+
+                    <h2>
+                        NEWEST MEMBERS
+                    </h2>
+
+                </div>
+
+
+                <small
+                    data-registry="updated"
+                >
+                    NOT YET UPDATED
+                </small>
+
+            </div>
+
+
+            <div
+                class="registry-newest"
+                data-registry="newest"
+            >
+
+                <div class="registry-loading">
+                    LOADING REGISTRY...
+                </div>
+
+            </div>
+
+        </section>
+
+
+        <!-- RANDOM MEMBER -->
+
+        <section class="content-card random-member-card">
+
+            <span class="page-kicker">
+                RANDOM ENCOUNTER
+            </span>
+
+            <h2>
+                WHO WILL YOU MEET?
+            </h2>
+
+
+            <p>
+                Roll the member dice and discover
+                someone from the Nexus.
+            </p>
+
+
+            <button
+                type="button"
+                class="member-dice"
+                data-action="member-dice"
+            >
+                <span>
+                    🎲
+                </span>
+
+                ROLL MEMBER
+            </button>
+
+
+            <div
+                class="random-member"
+                data-registry="random-result"
+            >
+                READY TO ROLL
+            </div>
+
+
+            <a
+                href="#"
+                class="random-profile"
+                data-registry="random-profile"
+                target="_blank"
+                rel="noopener noreferrer"
+            >
+                OPEN PROFILE ↗
+            </a>
+
+        </section>
+
+
+        <!-- INFO -->
+
+        <section class="content-card">
+
+            <h2>
+                ABOUT THE REGISTRY
+            </h2>
+
+            <p>
+                Member information is pulled from
+                Chess.com's public club API.
+            </p>
+
+            <p>
+                Registry data may not update
+                instantly because public API
+                responses can be cached.
+            </p>
+
+        </section>
+
+    </main>
+
+
+    <script src="script.js"></script>
+    <script src="registry.js"></script>
+
+</body>
+
+</html>

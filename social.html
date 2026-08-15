@@ -1,0 +1,755 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+
+    <meta charset="UTF-8">
+
+    <meta
+        name="viewport"
+        content="width=device-width, initial-scale=1.0"
+    >
+
+    <title>
+        Shonen Nexus — Social
+    </title>
+
+    <link
+        rel="stylesheet"
+        href="style.css"
+    >
+
+</head>
+
+
+<body>
+
+    <!-- =====================================
+         TOP BAR
+         ===================================== -->
+
+    <header class="topbar">
+
+        <button
+            id="menuToggle"
+            class="menu-toggle"
+            aria-label="Open navigation"
+            aria-expanded="false"
+        >
+
+            <span></span>
+            <span></span>
+            <span></span>
+
+        </button>
+
+
+        <div class="topbar-title">
+
+            <span>
+                SHONEN NEXUS
+            </span>
+
+            <small>
+                SOCIAL
+            </small>
+
+        </div>
+
+    </header>
+
+
+    <div
+        id="navOverlay"
+        class="nav-overlay"
+    ></div>
+
+
+    <!-- =====================================
+         SIDEBAR
+         ===================================== -->
+
+    <aside
+        id="sideNav"
+        class="side-nav"
+    >
+
+        <div class="nav-brand">
+
+            <img
+                src="https://images.chesscomfiles.com/uploads/v1/group/994818.7076cfad.160x160o.be2581528dae@2x.png"
+                alt="Shonen Nexus"
+            >
+
+            <strong>
+                SHONEN NEXUS
+            </strong>
+
+        </div>
+
+
+        <nav>
+
+            <a href="index.html" class="nav-link">
+                HOME
+            </a>
+
+            <a href="notes.html" class="nav-link">
+                NOTES
+            </a>
+
+            <a href="announcements.html" class="nav-link">
+                ANNOUNCEMENTS
+            </a>
+
+            <a href="forums.html" class="nav-link">
+                FORUMS
+            </a>
+
+            <a href="events.html" class="nav-link">
+                EVENTS
+            </a>
+
+            <a href="registry.html" class="nav-link">
+                REGISTRY
+            </a>
+
+            <a href="command.html" class="nav-link">
+                COMMAND
+            </a>
+
+            <a href="social.html" class="nav-link">
+                SOCIAL
+            </a>
+
+        </nav>
+
+    </aside>
+
+
+    <!-- =====================================
+         SCANLINE
+         ===================================== -->
+
+    <div
+        id="scanlineOverlay"
+        class="scanline-overlay"
+        aria-hidden="true"
+    ></div>
+
+
+    <!-- =====================================
+         MAIN
+         ===================================== -->
+
+    <main class="page-shell">
+
+        <section class="page-header">
+
+            <span class="page-kicker">
+                SOCIAL / CONTROL
+            </span>
+
+            <h1>
+                NEXUS SOCIAL
+            </h1>
+
+            <p>
+                Music, time, themes, and auxiliary
+                controls.
+            </p>
+
+        </section>
+
+
+        <!-- =================================
+             RADIO
+             ================================= -->
+
+        <section
+            class="radio-panel"
+            data-radio-player
+        >
+
+            <div class="radio-header">
+
+                <div>
+
+                    <span class="page-kicker">
+                        BROADCAST
+                    </span>
+
+                    <h2>
+                        SHONEN NEXUS RADIO
+                    </h2>
+
+                </div>
+
+
+                <span
+                    data-radio="status"
+                    class="radio-status"
+                >
+                    READY
+                </span>
+
+            </div>
+
+
+            <!-- NOW PLAYING -->
+
+            <div class="radio-now-playing">
+
+                <div class="radio-logo">
+
+                    <img
+                        src="https://images.chesscomfiles.com/uploads/v1/group/994818.7076cfad.160x160o.be2581528dae@2x.png"
+                        alt="Shonen Nexus Radio"
+                    >
+
+                </div>
+
+
+                <div class="radio-track-info">
+
+                    <span>
+                        NOW PLAYING
+                    </span>
+
+                    <strong
+                        data-radio="title"
+                    >
+                        Loading...
+                    </strong>
+
+                    <small
+                        data-radio="artist"
+                    >
+                        Shonen Nexus Radio
+                    </small>
+
+                    <small
+                        data-radio="track-number"
+                    >
+                        0 / 0
+                    </small>
+
+                </div>
+
+            </div>
+
+
+            <!-- PROGRESS -->
+
+            <div class="radio-progress">
+
+                <span
+                    data-radio="current-time"
+                >
+                    0:00
+                </span>
+
+
+                <input
+                    type="range"
+                    min="0"
+                    max="100"
+                    value="0"
+                    data-radio="progress"
+                    aria-label="Track progress"
+                >
+
+
+                <span
+                    data-radio="duration"
+                >
+                    0:00
+                </span>
+
+            </div>
+
+
+            <!-- CONTROLS -->
+
+            <div class="radio-controls">
+
+                <button
+                    type="button"
+                    data-radio="shuffle"
+                    aria-label="Shuffle"
+                >
+                    ⤨
+                </button>
+
+
+                <button
+                    type="button"
+                    data-radio="previous"
+                    aria-label="Previous"
+                >
+                    |◀
+                </button>
+
+
+                <button
+                    type="button"
+                    data-radio="play"
+                    class="radio-play"
+                    aria-label="Play"
+                >
+                    ▶
+                </button>
+
+
+                <button
+                    type="button"
+                    data-radio="next"
+                    aria-label="Next"
+                >
+                    ▶|
+                </button>
+
+
+                <button
+                    type="button"
+                    data-radio="repeat"
+                    aria-label="Repeat"
+                >
+                    ↻
+                </button>
+
+            </div>
+
+
+            <!-- VOLUME -->
+
+            <div class="radio-volume">
+
+                <span>
+                    VOL
+                </span>
+
+                <input
+                    type="range"
+                    min="0"
+                    max="100"
+                    value="75"
+                    data-radio="volume"
+                    aria-label="Volume"
+                >
+
+            </div>
+
+
+            <!-- PLAYLIST -->
+
+            <div class="radio-playlist-heading">
+
+                <span>
+                    PLAYLIST
+                </span>
+
+                <span>
+                    LOCAL ARCHIVE
+                </span>
+
+            </div>
+
+
+            <div
+                class="radio-playlist"
+                data-radio="playlist"
+            ></div>
+
+        </section>
+
+
+        <!-- =================================
+             CALENDAR
+             ================================= -->
+
+        <section
+            class="calendar-panel"
+            data-calendar-page
+        >
+
+            <div class="calendar-header">
+
+                <div>
+
+                    <span class="page-kicker">
+                        EVENT TIME
+                    </span>
+
+                    <h2
+                        data-calendar="month"
+                    >
+                        August 2026
+                    </h2>
+
+                </div>
+
+
+                <div class="calendar-navigation">
+
+                    <button
+                        type="button"
+                        data-calendar="previous"
+                        aria-label="Previous month"
+                    >
+                        ‹
+                    </button>
+
+
+                    <button
+                        type="button"
+                        data-calendar="next"
+                        aria-label="Next month"
+                    >
+                        ›
+                    </button>
+
+                </div>
+
+            </div>
+
+
+            <!-- TIMEZONE -->
+
+            <div class="timezone-controls">
+
+                <button
+                    type="button"
+                    data-calendar-timezone="local"
+                >
+                    LOCAL
+                </button>
+
+
+                <button
+                    type="button"
+                    data-calendar-timezone="tokyo"
+                >
+                    UTC+9
+                </button>
+
+
+                <span
+                    data-calendar="timezone"
+                >
+                    DETECTING...
+                </span>
+
+            </div>
+
+
+            <!-- WEEK -->
+
+            <div class="calendar-weekdays">
+
+                <span>
+                    SUN
+                </span>
+
+                <span>
+                    MON
+                </span>
+
+                <span>
+                    TUE
+                </span>
+
+                <span>
+                    WED
+                </span>
+
+                <span>
+                    THU
+                </span>
+
+                <span>
+                    FRI
+                </span>
+
+                <span>
+                    SAT
+                </span>
+
+            </div>
+
+
+            <!-- CALENDAR -->
+
+            <div
+                class="calendar-grid"
+                data-calendar="grid"
+            ></div>
+
+
+            <!-- EVENTS -->
+
+            <div
+                class="calendar-events"
+                data-calendar="events"
+            ></div>
+
+
+            <div
+                class="selected-calendar-event"
+                data-calendar="selected-event"
+            ></div>
+
+        </section>
+
+
+        <!-- =================================
+             AUXILIARY CONTROLS
+             ================================= -->
+
+        <section class="content-card">
+
+            <div class="section-heading">
+
+                <div>
+
+                    <span class="page-kicker">
+                        SYSTEM
+                    </span>
+
+                    <h2>
+                        AUXILIARY CONTROLS
+                    </h2>
+
+                </div>
+
+            </div>
+
+
+            <div class="control-grid">
+
+
+                <button
+                    type="button"
+                    data-action="scanline"
+                >
+                    <span>
+                        ╱╱
+                    </span>
+
+                    SCANLINE
+                </button>
+
+
+                <button
+                    type="button"
+                    data-action="copy-invite"
+                >
+                    <span>
+                        ⧉
+                    </span>
+
+                    COPY INVITE
+                </button>
+
+
+                <button
+                    type="button"
+                    onclick="scrollToTop()"
+                >
+                    <span>
+                        ↑
+                    </span>
+
+                    GO TOP
+                </button>
+
+
+                <button
+                    type="button"
+                    onclick="scrollToBottom()"
+                >
+                    <span>
+                        ↓
+                    </span>
+
+                    GO BOTTOM
+                </button>
+
+
+                <button
+                    type="button"
+                    data-action="focus"
+                >
+                    <span>
+                        ◎
+                    </span>
+
+                    FOCUS
+                </button>
+
+
+                <button
+                    type="button"
+                    data-action="welcome"
+                >
+                    <span>
+                        ✦
+                    </span>
+
+                    WELCOME
+                </button>
+
+
+            </div>
+
+        </section>
+
+
+        <!-- =================================
+             THEMES
+             ================================= -->
+
+        <section class="content-card">
+
+            <div class="section-heading">
+
+                <div>
+
+                    <span class="page-kicker">
+                        VISUAL SYSTEM
+                    </span>
+
+                    <h2>
+                        THEMES
+                    </h2>
+
+                </div>
+
+            </div>
+
+
+            <div class="theme-grid">
+
+
+                <button
+                    type="button"
+                    data-theme="default"
+                >
+                    NEXUS
+                </button>
+
+
+                <button
+                    type="button"
+                    data-theme="windbreaker"
+                >
+                    WIND BREAKER
+                </button>
+
+
+                <button
+                    type="button"
+                    data-theme="cote"
+                >
+                    COTE
+                </button>
+
+
+                <button
+                    type="button"
+                    data-theme="bleach"
+                >
+                    BLEACH
+                </button>
+
+
+                <button
+                    type="button"
+                    data-theme="jjk"
+                >
+                    JJK
+                </button>
+
+
+                <button
+                    type="button"
+                    data-theme="naruto"
+                >
+                    NARUTO
+                </button>
+
+
+                <button
+                    type="button"
+                    data-theme="onepiece"
+                >
+                    ONE PIECE
+                </button>
+
+
+            </div>
+
+        </section>
+
+
+        <!-- =================================
+             INVITE
+             ================================= -->
+
+        <section class="content-card invite-card">
+
+            <span class="page-kicker">
+                RECRUITMENT
+            </span>
+
+            <h2>
+                BRING SOMEONE INTO THE NEXUS
+            </h2>
+
+            <p>
+                Share the club with another anime
+                fan, chess player, or both.
+            </p>
+
+
+            <button
+                type="button"
+                data-action="copy-invite"
+                class="primary-button"
+            >
+                COPY CLUB INVITE
+            </button>
+
+        </section>
+
+
+        <!-- =================================
+             FOOTER
+             ================================= -->
+
+        <footer class="page-footer">
+
+            <span>
+                SHONEN NEXUS
+            </span>
+
+            <span>
+                ANIME × CHESS × COMMUNITY
+            </span>
+
+        </footer>
+
+    </main>
+
+
+    <!-- =====================================
+         SCRIPTS
+         ===================================== -->
+
+    <script src="script.js"></script>
+    <script src="radio.js"></script>
+    <script src="calendar.js"></script>
+
+</body>
+
+</html>
