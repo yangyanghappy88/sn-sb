@@ -22,7 +22,7 @@ const SHONEN_NEXUS = {
 };
 
 
-/* dom helpers */
+/* dom */
 
 const $ = (selector, parent = document) =>
     parent.querySelector(selector);
@@ -31,7 +31,7 @@ const $$ = (selector, parent = document) =>
     [...parent.querySelectorAll(selector)];
 
 
-/* page detection */
+/* page */
 
 const currentPage =
     window.location.pathname
@@ -39,18 +39,6 @@ const currentPage =
         .pop()
         .replace(".html", "")
         .toLowerCase() || "index";
-
-
-const PAGE = {
-    home: currentPage === "index",
-    notes: currentPage === "notes",
-    announcements: currentPage === "announcements",
-    forums: currentPage === "forums",
-    events: currentPage === "events",
-    registry: currentPage === "registry",
-    command: currentPage === "command",
-    social: currentPage === "social"
-};
 
 
 /* nav */
@@ -71,18 +59,19 @@ function initNavigation() {
 
         sideNav.classList.add("open");
 
-        if (navOverlay) {
-            navOverlay.classList.add("visible");
-        }
+        menuToggle.classList.add("active");
 
         menuToggle.setAttribute(
             "aria-expanded",
             "true"
         );
 
-        document.body.classList.add(
-            "nav-open"
-        );
+        if (navOverlay) {
+            navOverlay.classList.add("active");
+        }
+
+        document.body.classList.add("nav-open");
+
     }
 
 
@@ -90,18 +79,19 @@ function initNavigation() {
 
         sideNav.classList.remove("open");
 
-        if (navOverlay) {
-            navOverlay.classList.remove("visible");
-        }
+        menuToggle.classList.remove("active");
 
         menuToggle.setAttribute(
             "aria-expanded",
             "false"
         );
 
-        document.body.classList.remove(
-            "nav-open"
-        );
+        if (navOverlay) {
+            navOverlay.classList.remove("active");
+        }
+
+        document.body.classList.remove("nav-open");
+
     }
 
 
@@ -116,11 +106,15 @@ function initNavigation() {
     }
 
 
+    /* Hamburger */
+
     menuToggle.addEventListener(
         "click",
         toggleMenu
     );
 
+
+    /* X button */
 
     if (navClose) {
 
@@ -132,6 +126,8 @@ function initNavigation() {
     }
 
 
+    /* Dark overlay */
+
     if (navOverlay) {
 
         navOverlay.addEventListener(
@@ -142,31 +138,65 @@ function initNavigation() {
     }
 
 
-    /*
-     * Close the drawer after selecting
-     * a navigation link.
-     */
+    /* Navigation links */
 
     $$(".nav-link").forEach(link => {
 
         link.addEventListener(
             "click",
-            closeMenu
+            () => {
+
+                /*
+                 * On mobile the menu should close.
+                 * Desktop CSS can simply keep it visible.
+                 */
+
+                if (
+                    window.matchMedia(
+                        "(max-width: 899px)"
+                    ).matches
+                ) {
+
+                    closeMenu();
+
+                }
+
+            }
         );
 
     });
 
 
-    /*
-     * ESC closes the navigation.
-     */
+    /* Escape */
 
     document.addEventListener(
         "keydown",
         event => {
 
             if (event.key === "Escape") {
+
                 closeMenu();
+
+            }
+
+        }
+    );
+
+
+    /*
+     * Keep the menu sane when resizing.
+     */
+
+    window.addEventListener(
+        "resize",
+        () => {
+
+            if (
+                window.innerWidth >= 900
+            ) {
+
+                closeMenu();
+
             }
 
         }
@@ -175,16 +205,13 @@ function initNavigation() {
 }
 
 
-/* ============================================
-   ACTIVE NAVIGATION LINK
-   ============================================ */
+/* =========================================================
+   ACTIVE NAVIGATION
+   ========================================================= */
 
 function initActiveNavigation() {
 
-    const navLinks =
-        $$(".nav-link");
-
-    navLinks.forEach(link => {
+    $$(".nav-link").forEach(link => {
 
         const href =
             link.getAttribute("href");
@@ -212,9 +239,9 @@ function initActiveNavigation() {
 }
 
 
-/* ============================================
+/* =========================================================
    SCROLL CONTROLS
-   ============================================ */
+   ========================================================= */
 
 function scrollToTop() {
 
@@ -235,6 +262,7 @@ function scrollToBottom() {
 
 }
 
+
 window.scrollToTop =
     scrollToTop;
 
@@ -242,13 +270,13 @@ window.scrollToBottom =
     scrollToBottom;
 
 
-/* ============================================
-   SCROLL POSITION
-   ============================================ */
+/* =========================================================
+   SCROLL STATE
+   ========================================================= */
 
 function initScrollState() {
 
-    function update() {
+    function updateScrollState() {
 
         const atTop =
             window.scrollY <= 10;
@@ -274,19 +302,19 @@ function initScrollState() {
 
     window.addEventListener(
         "scroll",
-        update,
+        updateScrollState,
         { passive: true }
     );
 
 
-    update();
+    updateScrollState();
 
 }
 
 
-/* ============================================
-   SCANLINE SYSTEM
-   ============================================ */
+/* =========================================================
+   SCANLINE
+   ========================================================= */
 
 function initScanline() {
 
@@ -297,10 +325,6 @@ function initScanline() {
         return;
     }
 
-
-    /*
-     * Restore previous setting.
-     */
 
     const saved =
         localStorage.getItem(
@@ -316,14 +340,6 @@ function initScanline() {
 
     }
 
-
-    /*
-     * Any button using:
-     *
-     * data-action="scanline"
-     *
-     * will toggle the effect.
-     */
 
     $$('[data-action="scanline"]')
         .forEach(button => {
@@ -351,9 +367,9 @@ function initScanline() {
 }
 
 
-/* ============================================
+/* =========================================================
    FOCUS MODE
-   ============================================ */
+   ========================================================= */
 
 function initFocusMode() {
 
@@ -364,13 +380,15 @@ function initFocusMode() {
                 "click",
                 () => {
 
-                    document.body.classList.toggle(
-                        "focus-mode"
-                    );
+                    const enabled =
+                        document.body.classList.toggle(
+                            "focus-mode"
+                        );
 
 
                     button.classList.toggle(
-                        "active"
+                        "active",
+                        enabled
                     );
 
                 }
@@ -381,9 +399,9 @@ function initFocusMode() {
 }
 
 
-/* ============================================
+/* =========================================================
    COPY INVITE LINK
-   ============================================ */
+   ========================================================= */
 
 async function copyInviteLink(button = null) {
 
@@ -394,36 +412,32 @@ async function copyInviteLink(button = null) {
         );
 
 
-        if (button) {
-
-            const original =
-                button.dataset.originalText ||
-                button.textContent;
-
-
-            button.dataset.originalText =
-                original;
-
-
-            button.textContent =
-                "COPIED ✓";
-
-
-            setTimeout(() => {
-
-                button.textContent =
-                    original;
-
-            }, 1800);
-
+        if (!button) {
+            return;
         }
 
-    } catch (error) {
 
-        /*
-         * Clipboard API may be unavailable
-         * in certain iframe/security contexts.
-         */
+        const original =
+            button.dataset.originalText ||
+            button.textContent;
+
+
+        button.dataset.originalText =
+            original;
+
+
+        button.textContent =
+            "COPIED ✓";
+
+
+        setTimeout(() => {
+
+            button.textContent =
+                original;
+
+        }, 1800);
+
+    } catch (error) {
 
         console.error(
             "Could not copy invite link:",
@@ -439,9 +453,9 @@ window.copyInviteLink =
     copyInviteLink;
 
 
-/* ============================================
-   AUTO-BIND INVITE BUTTONS
-   ============================================ */
+/* =========================================================
+   INVITE BUTTONS
+   ========================================================= */
 
 function initInviteButtons() {
 
@@ -458,15 +472,11 @@ function initInviteButtons() {
 }
 
 
-/* ============================================
+/* =========================================================
    WELCOME SCREEN
-   ============================================ */
+   ========================================================= */
 
 function createWelcomeScreen() {
-
-    /*
-     * Don't create duplicates.
-     */
 
     if ($("#welcomeScreen")) {
         return;
@@ -480,7 +490,6 @@ function createWelcomeScreen() {
     screen.id =
         "welcomeScreen";
 
-
     screen.className =
         "welcome-screen";
 
@@ -489,17 +498,11 @@ function createWelcomeScreen() {
 
         <div class="welcome-content">
 
-            <p>
-                SHONEN NEXUS
-            </p>
+            <p>SHONEN NEXUS</p>
 
-            <h2>
-                WELCOME TO THE CLUB!
-            </h2>
+            <h2>WELCOME TO THE CLUB!</h2>
 
-            <p>
-                ANIME × CHESS × COMMUNITY
-            </p>
+            <p>ANIME × CHESS × COMMUNITY</p>
 
         </div>
 
@@ -513,10 +516,6 @@ function createWelcomeScreen() {
 }
 
 
-/* ============================================
-   WELCOME EFFECT
-   ============================================ */
-
 function showWelcome() {
 
     createWelcomeScreen();
@@ -525,10 +524,22 @@ function showWelcome() {
     const screen =
         $("#welcomeScreen");
 
-
     if (!screen) {
         return;
     }
+
+
+    screen.classList.remove(
+        "active"
+    );
+
+
+    /*
+     * Force reflow so the animation
+     * can replay every time.
+     */
+
+    void screen.offsetWidth;
 
 
     screen.classList.add(
@@ -536,17 +547,19 @@ function showWelcome() {
     );
 
 
-    /*
-     * Automatically dismiss.
-     */
+    clearTimeout(
+        screen._welcomeTimeout
+    );
 
-    setTimeout(() => {
 
-        screen.classList.remove(
-            "active"
-        );
+    screen._welcomeTimeout =
+        setTimeout(() => {
 
-    }, 2400);
+            screen.classList.remove(
+                "active"
+            );
+
+        }, 2400);
 
 }
 
@@ -555,9 +568,9 @@ window.showWelcome =
     showWelcome;
 
 
-/* ============================================
-   WELCOME BUTTON
-   ============================================ */
+/* =========================================================
+   WELCOME BUTTONS
+   ========================================================= */
 
 function initWelcomeButton() {
 
@@ -574,16 +587,14 @@ function initWelcomeButton() {
 }
 
 
-/* ============================================
+/* =========================================================
    THEME SYSTEM
-   ============================================ */
+   ========================================================= */
 
 function setTheme(theme) {
 
     if (
-        !SHONEN_NEXUS.themes.includes(
-            theme
-        )
+        !SHONEN_NEXUS.themes.includes(theme)
     ) {
 
         theme = "default";
@@ -592,7 +603,7 @@ function setTheme(theme) {
 
 
     /*
-     * Remove previous theme classes.
+     * Remove all theme classes.
      */
 
     SHONEN_NEXUS.themes.forEach(
@@ -607,17 +618,18 @@ function setTheme(theme) {
 
 
     /*
-     * Apply new theme.
+     * Default theme doesn't
+     * actually need a class.
      */
 
-    document.body.classList.add(
-        `theme-${theme}`
-    );
+    if (theme !== "default") {
 
+        document.body.classList.add(
+            `theme-${theme}`
+        );
 
-    /*
-     * Persist theme.
-     */
+    }
+
 
     localStorage.setItem(
         "shonen-theme",
@@ -626,7 +638,7 @@ function setTheme(theme) {
 
 
     /*
-     * Update theme buttons.
+     * Update theme controls.
      */
 
     $$("[data-theme]").forEach(
@@ -647,9 +659,9 @@ window.setTheme =
     setTheme;
 
 
-/* ============================================
+/* =========================================================
    INITIALIZE THEME
-   ============================================ */
+   ========================================================= */
 
 function initTheme() {
 
@@ -662,14 +674,8 @@ function initTheme() {
     setTheme(saved);
 
 
-    /*
-     * Theme buttons can simply use:
-     *
-     * data-theme="bleach"
-     */
-
-    $$("[data-theme]").forEach(
-        button => {
+    $$("[data-theme]")
+        .forEach(button => {
 
             button.addEventListener(
                 "click",
@@ -682,15 +688,14 @@ function initTheme() {
                 }
             );
 
-        }
-    );
+        });
 
 }
 
 
-/* ============================================
+/* =========================================================
    KEYBOARD SHORTCUTS
-   ============================================ */
+   ========================================================= */
 
 function initKeyboardShortcuts() {
 
@@ -698,28 +703,28 @@ function initKeyboardShortcuts() {
         "keydown",
         event => {
 
-            /*
-             * Don't hijack typing fields.
-             */
+            const active =
+                document.activeElement;
 
             const tag =
-                document.activeElement?.tagName;
+                active?.tagName;
 
+
+            /*
+             * Don't interfere with typing.
+             */
 
             if (
                 tag === "INPUT" ||
                 tag === "TEXTAREA" ||
-                tag === "SELECT"
+                tag === "SELECT" ||
+                active?.isContentEditable
             ) {
 
                 return;
 
             }
 
-
-            /*
-             * Home
-             */
 
             if (event.key === "Home") {
 
@@ -730,10 +735,6 @@ function initKeyboardShortcuts() {
             }
 
 
-            /*
-             * End
-             */
-
             if (event.key === "End") {
 
                 event.preventDefault();
@@ -742,10 +743,6 @@ function initKeyboardShortcuts() {
 
             }
 
-
-            /*
-             * G = Welcome
-             */
 
             if (
                 event.key.toLowerCase() === "g"
@@ -761,9 +758,9 @@ function initKeyboardShortcuts() {
 }
 
 
-/* ============================================
-   EXTERNAL CHESS.COM LINK
-   ============================================ */
+/* =========================================================
+   CLUB LINKS
+   ========================================================= */
 
 function initClubLinks() {
 
@@ -778,9 +775,9 @@ function initClubLinks() {
 }
 
 
-/* ============================================
-   PAGE INITIALIZATION
-   ============================================ */
+/* =========================================================
+   INITIALIZATION
+   ========================================================= */
 
 function init() {
 
@@ -807,9 +804,9 @@ function init() {
 }
 
 
-/* ============================================
+/* =========================================================
    START
-   ============================================ */
+   ========================================================= */
 
 if (
     document.readyState === "loading"
@@ -817,7 +814,8 @@ if (
 
     document.addEventListener(
         "DOMContentLoaded",
-        init
+        init,
+        { once: true }
     );
 
 } else {
