@@ -1,1739 +1,188 @@
 :root {
-    --bg: #07111f;
-    --bg-secondary: #0b1728;
-    --panel: #0d1b2d;
-    --panel-light: #12243a;
-
-    --text: #e9f3ff;
-    --muted: #8193aa;
-
-    --accent: #43a5ff;
-    --accent-bright: #73c4ff;
-
-    --border: rgba(112, 180, 255, 0.18);
-
-    --danger: #ff5364;
-    --success: #52e39a;
-    --warning: #ffc857;
-
-    --shadow: 0 12px 35px rgba(0, 0, 0, 0.35);
-
-    --radius: 14px;
-
-    --sidebar-width: 280px;
-
-    --transition: 180ms ease;
+  --bg: #080808;
+  --bg-soft: #0d0d0d;
+  --panel: #101010;
+  --panel-hover: #151515;
+  --border: #292929;
+  --border-red: #551111;
+  --red: #a51d1d;
+  --red-bright: #d62b2b;
+  --red-dark: #3d1111;
+  --text: #d8d8d8;
+  --text-soft: #999;
+  --text-muted: #555;
+  --white: #f2f2f2;
+  --shadow: rgba(0, 0, 0, .45);
+  --radius: 4px;
 }
 
-/* =========================================================
-   RESET
-   ========================================================= */
-
 * {
-    box-sizing: border-box;
+  box-sizing: border-box;
 }
 
 html {
-    scroll-behavior: smooth;
+  scroll-behavior: smooth;
+  background: var(--bg);
 }
 
 body {
-    margin: 0;
-    min-height: 100vh;
-
-    background:
-        radial-gradient(
-            circle at 20% 0%,
-            rgba(50, 130, 210, 0.12),
-            transparent 35%
-        ),
-        var(--bg);
-
-    color: var(--text);
-
-    font-family:
-        Inter,
-        system-ui,
-        -apple-system,
-        BlinkMacSystemFont,
-        "Segoe UI",
-        sans-serif;
-
-    line-height: 1.55;
+  margin: 0;
+  min-width: 0;
+  background:
+    radial-gradient(
+      circle at 50% 0%,
+      rgba(165, 29, 29, .08),
+      transparent 42%
+    ),
+    var(--bg);
+  color: var(--text);
+  font-family:
+    "Rajdhani",
+    "Segoe UI",
+    Arial,
+    sans-serif;
+  font-size: 14px;
+  overflow-x: hidden;
 }
 
 button,
-a,
-input {
-    font: inherit;
+input,
+select,
+textarea {
+  font: inherit;
 }
 
 button {
-    color: inherit;
+  color: inherit;
 }
 
-a {
-    color: inherit;
-    text-decoration: none;
-}
-
-img {
-    max-width: 100%;
-    display: block;
-}
-
-h1,
-h2,
-h3,
-p {
-    margin-top: 0;
+button:focus-visible {
+  outline: 1px solid var(--red-bright);
+  outline-offset: 2px;
 }
 
 
 /* =========================================================
-   MOBILE TOP BAR
+   CALENDAR
    ========================================================= */
 
-.topbar {
-    display: none;
-
-    position: sticky;
-    top: 0;
-    z-index: 900;
-
-    height: 64px;
-
-    align-items: center;
-    gap: 14px;
-
-    padding: 0 16px;
-
-    background: rgba(7, 17, 31, 0.92);
-
-    backdrop-filter: blur(14px);
-
-    border-bottom: 1px solid var(--border);
+[data-calendar-page] {
+  width: 100%;
+  max-width: 760px;
+  margin: 0 auto;
+  padding: 14px;
 }
 
 
-/* Chess.com/mobile brand */
+/* Header */
 
-.club-brand {
-    display: flex;
-    align-items: center;
-    gap: 10px;
+.header-top {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  gap: 10px;
+  flex-wrap: wrap;
 }
 
-.club-brand img {
-    width: 38px;
-    height: 38px;
-
-    border-radius: 10px;
-
-    object-fit: cover;
+.academy {
+  color: var(--white);
+  font-size: 12px;
+  font-weight: 700;
+  letter-spacing: 2px;
+  text-transform: uppercase;
 }
 
-.brand-text {
-    display: flex;
-    flex-direction: column;
-    line-height: 1.05;
+.system {
+  color: var(--text-muted);
+  font-family: monospace;
+  font-size: 8px;
+  letter-spacing: 1.5px;
+  text-transform: uppercase;
 }
 
-.brand-text strong {
-    font-size: 12px;
-    letter-spacing: 0.12em;
+
+/* Month navigation */
+
+.month-nav {
+  display: grid;
+  grid-template-columns: 36px minmax(0, 1fr) 36px;
+  align-items: center;
+  gap: 8px;
+  margin-top: 14px;
 }
 
-.brand-text small {
-    margin-top: 4px;
+.month-nav h1 {
+  margin: 0;
+  color: var(--white);
+  font-size: clamp(20px, 5vw, 30px);
+  font-weight: 600;
+  letter-spacing: 3px;
+  text-align: center;
+  text-transform: uppercase;
+}
 
-    color: var(--muted);
+.nav-btn {
+  width: 36px;
+  height: 36px;
+  padding: 0;
+  border: 1px solid var(--border);
+  border-radius: var(--radius);
+  background: #0d0d0d;
+  color: var(--text-soft);
+  cursor: pointer;
+  transition:
+    background .2s ease,
+    border-color .2s ease,
+    color .2s ease,
+    transform .2s ease;
+}
 
-    font-size: 8px;
-    letter-spacing: 0.16em;
+.nav-btn:hover {
+  background: var(--red-dark);
+  border-color: var(--red);
+  color: var(--white);
+}
+
+.nav-btn:active {
+  transform: scale(.94);
 }
 
 
 /* =========================================================
-   HAMBURGER
+   TIME PANEL
    ========================================================= */
 
-.menu-toggle {
-    width: 42px;
-    height: 42px;
-
-    display: flex;
-    flex-direction: column;
-    justify-content: center;
-    align-items: center;
-
-    gap: 5px;
-
-    border: 1px solid var(--border);
-    border-radius: 10px;
-
-    background: rgba(255, 255, 255, 0.025);
-
-    cursor: pointer;
-
-    transition: var(--transition);
-}
-
-.menu-toggle:hover {
-    background: rgba(67, 165, 255, 0.1);
-    border-color: rgba(67, 165, 255, 0.4);
-}
-
-.menu-toggle span {
-    width: 18px;
-    height: 2px;
-
-    border-radius: 10px;
-
-    background: var(--accent-bright);
-
-    transition: var(--transition);
-}
-
-.menu-toggle.active span:nth-child(1) {
-    transform: translateY(7px) rotate(45deg);
-}
-
-.menu-toggle.active span:nth-child(2) {
-    opacity: 0;
-}
-
-.menu-toggle.active span:nth-child(3) {
-    transform: translateY(-7px) rotate(-45deg);
-}
-
-
-/* =========================================================
-   SIDEBAR
-   ========================================================= */
-
-.side-nav {
-    position: fixed;
-
-    top: 0;
-    left: 0;
-
-    z-index: 1000;
-
-    width: var(--sidebar-width);
-    height: 100vh;
-
-    padding: 22px 15px;
-
-    background:
-        linear-gradient(
-            180deg,
-            #09192b,
-            #06101c
-        );
-
-    border-right: 1px solid var(--border);
-
-    box-shadow:
-        18px 0 50px rgba(0, 0, 0, 0.25);
-
-    overflow-y: auto;
-    overflow-x: hidden;
-
-    /*
-       Desktop:
-       sidebar is visible.
-    */
-    transform: translateX(0);
-
-    transition: transform 240ms ease;
-}
-
-
-/* =========================================================
-   SIDEBAR HEADER
-   ========================================================= */
-
-.nav-header {
-    display: flex;
-
-    align-items: center;
-    justify-content: space-between;
-
-    padding:
-        0 4px 22px;
-
-    border-bottom: 1px solid var(--border);
-
-    color: var(--text);
-
-    font-size: 13px;
-    font-weight: 800;
-
-    letter-spacing: 0.12em;
-}
-
-.nav-close {
-    display: none;
-
-    width: 38px;
-    height: 38px;
-
-    border: 1px solid var(--border);
-    border-radius: 8px;
-
-    background: rgba(255, 255, 255, 0.03);
-
-    color: var(--muted);
-
-    font-size: 22px;
-
-    cursor: pointer;
-}
-
-
-/* =========================================================
-   SIDEBAR LINKS
-   ========================================================= */
-
-.nav-links {
-    display: flex;
-
-    flex-direction: column;
-
-    gap: 5px;
-
-    margin-top: 18px;
-}
-
-.nav-link {
-    display: flex;
-
-    align-items: center;
-
-    gap: 12px;
-
-    padding: 13px;
-
-    border: 1px solid transparent;
-
-    border-radius: 10px;
-
-    color: var(--muted);
-
-    font-size: 11px;
-    font-weight: 700;
-
-    letter-spacing: 0.1em;
-
-    transition:
-        background var(--transition),
-        border-color var(--transition),
-        color var(--transition);
-}
-
-.nav-link span:first-child {
-    width: 18px;
-
-    text-align: center;
-
-    color: var(--accent-bright);
-
-    font-size: 14px;
-}
-
-.nav-link:hover,
-.nav-link.active {
-    color: var(--text);
-
-    background:
-        rgba(67, 165, 255, 0.08);
-
-    border-color:
-        rgba(67, 165, 255, 0.18);
-}
-
-.nav-divider {
-    height: 1px;
-
-    margin: 10px 4px;
-
-    background: var(--border);
-}
-
-
-/* =========================================================
-   SIDEBAR FOOTER
-   ========================================================= */
-
-.nav-footer {
-    display: flex;
-
-    flex-direction: column;
-
-    gap: 4px;
-
-    margin-top: 28px;
-
-    padding:
-        18px 4px 4px;
-
-    border-top: 1px solid var(--border);
-
-    color: var(--muted);
-
-    font-size: 9px;
-    font-weight: 700;
-
-    letter-spacing: 0.1em;
-}
-
-.nav-footer small {
-    color: #52667d;
-
-    font-size: 7px;
-
-    letter-spacing: 0.14em;
-}
-
-
-/* =========================================================
-   OVERLAY
-   ========================================================= */
-
-.nav-overlay {
-    position: fixed;
-
-    inset: 0;
-
-    z-index: 950;
-
-    background: rgba(0, 0, 0, 0.58);
-
-    opacity: 0;
-    visibility: hidden;
-
-    transition:
-        opacity var(--transition),
-        visibility var(--transition);
-}
-
-.nav-overlay.active {
-    opacity: 1;
-    visibility: visible;
-}
-
-
-/* =========================================================
-   MAIN PAGE
-   ========================================================= */
-
-.page {
-    width: 100%;
-
-    max-width: 820px;
-
-    /*
-       Important:
-       desktop content starts after sidebar.
-    */
-    margin-left: var(--sidebar-width);
-
-    margin-right: auto;
-
-    padding:
-        48px 24px 80px;
-}
-
-
-/* =========================================================
-   HERO
-   ========================================================= */
-
-.hero {
-    display: flex;
-
-    align-items: center;
-
-    gap: 22px;
-
-    padding:
-        20px 2px 35px;
-}
-
-.hero-logo img {
-    width: 82px;
-    height: 82px;
-
-    border-radius: 18px;
-
-    object-fit: cover;
-
-    box-shadow:
-        0 0 30px rgba(67, 165, 255, 0.18);
-}
-
-.hero-content {
-    min-width: 0;
-}
-
-.eyebrow {
-    margin-bottom: 8px;
-
-    color: var(--accent-bright);
-
-    font-size: 9px;
-    font-weight: 800;
-
-    letter-spacing: 0.18em;
-}
-
-.hero h1 {
-    margin: 0;
-
-    font-size:
-        clamp(36px, 6vw, 64px);
-
-    line-height: 0.9;
-
-    letter-spacing: -0.05em;
-}
-
-.hero h1 span {
-    color: var(--accent-bright);
-}
-
-.hero-description {
-    margin:
-        16px 0 0;
-
-    color: var(--muted);
-
-    font-size: 14px;
-}
-
-
-/* =========================================================
-   PANELS
-   ========================================================= */
-
-.panel {
-    position: relative;
-
-    margin-bottom: 14px;
-
-    padding: 22px;
-
-    background:
-        linear-gradient(
-            145deg,
-            rgba(18, 36, 58, 0.92),
-            rgba(10, 25, 42, 0.92)
-        );
-
-    border:
-        1px solid var(--border);
-
-    border-radius:
-        var(--radius);
-
-    box-shadow:
-        var(--shadow);
-}
-
-.panel h2 {
-    margin-bottom: 10px;
-
-    font-size: 17px;
-
-    letter-spacing: 0.04em;
-}
-
-.panel p {
-    color: var(--muted);
-
-    font-size: 13px;
-}
-
-.panel-label {
-    display: flex;
-
-    align-items: center;
-
-    gap: 8px;
-
-    margin-bottom: 12px;
-
-    color: var(--accent-bright);
-
-    font-size: 9px;
-    font-weight: 800;
-
-    letter-spacing: 0.18em;
-}
-
-.panel-label span {
-    color: var(--accent);
-}
-
-
-/* =========================================================
-   QUICK LINKS
-   ========================================================= */
-
-.quick-links {
-    display: grid;
-
-    grid-template-columns:
-        repeat(2, 1fr);
-
-    gap: 8px;
-}
-
-.quick-link {
-    display: flex;
-
-    align-items: center;
-
-    gap: 11px;
-
-    padding: 13px;
-
-    border:
-        1px solid var(--border);
-
-    border-radius: 9px;
-
-    background:
-        rgba(255, 255, 255, 0.02);
-
-    transition: var(--transition);
-}
-
-.quick-link:hover {
-    border-color:
-        rgba(67, 165, 255, 0.45);
-
-    background:
-        rgba(67, 165, 255, 0.08);
-}
-
-.quick-icon {
-    color: var(--accent-bright);
-
-    font-size: 15px;
-}
-
-.quick-link > span:nth-child(2) {
-    display: flex;
-
-    flex-direction: column;
-
-    min-width: 0;
-
-    flex: 1;
-}
-
-.quick-link strong {
-    font-size: 10px;
-
-    letter-spacing: 0.06em;
-}
-
-.quick-link small {
-    margin-top: 3px;
-
-    color: var(--muted);
-
-    font-size: 8px;
-}
-
-.quick-link b {
-    color: var(--accent-bright);
-
-    font-size: 13px;
-}
-
-
-/* =========================================================
-   CLUB LINK
-   ========================================================= */
-
-.club-link-panel {
-    margin-top: 14px;
-}
-
-.club-link-panel a {
-    display: flex;
-
-    justify-content: space-between;
-    align-items: center;
-
-    padding: 15px 18px;
-
-    border:
-        1px solid rgba(67, 165, 255, 0.3);
-
-    border-radius: 10px;
-
-    background:
-        rgba(67, 165, 255, 0.06);
-
-    color: var(--accent-bright);
-
-    font-size: 10px;
-    font-weight: 800;
-
-    letter-spacing: 0.08em;
-
-    transition: var(--transition);
-}
-
-.club-link-panel a:hover {
-    background:
-        rgba(67, 165, 255, 0.12);
-
-    border-color:
-        rgba(67, 165, 255, 0.5);
-}
-
-.club-link-panel span {
-    font-size: 16px;
-}
-
-
-/* =========================================================
-   SCANLINE
-   ========================================================= */
-
-.scanline-overlay {
-    position: fixed;
-
-    inset: 0;
-
-    z-index: 2000;
-
-    pointer-events: none;
-
-    opacity: 0;
-
-    background:
-        repeating-linear-gradient(
-            to bottom,
-            transparent 0,
-            transparent 3px,
-            rgba(100, 190, 255, 0.045) 4px
-        );
-
-    transition:
-        opacity 200ms ease;
-}
-
-.scanline-overlay.active {
-    opacity: 1;
-}
-
-
-/* =========================================================
-   WELCOME MESSAGE
-   ========================================================= */
-
-.welcome-message {
-    position: fixed;
-
-    left: 50%;
-    top: 50%;
-
-    z-index: 2100;
-
-    width: min(90vw, 420px);
-
-    padding: 20px;
-
-    transform:
-        translate(-50%, -50%)
-        scale(0.94);
-
-    opacity: 0;
-
-    pointer-events: none;
-
-    border:
-        1px solid rgba(67, 165, 255, 0.5);
-
-    border-radius:
-        var(--radius);
-
-    background:
-        rgba(5, 16, 28, 0.95);
-
-    box-shadow:
-        0 0 50px rgba(67, 165, 255, 0.18);
-
-    text-align: center;
-
-    transition: 200ms ease;
-}
-
-.welcome-message.active {
-    transform:
-        translate(-50%, -50%)
-        scale(1);
-
-    opacity: 1;
-}
-
-
-/* =========================================================
-   FOOTER
-   ========================================================= */
-
-.page-footer {
-    display: flex;
-
-    justify-content: space-between;
-
-    gap: 15px;
-
-    padding:
-        25px 3px 0;
-
-    color: var(--muted);
-
-    font-size: 7px;
-    font-weight: 700;
-
-    letter-spacing: 0.1em;
-}
-
-
-/* =========================================================
-   FOCUS MODE
-   ========================================================= */
-
-body.focus-mode .topbar,
-body.focus-mode .side-nav {
-    opacity: 0.18;
-}
-
-body.focus-mode .page {
-    max-width: 900px;
-}
-
-body.focus-mode .panel {
-    border-color:
-        rgba(67, 165, 255, 0.35);
-}
-
-body.theme-default {
-    --bg: #07111f;
-    --bg-secondary: #0b1728;
-    --panel: #0d1b2d;
-    --panel-light: #12243a;
-
-    --text: #e9f3ff;
-    --muted: #8193aa;
-
-    --accent: #43a5ff;
-    --accent-bright: #73c4ff;
-
-    --border: rgba(112, 180, 255, 0.18);
-
-    --shadow:
-        0 18px 45px rgba(0, 0, 0, 0.38);
-}
-
-
-/* =========================================================
-   WIND BREAKER
-   STREET / RED / BLACK
-   ========================================================= */
-
-body.theme-windbreaker {
-    --bg: #0d0b0c;
-    --bg-secondary: #151112;
-    --panel: #1a1516;
-    --panel-light: #241b1d;
-
-    --text: #f5eeee;
-    --muted: #a99595;
-
-    --accent: #d72f3f;
-    --accent-bright: #ff5263;
-
-    --border: rgba(255, 73, 88, 0.20);
-
-    --shadow:
-        0 18px 45px rgba(0, 0, 0, 0.55);
-}
-
-
-body.theme-windbreaker {
-    background:
-        linear-gradient(
-            135deg,
-            rgba(210, 35, 52, 0.08),
-            transparent 32%
-        ),
-        linear-gradient(
-            315deg,
-            rgba(255,255,255,0.025),
-            transparent 30%
-        ),
-        var(--bg);
-}
-
-
-body.theme-windbreaker .side-nav {
-    background:
-        linear-gradient(
-            180deg,
-            #181112,
-            #090708
-        );
-
-    border-right-color:
-        rgba(255, 73, 88, 0.22);
-}
-
-
-body.theme-windbreaker .panel,
-body.theme-windbreaker .calendar-panel,
-body.theme-windbreaker .radio-panel,
-body.theme-windbreaker .content-card {
-    background:
-        linear-gradient(
-            145deg,
-            rgba(32, 23, 25, 0.97),
-            rgba(15, 11, 12, 0.98)
-        );
-
-    border-radius: 6px;
-}
-
-
-body.theme-windbreaker .nav-link:hover,
-body.theme-windbreaker .nav-link.active {
-    background:
-        rgba(215, 47, 63, 0.10);
-
-    border-color:
-        rgba(255, 73, 88, 0.25);
-}
-
-
-/* =========================================================
-   COTE
-   LUXURY / ACADEMY / GOLD
-   ========================================================= */
-
-body.theme-cote {
-    --bg: #0a0c0f;
-    --bg-secondary: #11151a;
-    --panel: #151a20;
-    --panel-light: #1c232b;
-
-    --text: #f1f0e8;
-    --muted: #96958e;
-
-    --accent: #b99848;
-    --accent-bright: #e8cb78;
-
-    --border: rgba(218, 190, 111, 0.20);
-
-    --shadow:
-        0 20px 55px rgba(0, 0, 0, 0.60);
-}
-
-
-body.theme-cote {
-    background:
-        radial-gradient(
-            circle at 75% 0%,
-            rgba(203, 167, 75, 0.10),
-            transparent 34%
-        ),
-        linear-gradient(
-            160deg,
-            #090b0d,
-            #0d1115
-        );
-}
-
-
-body.theme-cote .side-nav {
-    background:
-        linear-gradient(
-            180deg,
-            #15191e,
-            #090b0d
-        );
-
-    border-right-color:
-        rgba(218, 190, 111, 0.25);
-}
-
-
-body.theme-cote .panel,
-body.theme-cote .calendar-panel,
-body.theme-cote .radio-panel,
-body.theme-cote .content-card {
-    background:
-        linear-gradient(
-            145deg,
-            rgba(25, 30, 36, 0.98),
-            rgba(12, 15, 18, 0.98)
-        );
-
-    border-radius: 4px;
-}
-
-
-body.theme-cote .page-kicker,
-body.theme-cote .eyebrow {
-    letter-spacing: 0.24em;
-}
-
-
-/* =========================================================
-   BLEACH
-   WHITE / ICE / SPIRITUAL
-   ========================================================= */
-
-body.theme-bleach {
-    --bg: #080b10;
-    --bg-secondary: #10151d;
-    --panel: #121820;
-    --panel-light: #1a222c;
-
-    --text: #f4f7fb;
-    --muted: #8f9ba9;
-
-    --accent: #dce8f5;
-    --accent-bright: #ffffff;
-
-    --border: rgba(220, 232, 245, 0.22);
-
-    --shadow:
-        0 18px 55px rgba(0, 0, 0, 0.58);
-}
-
-
-body.theme-bleach {
-    background:
-        radial-gradient(
-            circle at 50% -10%,
-            rgba(225, 238, 255, 0.12),
-            transparent 35%
-        ),
-        linear-gradient(
-            180deg,
-            #090d13,
-            #05070a
-        );
-}
-
-
-body.theme-bleach .side-nav {
-    background:
-        linear-gradient(
-            180deg,
-            #151b23,
-            #07090d
-        );
-}
-
-
-body.theme-bleach .panel,
-body.theme-bleach .calendar-panel,
-body.theme-bleach .radio-panel,
-body.theme-bleach .content-card {
-    background:
-        linear-gradient(
-            145deg,
-            rgba(24, 32, 42, 0.96),
-            rgba(9, 13, 18, 0.99)
-        );
-}
-
-
-body.theme-bleach .hero-logo img {
-    box-shadow:
-        0 0 40px rgba(235, 245, 255, 0.20);
-}
-
-
-/* =========================================================
-   JJK
-   PURPLE / CURSED ENERGY / NEON
-   ========================================================= */
-
-body.theme-jjk {
-    --bg: #0b0612;
-    --bg-secondary: #130a1d;
-    --panel: #180d24;
-    --panel-light: #221133;
-
-    --text: #f3ebff;
-    --muted: #9f8caf;
-
-    --accent: #8c4dff;
-    --accent-bright: #c18cff;
-
-    --border: rgba(157, 91, 255, 0.25);
-
-    --shadow:
-        0 20px 55px rgba(67, 20, 120, 0.32);
-}
-
-
-body.theme-jjk {
-    background:
-        radial-gradient(
-            circle at 80% 0%,
-            rgba(137, 58, 255, 0.18),
-            transparent 34%
-        ),
-        radial-gradient(
-            circle at 0% 75%,
-            rgba(76, 25, 120, 0.14),
-            transparent 30%
-        ),
-        #090510;
-}
-
-
-body.theme-jjk .side-nav {
-    background:
-        linear-gradient(
-            180deg,
-            #170b25,
-            #08040d
-        );
-
-    border-right-color:
-        rgba(157, 91, 255, 0.28);
-}
-
-
-body.theme-jjk .panel,
-body.theme-jjk .calendar-panel,
-body.theme-jjk .radio-panel,
-body.theme-jjk .content-card {
-    background:
-        linear-gradient(
-            145deg,
-            rgba(30, 15, 45, 0.97),
-            rgba(10, 5, 16, 0.99)
-        );
-
-    box-shadow:
-        0 18px 50px rgba(70, 20, 120, 0.20);
-}
-
-
-body.theme-jjk .calendar-day.selected {
-    box-shadow:
-        0 0 24px rgba(157, 91, 255, 0.25);
-}
-
-
-/* =========================================================
-   NARUTO
-   ORANGE / FIRE / DEEP NAVY
-   ========================================================= */
-
-body.theme-naruto {
-    --bg: #0b1018;
-    --bg-secondary: #111923;
-    --panel: #151f2c;
-    --panel-light: #1d2b3c;
-
-    --text: #f4f4ee;
-    --muted: #91a0ad;
-
-    --accent: #ef6a24;
-    --accent-bright: #ffad54;
-
-    --border: rgba(255, 127, 46, 0.22);
-
-    --shadow:
-        0 20px 55px rgba(0, 0, 0, 0.50);
-}
-
-
-body.theme-naruto {
-    background:
-        radial-gradient(
-            circle at 15% 10%,
-            rgba(239, 106, 36, 0.16),
-            transparent 30%
-        ),
-        linear-gradient(
-            135deg,
-            #0b1018,
-            #090d14
-        );
-}
-
-
-body.theme-naruto .side-nav {
-    background:
-        linear-gradient(
-            180deg,
-            #152232,
-            #080c13
-        );
-
-    border-right-color:
-        rgba(255, 127, 46, 0.24);
-}
-
-
-body.theme-naruto .panel,
-body.theme-naruto .calendar-panel,
-body.theme-naruto .radio-panel,
-body.theme-naruto .content-card {
-    background:
-        linear-gradient(
-            145deg,
-            rgba(24, 36, 51, 0.97),
-            rgba(10, 15, 23, 0.99)
-        );
-}
-
-
-body.theme-naruto .calendar-day.has-event::after {
-    background: #ffad54;
-
-    box-shadow:
-        0 0 10px #ef6a24;
-}
-
-
-/* =========================================================
-   ONE PIECE
-   OCEAN / SKY / PIRATE
-   ========================================================= */
-
-body.theme-onepiece {
-    --bg: #06131d;
-    --bg-secondary: #09202d;
-    --panel: #0c2533;
-    --panel-light: #123445;
-
-    --text: #ecf9ff;
-    --muted: #7898a8;
-
-    --accent: #16a9d8;
-    --accent-bright: #63d9ff;
-
-    --border: rgba(54, 202, 244, 0.22);
-
-    --shadow:
-        0 20px 55px rgba(0, 0, 0, 0.45);
-}
-
-
-body.theme-onepiece {
-    background:
-        radial-gradient(
-            circle at 70% 0%,
-            rgba(0, 177, 232, 0.18),
-            transparent 35%
-        ),
-        linear-gradient(
-            160deg,
-            #06131d,
-            #041019
-        );
-}
-
-
-body.theme-onepiece .side-nav {
-    background:
-        linear-gradient(
-            180deg,
-            #0b2635,
-            #041018
-        );
-
-    border-right-color:
-        rgba(54, 202, 244, 0.24);
-}
-
-
-body.theme-onepiece .panel,
-body.theme-onepiece .calendar-panel,
-body.theme-onepiece .radio-panel,
-body.theme-onepiece .content-card {
-    background:
-        linear-gradient(
-            145deg,
-            rgba(14, 42, 56, 0.97),
-            rgba(5, 18, 27, 0.99)
-        );
-}
-
-
-body.theme-onepiece .hero-logo img {
-    box-shadow:
-        0 0 40px rgba(54, 202, 244, 0.20);
-}
-
-
-/* =========================================================
-   DESKTOP
-   ========================================================= */
-
-@media (min-width: 901px) {
-
-    .topbar {
-        display: none;
-    }
-
-    .side-nav {
-        transform: translateX(0);
-    }
-
-    .nav-close {
-        display: none;
-    }
-
-    .nav-overlay {
-        display: none;
-    }
-
-}
-
-
-/* =========================================================
-   MOBILE / CHESS.COM SIDEBAR
-   ========================================================= */
-
-@media (max-width: 900px) {
-
-    .topbar {
-        display: flex;
-    }
-
-    .side-nav {
-        width: min(88vw, 380px);
-
-        transform:
-            translateX(-105%);
-    }
-
-    .side-nav.open {
-        transform:
-            translateX(0);
-    }
-
-    .nav-close {
-        display: block;
-    }
-
-    .page {
-        width: 100%;
-
-        max-width: none;
-
-        margin-left: 0;
-
-        padding:
-            28px 16px 60px;
-    }
-
-    .hero {
-        padding-top: 10px;
-    }
-
-}
-
-
-/* =========================================================
-   SMALL MOBILE
-   ========================================================= */
-
-@media (max-width: 520px) {
-
-    .page {
-        padding-left: 12px;
-        padding-right: 12px;
-    }
-
-    .hero {
-        flex-direction: column;
-
-        align-items: flex-start;
-
-        gap: 16px;
-    }
-
-    .hero-logo img {
-        width: 64px;
-        height: 64px;
-    }
-
-    .hero h1 {
-        font-size: 42px;
-    }
-
-    .panel {
-        padding: 16px;
-    }
-
-    .quick-links {
-        grid-template-columns: 1fr;
-    }
-
-    .page-footer {
-        flex-direction: column;
-    }
-
-}
-
-
-/* =========================================================
-   VERY NARROW
-   ========================================================= */
-
-@media (max-width: 360px) {
-
-    .side-nav {
-        width: 100%;
-    }
-
-    .hero h1 {
-        font-size: 36px;
-    }
-
-}
-
-/* =========================================================
-   SOCIAL CALENDAR
-   ========================================================= */
-
-.calendar-panel {
-    position: relative;
-
-    margin-bottom: 14px;
-    padding: 22px;
-
-    overflow: hidden;
-
-    background:
-        linear-gradient(
-            145deg,
-            rgba(16, 31, 50, 0.98),
-            rgba(7, 15, 27, 0.98)
-        );
-
-    border: 1px solid var(--border);
-    border-radius: var(--radius);
-
-    box-shadow:
-        var(--shadow);
-}
-
-
-/* =========================================================
-   CALENDAR DECORATION
-   ========================================================= */
-
-.calendar-panel::before {
-    content: "";
-
-    position: absolute;
-
-    top: -90px;
-    right: -70px;
-
-    width: 220px;
-    height: 220px;
-
-    border-radius: 50%;
-
-    background:
-        radial-gradient(
-            circle,
-            color-mix(in srgb, var(--accent) 18%, transparent),
-            transparent 68%
-        );
-
-    pointer-events: none;
-}
-
-
-.calendar-panel::after {
-    content: "";
-
-    position: absolute;
-
-    inset: 0;
-
-    background:
-        linear-gradient(
-            135deg,
-            transparent 0%,
-            transparent 72%,
-            rgba(255,255,255,0.015) 72%,
-            rgba(255,255,255,0.015) 72.5%,
-            transparent 72.5%
-        );
-
-    pointer-events: none;
-}
-
-
-/* =========================================================
-   HEADER
-   ========================================================= */
-
-.calendar-header {
-    position: relative;
-    z-index: 1;
-
-    display: flex;
-
-    justify-content: space-between;
-    align-items: center;
-
-    gap: 18px;
-
-    padding-bottom: 18px;
-
-    border-bottom: 1px solid var(--border);
-}
-
-
-.calendar-header h2 {
-    margin: 5px 0 0;
-
-    color: var(--text);
-
-    font-size:
-        clamp(21px, 4vw, 29px);
-
-    font-weight: 900;
-
-    line-height: 1;
-
-    letter-spacing: -0.04em;
-}
-
-
-/* =========================================================
-   MONTH NAVIGATION
-   ========================================================= */
-
-.calendar-navigation {
-    display: flex;
-
-    gap: 6px;
-}
-
-
-.calendar-navigation button {
-    width: 38px;
-    height: 38px;
-
-    display: flex;
-
-    align-items: center;
-    justify-content: center;
-
-    padding: 0;
-
-    border: 1px solid var(--border);
-    border-radius: 8px;
-
-    background:
-        rgba(255,255,255,0.025);
-
-    color: var(--muted);
-
-    font-size: 24px;
-    font-weight: 500;
-
-    line-height: 1;
-
-    cursor: pointer;
-
-    transition:
-        background var(--transition),
-        border-color var(--transition),
-        color var(--transition),
-        transform var(--transition);
-}
-
-
-.calendar-navigation button:hover {
-    color: var(--text);
-
-    background:
-        color-mix(
-            in srgb,
-            var(--accent) 10%,
-            transparent
-        );
-
-    border-color:
-        color-mix(
-            in srgb,
-            var(--accent) 45%,
-            transparent
-        );
-
-    transform: translateY(-2px);
-}
-
-
-.calendar-navigation button:active {
-    transform: translateY(0);
-}
-
-
-/* =========================================================
-   TIMEZONE BAR
-   ========================================================= */
-
-.timezone-controls {
-    position: relative;
-    z-index: 1;
-
-    display: flex;
-
-    align-items: center;
-
-    gap: 4px;
-
-    margin: 15px 0;
-
-    padding: 4px;
-
-    border: 1px solid var(--border);
-    border-radius: 9px;
-
-    background:
-        rgba(0,0,0,0.18);
-}
-
-
-.timezone-controls button {
-    min-height: 30px;
-
-    padding: 5px 10px;
-
-    border: 1px solid transparent;
-    border-radius: 6px;
-
-    background: transparent;
-
-    color: var(--muted);
-
-    font-size: 8px;
-    font-weight: 900;
-
-    letter-spacing: 0.1em;
-
-    cursor: pointer;
-
-    transition: var(--transition);
-}
-
-
-.timezone-controls button:hover {
-    color: var(--text);
-
-    background:
-        rgba(255,255,255,0.035);
-}
-
-
-.timezone-controls button.active {
-    color: var(--accent-bright);
-
-    border-color:
-        color-mix(
-            in srgb,
-            var(--accent) 35%,
-            transparent
-        );
-
-    background:
-        color-mix(
-            in srgb,
-            var(--accent) 11%,
-            transparent
-        );
-
-    box-shadow:
-        inset 0 0 12px
-        color-mix(
-            in srgb,
-            var(--accent) 5%,
-            transparent
-        );
-}
-
-
-.timezone-controls > span {
-    margin-left: auto;
-
-    padding-right: 7px;
-
-    color:
-        color-mix(
-            in srgb,
-            var(--muted) 65%,
-            transparent
-        );
-
-    font-size: 7px;
-    font-weight: 800;
-
-    letter-spacing: 0.1em;
-
-    text-transform: uppercase;
-}
-
-
-/* =========================================================
-   WEEKDAYS
-   ========================================================= */
-
-.calendar-weekdays {
-    position: relative;
-    z-index: 1;
-
-    display: grid;
-
-    grid-template-columns:
-        repeat(7, 1fr);
-
-    gap: 4px;
-
-    margin-bottom: 5px;
-}
-
-
-.calendar-weekdays span {
-    padding: 7px 0;
-
-    color:
-        color-mix(
-            in srgb,
-            var(--muted) 72%,
-            transparent
-        );
-
-    text-align: center;
-
-    font-size: 7px;
-    font-weight: 900;
-
-    letter-spacing: 0.12em;
+.time-panel {
+  margin-top: 10px;
+  padding: 15px;
+  border: 1px solid var(--border);
+  background: #0c0c0c;
+  text-align: center;
+}
+
+.time {
+  color: var(--red-bright);
+  font-family: monospace;
+  font-size: clamp(24px, 7vw, 40px);
+  font-weight: 700;
+  letter-spacing: 3px;
+  text-shadow: 0 0 14px rgba(214, 43, 43, .18);
+}
+
+.timezone {
+  margin-top: 5px;
+  color: var(--text-soft);
+  font-family: monospace;
+  font-size: 9px;
+  letter-spacing: 1.5px;
+  text-transform: uppercase;
+}
+
+.location {
+  margin-top: 4px;
+  color: var(--text-muted);
+  font-size: 10px;
+  letter-spacing: 1px;
 }
 
 
@@ -1742,432 +191,1299 @@ body.theme-onepiece .hero-logo img {
    ========================================================= */
 
 .calendar-grid {
-    position: relative;
-    z-index: 1;
-
-    display: grid;
-
-    grid-template-columns:
-        repeat(7, minmax(0, 1fr));
-
-    gap: 4px;
+  display: grid;
+  grid-template-columns: repeat(7, minmax(0, 1fr));
+  gap: 3px;
+  margin-top: 10px;
 }
 
+.calendar-weekdays {
+  display: grid;
+  grid-template-columns: repeat(7, minmax(0, 1fr));
+  gap: 3px;
+  margin-top: 10px;
+}
+
+.calendar-weekdays > div,
+.calendar-weekdays > span {
+  padding: 7px 2px;
+  color: var(--text-muted);
+  font-family: monospace;
+  font-size: 8px;
+  letter-spacing: 1px;
+  text-align: center;
+  text-transform: uppercase;
+}
 
 .calendar-day {
-    position: relative;
-
-    min-height: 48px;
-
-    display: flex;
-
-    align-items: center;
-    justify-content: center;
-
-    border: 1px solid transparent;
-    border-radius: 8px;
-
-    background:
-        linear-gradient(
-            145deg,
-            rgba(255,255,255,0.025),
-            rgba(255,255,255,0.008)
-        );
-
-    color: var(--muted);
-
-    font-size: 10px;
-    font-weight: 800;
-
-    cursor: pointer;
-
-    transition:
-        background var(--transition),
-        border-color var(--transition),
-        color var(--transition),
-        transform var(--transition);
+  position: relative;
+  min-width: 0;
+  min-height: 42px;
+  padding: 8px 4px;
+  border: 1px solid var(--border);
+  border-radius: 2px;
+  background: var(--panel);
+  color: var(--text-soft);
+  cursor: pointer;
+  transition:
+    background .18s ease,
+    border-color .18s ease,
+    color .18s ease,
+    transform .18s ease;
 }
-
 
 .calendar-day:hover {
-    color: var(--text);
-
-    background:
-        color-mix(
-            in srgb,
-            var(--accent) 8%,
-            transparent
-        );
-
-    border-color:
-        color-mix(
-            in srgb,
-            var(--accent) 35%,
-            transparent
-        );
-
-    transform: translateY(-1px);
+  background: var(--panel-hover);
+  border-color: var(--red-dark);
+  color: var(--white);
 }
 
-
-/* =========================================================
-   EMPTY DAYS
-   ========================================================= */
+.calendar-day:active {
+  transform: scale(.96);
+}
 
 .calendar-day.empty {
-    opacity: 0;
-
-    pointer-events: none;
+  min-height: 42px;
+  border-color: transparent;
+  background: transparent;
+  cursor: default;
 }
 
-
-/* =========================================================
-   TODAY
-   ========================================================= */
+.calendar-number {
+  display: block;
+  font-family: monospace;
+  font-size: 11px;
+  font-weight: 600;
+}
 
 .calendar-day.today {
-    color: var(--accent-bright);
-
-    border-color:
-        color-mix(
-            in srgb,
-            var(--accent) 55%,
-            transparent
-        );
-
-    background:
-        color-mix(
-            in srgb,
-            var(--accent) 9%,
-            transparent
-        );
-
-    box-shadow:
-        inset 0 0 18px
-        color-mix(
-            in srgb,
-            var(--accent) 5%,
-            transparent
-        );
+  border-color: var(--red);
+  background:
+    linear-gradient(
+      135deg,
+      rgba(165, 29, 29, .18),
+      var(--panel)
+    );
+  color: var(--white);
 }
 
-
-.calendar-day.today::before {
-    content: "TODAY";
-
-    position: absolute;
-
-    top: 4px;
-    left: 50%;
-
-    transform: translateX(-50%);
-
-    color:
-        color-mix(
-            in srgb,
-            var(--accent-bright) 70%,
-            transparent
-        );
-
-    font-size: 5px;
-    font-weight: 900;
-
-    letter-spacing: 0.08em;
+.calendar-day.today .calendar-number {
+  color: var(--red-bright);
 }
-
-
-/* =========================================================
-   SELECTED DAY
-   ========================================================= */
-
-.calendar-day.selected {
-    color: var(--text);
-
-    border-color: var(--accent);
-
-    background:
-        linear-gradient(
-            145deg,
-            color-mix(
-                in srgb,
-                var(--accent) 20%,
-                transparent
-            ),
-            color-mix(
-                in srgb,
-                var(--accent) 7%,
-                transparent
-            )
-        );
-
-    box-shadow:
-        0 0 18px
-        color-mix(
-            in srgb,
-            var(--accent) 13%,
-            transparent
-        );
-}
-
-
-/* =========================================================
-   EVENT DAYS
-   ========================================================= */
 
 .calendar-day.has-event {
-    color: var(--text);
+  border-color: #4a1919;
 }
 
-
-.calendar-day.has-event::after {
-    content: "";
-
-    position: absolute;
-
-    bottom: 5px;
-    left: 50%;
-
-    width: 5px;
-    height: 5px;
-
-    border-radius: 50%;
-
-    background:
-        var(--accent-bright);
-
-    box-shadow:
-        0 0 8px var(--accent);
-
-    transform:
-        translateX(-50%);
+.calendar-event-dot {
+  position: absolute;
+  right: 5px;
+  bottom: 5px;
+  width: 4px;
+  height: 4px;
+  border-radius: 50%;
+  background: var(--red-bright);
+  box-shadow: 0 0 7px rgba(214, 43, 43, .45);
 }
 
 
 /* =========================================================
-   EVENT LIST
+   EVENTS
    ========================================================= */
 
-.calendar-events {
-    position: relative;
-    z-index: 1;
-
-    margin-top: 18px;
-
-    padding-top: 16px;
-
-    border-top: 1px solid var(--border);
+[data-calendar="events"] {
+  display: flex;
+  flex-direction: column;
+  gap: 6px;
+  margin-top: 10px;
 }
-
 
 .calendar-event {
-    position: relative;
-
-    margin-bottom: 7px;
-
-    padding: 12px 13px;
-
-    border: 1px solid
-        color-mix(
-            in srgb,
-            var(--accent) 16%,
-            transparent
-        );
-
-    border-left: 2px solid var(--accent);
-
-    border-radius: 8px;
-
-    background:
-        color-mix(
-            in srgb,
-            var(--accent) 5%,
-            transparent
-        );
-
-    transition: var(--transition);
+  display: grid;
+  grid-template-columns: 70px minmax(0, 1fr);
+  gap: 10px;
+  padding: 10px;
+  border: 1px solid var(--border);
+  border-left: 2px solid var(--red-dark);
+  background: var(--panel);
 }
-
 
 .calendar-event:hover {
-    background:
-        color-mix(
-            in srgb,
-            var(--accent) 9%,
-            transparent
-        );
+  border-left-color: var(--red);
+  background: var(--panel-hover);
+}
 
-    border-color:
-        color-mix(
-            in srgb,
-            var(--accent) 35%,
-            transparent
-        );
+.calendar-event-date {
+  display: flex;
+  flex-direction: column;
+  gap: 2px;
+}
 
-    transform: translateX(2px);
+.calendar-event-date strong {
+  color: var(--white);
+  font-family: monospace;
+  font-size: 10px;
+  letter-spacing: .5px;
+}
+
+.calendar-event-date small {
+  color: var(--text-muted);
+  font-family: monospace;
+  font-size: 8px;
+}
+
+.calendar-event-info {
+  min-width: 0;
+}
+
+.calendar-event-info strong {
+  display: block;
+  overflow: hidden;
+  color: var(--text-soft);
+  font-size: 12px;
+  font-weight: 600;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+}
+
+.calendar-event-info small {
+  display: block;
+  margin-top: 3px;
+  color: var(--red);
+  font-family: monospace;
+  font-size: 7px;
+  letter-spacing: 1.2px;
 }
 
 
-.calendar-event strong {
-    display: block;
+/* Selected event */
 
-    color: var(--text);
-
-    font-size: 10px;
-    font-weight: 900;
-
-    letter-spacing: 0.03em;
+[data-calendar="selected-event"] {
+  margin-top: 8px;
 }
-
-
-.calendar-event span {
-    display: block;
-
-    margin-top: 3px;
-
-    color: var(--muted);
-
-    font-size: 8px;
-}
-
-
-/* =========================================================
-   SELECTED EVENT
-   ========================================================= */
 
 .selected-calendar-event {
-    position: relative;
-    z-index: 1;
-
-    margin-top: 8px;
-
-    padding: 11px 13px;
-
-    border: 1px dashed
-        color-mix(
-            in srgb,
-            var(--accent) 25%,
-            transparent
-        );
-
-    border-radius: 8px;
-
-    background:
-        color-mix(
-            in srgb,
-            var(--accent) 3%,
-            transparent
-        );
-
-    color: var(--muted);
-
-    font-size: 9px;
-
-    line-height: 1.5;
+  padding: 10px;
+  border: 1px solid var(--red-dark);
+  background: #0d0d0d;
 }
 
+.selected-calendar-event strong {
+  display: block;
+  color: var(--white);
+  font-size: 12px;
+}
 
-.selected-calendar-event:empty {
-    display: none;
+.selected-calendar-event small {
+  display: block;
+  margin-top: 3px;
+  color: var(--red-bright);
+  font-family: monospace;
+  font-size: 8px;
 }
 
 
 /* =========================================================
-   CALENDAR MOBILE
+   CALENDAR CONTROLS
+   ========================================================= */
+
+.calendar-controls,
+.calendar-footer {
+  display: flex;
+  gap: 7px;
+  flex-wrap: wrap;
+  margin-top: 10px;
+}
+
+.calendar-footer button,
+.calendar-controls button {
+  min-height: 34px;
+  padding: 7px 12px;
+  border: 1px solid var(--border);
+  border-radius: var(--radius);
+  background: #0d0d0d;
+  color: var(--text-soft);
+  cursor: pointer;
+  font-family: monospace;
+  font-size: 8px;
+  letter-spacing: 1px;
+  text-transform: uppercase;
+  transition:
+    background .2s ease,
+    border-color .2s ease,
+    color .2s ease;
+}
+
+.calendar-footer button:hover,
+.calendar-controls button:hover {
+  border-color: var(--red);
+  background: var(--red-dark);
+  color: var(--white);
+}
+
+.calendar-footer button.active,
+.calendar-controls button.active {
+  border-color: var(--red);
+  background: rgba(165, 29, 29, .16);
+  color: var(--red-bright);
+}
+
+
+/* =========================================================
+   AUXILIARY CONTROLS
+   ========================================================= */
+
+.auxiliary-tools {
+  width: 100%;
+  margin-top: 12px;
+  padding: 11px;
+  border: 1px solid var(--border);
+  background: #0b0b0b;
+}
+
+.auxiliary-title {
+  color: #bdbdbd;
+  font-family: "Segoe UI", Arial, sans-serif;
+  font-size: 11px;
+  font-weight: 600;
+  letter-spacing: 3px;
+  text-align: center;
+}
+
+.auxiliary-divider {
+  width: 42px;
+  height: 1px;
+  margin: 7px auto 5px;
+  background: var(--red-dark);
+}
+
+.auxiliary-subtitle {
+  margin-bottom: 9px;
+  color: #4d4d4d;
+  font-family: monospace;
+  font-size: 7px;
+  letter-spacing: 1.5px;
+  text-align: center;
+}
+
+.auxiliary-tool-row {
+  display: flex;
+  gap: 7px;
+  width: 100%;
+  overflow-x: auto;
+  overflow-y: hidden;
+  padding: 3px 2px 8px;
+  scrollbar-width: thin;
+  scrollbar-color: var(--red-dark) #090909;
+}
+
+.auxiliary-tool-row::-webkit-scrollbar {
+  height: 4px;
+}
+
+.auxiliary-tool-row::-webkit-scrollbar-track {
+  background: #090909;
+}
+
+.auxiliary-tool-row::-webkit-scrollbar-thumb {
+  background: var(--red-dark);
+}
+
+.auxiliary-tool {
+  flex: 0 0 46px;
+  width: 46px;
+  height: 46px;
+  border: 1px solid #303030;
+  border-radius: 3px;
+  background: #101010;
+  color: #999;
+  cursor: pointer;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-family: monospace;
+  font-size: 8px;
+  letter-spacing: .5px;
+  user-select: none;
+  transition:
+    background .2s ease,
+    border-color .2s ease,
+    color .2s ease,
+    transform .15s ease,
+    box-shadow .2s ease;
+}
+
+.auxiliary-tool:hover {
+  border-color: var(--red);
+  background: #151515;
+  color: var(--white);
+  box-shadow: 0 0 10px rgba(165, 29, 29, .12);
+}
+
+.auxiliary-tool:active {
+  transform: scale(.92);
+}
+
+.auxiliary-tool.active {
+  border-color: var(--red);
+  color: var(--red-bright);
+  background: rgba(165, 29, 29, .12);
+}
+
+
+/* =========================================================
+   SCAN LINE
+   ========================================================= */
+
+.anhs-scan-line {
+  position: fixed;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 1px;
+  background: var(--red-bright);
+  box-shadow: 0 0 6px rgba(214, 43, 43, .5);
+  pointer-events: none;
+  z-index: 99999;
+  opacity: 1;
+  transition:
+    top 1.8s linear,
+    opacity .25s ease;
+}
+
+
+/* =========================================================
+   RADIO
+   ========================================================= */
+
+.radio-panel {
+  width: 100%;
+  margin-top: 12px;
+  padding: 12px;
+  border: 1px solid var(--border);
+  background: #0b0b0b;
+}
+
+.radio-cover {
+  width: 100%;
+  max-width: 130px;
+  aspect-ratio: 1;
+  margin: 0 auto 10px;
+  display: block;
+  border: 1px solid var(--border);
+  object-fit: cover;
+}
+
+.radio-cover.playing {
+  border-color: var(--red);
+  box-shadow: 0 0 16px rgba(165, 29, 29, .18);
+}
+
+.radio-title {
+  color: var(--white);
+  font-size: 14px;
+  font-weight: 600;
+  text-align: center;
+}
+
+.radio-artist {
+  margin-top: 3px;
+  color: var(--text-muted);
+  font-family: monospace;
+  font-size: 8px;
+  text-align: center;
+}
+
+.radio-controls {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: 6px;
+  margin-top: 10px;
+}
+
+.radio-controls button {
+  min-width: 38px;
+  height: 32px;
+  border: 1px solid var(--border);
+  background: #101010;
+  color: var(--text-soft);
+  cursor: pointer;
+}
+
+.radio-controls button:hover {
+  border-color: var(--red);
+  color: var(--white);
+}
+
+.track-list {
+  display: flex;
+  flex-direction: column;
+  gap: 4px;
+  margin-top: 10px;
+}
+
+.track {
+  display: grid;
+  grid-template-columns: 34px minmax(0, 1fr) 22px;
+  align-items: center;
+  gap: 8px;
+  width: 100%;
+  padding: 6px;
+  border: 1px solid var(--border);
+  background: #0e0e0e;
+  color: var(--text-soft);
+  cursor: pointer;
+  text-align: left;
+}
+
+.track:hover,
+.track.active {
+  border-color: var(--red-dark);
+  background: #141414;
+}
+
+.track img {
+  width: 34px;
+  height: 34px;
+  object-fit: cover;
+}
+
+.track strong {
+  display: block;
+  overflow: hidden;
+  color: var(--text-soft);
+  font-size: 10px;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+}
+
+.track small {
+  color: var(--text-muted);
+  font-family: monospace;
+  font-size: 7px;
+}
+
+.track-play-icon {
+  color: var(--red);
+  font-size: 9px;
+  text-align: center;
+}
+
+
+/* =========================================================
+   SYSTEM TERMINAL
+   ========================================================= */
+
+.system-terminal {
+  padding: 12px;
+  border: 1px solid var(--border);
+  background: #090909;
+  font-family: monospace;
+  font-size: 9px;
+}
+
+.terminal-line {
+  display: flex;
+  gap: 7px;
+  align-items: flex-start;
+}
+
+.terminal-prompt {
+  color: var(--red);
+}
+
+.terminal-muted {
+  color: var(--text-muted);
+}
+
+/* =========================================================
+   SHONEN NEXUS — SOCIAL / AUXILIARY / CALENDAR
+   ========================================================= */
+
+.social-page {
+  display: flex;
+  flex-direction: column;
+  gap: 18px;
+  width: 100%;
+}
+
+.social-grid {
+  display: grid;
+  grid-template-columns: minmax(0, 1.4fr) minmax(260px, .8fr);
+  gap: 18px;
+  width: 100%;
+}
+
+.social-panel,
+.calendar-panel,
+.radio-panel,
+.auxiliary-panel {
+  position: relative;
+  min-width: 0;
+  background: var(--panel-bg, #0c0c0f);
+  border: 1px solid var(--panel-border, #29292f);
+  border-radius: 4px;
+  overflow: hidden;
+}
+
+.panel-header {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 10px;
+  padding: 11px 14px;
+  border-bottom: 1px solid var(--panel-border, #29292f);
+  background: var(--panel-header, #101014);
+}
+
+.panel-header strong {
+  color: var(--accent, #c62828);
+  font-family: monospace;
+  font-size: 10px;
+  letter-spacing: 2px;
+}
+
+.panel-header small {
+  color: var(--muted, #666);
+  font-family: monospace;
+  font-size: 8px;
+  letter-spacing: 1px;
+}
+
+.panel-content {
+  padding: 14px;
+}
+
+
+/* =========================================================
+   CALENDAR
+   ========================================================= */
+
+.calendar-panel {
+  min-height: 320px;
+}
+
+.calendar-header {
+  display: flex;
+  flex-direction: column;
+  gap: 10px;
+  padding: 14px;
+  border-bottom: 1px solid var(--panel-border, #29292f);
+}
+
+.calendar-header-top {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 10px;
+}
+
+.calendar-academy {
+  color: var(--text, #d0d0d0);
+  font-size: 10px;
+  font-weight: 600;
+  letter-spacing: 2px;
+}
+
+.calendar-system {
+  color: var(--muted, #666);
+  font-family: monospace;
+  font-size: 8px;
+  letter-spacing: 1px;
+}
+
+.calendar-month-nav {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 8px;
+}
+
+.calendar-month-nav h2 {
+  margin: 0;
+  color: var(--text, #e5e5e5);
+  font-size: 18px;
+  letter-spacing: 1px;
+  text-align: center;
+}
+
+.calendar-nav-btn,
+.calendar-today-btn {
+  border: 1px solid var(--panel-border, #303038);
+  background: var(--button-bg, #111115);
+  color: var(--muted, #999);
+  border-radius: 3px;
+  cursor: pointer;
+  transition:
+    background .2s ease,
+    color .2s ease,
+    border-color .2s ease;
+}
+
+.calendar-nav-btn {
+  width: 32px;
+  height: 30px;
+}
+
+.calendar-nav-btn:hover,
+.calendar-today-btn:hover {
+  color: var(--accent, #c62828);
+  border-color: var(--accent, #c62828);
+  background: var(--button-hover, #17171c);
+}
+
+.calendar-time {
+  padding: 12px 14px;
+  border-bottom: 1px solid var(--panel-border, #29292f);
+  text-align: center;
+}
+
+.calendar-clock {
+  color: var(--accent, #c62828);
+  font-family: monospace;
+  font-size: 23px;
+  font-weight: 600;
+  letter-spacing: 2px;
+}
+
+.calendar-timezone {
+  margin-top: 4px;
+  color: var(--muted, #777);
+  font-family: monospace;
+  font-size: 8px;
+  letter-spacing: 1px;
+}
+
+.calendar-location {
+  margin-top: 3px;
+  color: var(--text, #aaa);
+  font-size: 9px;
+}
+
+.calendar-table-wrap {
+  width: 100%;
+  overflow-x: auto;
+}
+
+.calendar-table {
+  width: 100%;
+  border-collapse: collapse;
+  table-layout: fixed;
+}
+
+.calendar-table th {
+  padding: 8px 3px;
+  color: var(--muted, #666);
+  font-family: monospace;
+  font-size: 8px;
+  font-weight: 500;
+  letter-spacing: 1px;
+  border-bottom: 1px solid var(--panel-border, #29292f);
+}
+
+.calendar-table td {
+  position: relative;
+  height: 42px;
+  padding: 5px;
+  color: var(--text, #aaa);
+  font-size: 10px;
+  text-align: center;
+  border-right: 1px solid rgba(255,255,255,.035);
+  border-bottom: 1px solid rgba(255,255,255,.035);
+  transition:
+    background .2s ease,
+    color .2s ease;
+}
+
+.calendar-table td:hover {
+  background: var(--accent-soft, rgba(198,40,40,.08));
+}
+
+.calendar-table td.empty {
+  opacity: .2;
+}
+
+.calendar-table td.today {
+  color: var(--accent, #c62828);
+  font-weight: 700;
+  box-shadow: inset 0 0 0 1px var(--accent, #c62828);
+}
+
+.calendar-footer {
+  display: flex;
+  justify-content: center;
+  gap: 8px;
+  padding: 12px;
+  border-top: 1px solid var(--panel-border, #29292f);
+}
+
+
+/* =========================================================
+   RADIO
+   ========================================================= */
+
+.radio-panel {
+  min-height: 260px;
+}
+
+.radio-player {
+  display: grid;
+  grid-template-columns: 72px minmax(0, 1fr);
+  gap: 13px;
+  padding: 14px;
+}
+
+.radio-cover {
+  width: 72px;
+  height: 72px;
+  object-fit: cover;
+  border: 1px solid var(--panel-border, #333);
+  border-radius: 3px;
+  background: #080808;
+}
+
+.radio-cover.playing {
+  border-color: var(--accent, #c62828);
+  box-shadow: 0 0 12px var(--accent-glow, rgba(198,40,40,.25));
+}
+
+.radio-info {
+  min-width: 0;
+}
+
+.radio-title {
+  overflow: hidden;
+  color: var(--text, #ddd);
+  font-size: 12px;
+  font-weight: 600;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+}
+
+.radio-artist {
+  margin-top: 4px;
+  overflow: hidden;
+  color: var(--muted, #777);
+  font-family: monospace;
+  font-size: 8px;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+}
+
+.radio-controls {
+  display: flex;
+  align-items: center;
+  gap: 6px;
+  margin-top: 12px;
+}
+
+.radio-control {
+  min-width: 34px;
+  height: 30px;
+  border: 1px solid var(--panel-border, #303038);
+  border-radius: 3px;
+  background: var(--button-bg, #111115);
+  color: var(--muted, #999);
+  cursor: pointer;
+  transition: .2s ease;
+}
+
+.radio-control:hover {
+  color: var(--accent, #c62828);
+  border-color: var(--accent, #c62828);
+}
+
+.radio-progress {
+  width: 100%;
+  margin-top: 10px;
+  accent-color: var(--accent, #c62828);
+}
+
+.radio-volume {
+  width: 70px;
+  accent-color: var(--accent, #c62828);
+}
+
+.radio-track-list {
+  display: flex;
+  flex-direction: column;
+  max-height: 220px;
+  overflow-y: auto;
+  border-top: 1px solid var(--panel-border, #29292f);
+}
+
+.track {
+  display: grid;
+  grid-template-columns: 34px minmax(0, 1fr) 20px;
+  align-items: center;
+  gap: 9px;
+  width: 100%;
+  padding: 8px 12px;
+  border: 0;
+  border-bottom: 1px solid rgba(255,255,255,.035);
+  background: transparent;
+  color: var(--text, #aaa);
+  text-align: left;
+  cursor: pointer;
+  transition: background .2s ease;
+}
+
+.track:hover,
+.track.active {
+  background: var(--accent-soft, rgba(198,40,40,.08));
+}
+
+.track img {
+  width: 34px;
+  height: 34px;
+  object-fit: cover;
+  border-radius: 2px;
+}
+
+.track strong {
+  color: var(--text, #ccc);
+  font-size: 9px;
+}
+
+.track small {
+  color: var(--muted, #666);
+  font-family: monospace;
+  font-size: 7px;
+}
+
+.track-play-icon {
+  color: var(--accent, #c62828);
+  font-size: 9px;
+  text-align: center;
+}
+
+
+/* =========================================================
+   AUXILIARY CONTROLS
+   ========================================================= */
+
+.auxiliary-panel {
+  overflow: hidden;
+}
+
+.auxiliary-heading {
+  text-align: center;
+  padding: 12px 10px 6px;
+}
+
+.auxiliary-heading strong {
+  color: var(--text, #bbb);
+  font-family: "Segoe UI", Arial, sans-serif;
+  font-size: 11px;
+  font-weight: 600;
+  letter-spacing: 3px;
+}
+
+.auxiliary-heading::after {
+  content: "";
+  display: block;
+  width: 42px;
+  height: 1px;
+  margin: 7px auto 5px;
+  background: var(--accent-dark, #551111);
+}
+
+.auxiliary-heading small {
+  display: block;
+  color: var(--muted-dark, #4d4d4d);
+  font-family: monospace;
+  font-size: 7px;
+  letter-spacing: 1.5px;
+}
+
+.auxiliary-tools {
+  display: flex;
+  gap: 7px;
+  overflow-x: auto;
+  overflow-y: hidden;
+  padding: 3px 10px 11px;
+  scrollbar-width: thin;
+  scrollbar-color:
+    var(--accent-dark, #3d1111)
+    #090909;
+}
+
+.auxiliary-tool {
+  flex: 0 0 46px;
+  width: 46px;
+  height: 46px;
+  border: 1px solid var(--panel-border, #303030);
+  border-radius: 3px;
+  background: var(--button-bg, #101010);
+  color: var(--muted, #999);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-family: monospace;
+  font-size: 8px;
+  letter-spacing: .5px;
+  cursor: pointer;
+  user-select: none;
+  transition:
+    color .2s ease,
+    border-color .2s ease,
+    background .2s ease,
+    transform .15s ease;
+}
+
+.auxiliary-tool:hover {
+  color: var(--accent, #c62828);
+  border-color: var(--accent, #c62828);
+  background: var(--button-hover, #151519);
+}
+
+.auxiliary-tool:active {
+  transform: translateY(1px);
+}
+
+.auxiliary-tool.active {
+  color: var(--accent, #c62828);
+  border-color: var(--accent, #c62828);
+  background: var(--accent-soft, rgba(198,40,40,.08));
+}
+
+
+/* =========================================================
+   SCAN LINE
+   ========================================================= */
+
+.anhs-scan-line {
+  position: fixed;
+  left: 0;
+  top: 0;
+  width: 100%;
+  height: 1px;
+  z-index: 99999;
+  pointer-events: none;
+  background: var(--accent, #a51d1d);
+  box-shadow:
+    0 0 5px var(--accent-glow, rgba(165,29,29,.45)),
+    0 0 12px var(--accent-glow, rgba(165,29,29,.18));
+  transition:
+    top 1.8s linear,
+    opacity .25s ease;
+}
+
+.anhs-scan-line-label {
+  position: fixed;
+  left: 10px;
+  top: 10px;
+  z-index: 100000;
+  padding: 5px 7px;
+  border: 1px solid var(--accent-dark, #551111);
+  background: rgba(5,5,5,.9);
+  color: var(--accent, #c62828);
+  font-family: monospace;
+  font-size: 7px;
+  letter-spacing: 1px;
+  pointer-events: none;
+}
+
+
+/* =========================================================
+   FOCUS MODE
+   ========================================================= */
+
+body.focus-mode .sidebar,
+body.focus-mode .site-footer {
+  opacity: .18;
+  transition: opacity .25s ease;
+}
+
+body.focus-mode .sidebar:hover {
+  opacity: 1;
+}
+
+body.focus-mode .app-shell {
+  max-width: 1100px;
+  margin-left: auto;
+  margin-right: auto;
+}
+
+body.focus-mode .ambient {
+  opacity: .25;
+}
+
+
+/* =========================================================
+   THEME VARIABLES
+   These are the foundation for the future theme switcher.
+   ========================================================= */
+
+:root {
+  --accent: #c62828;
+  --accent-dark: #551111;
+  --accent-soft: rgba(198,40,40,.08);
+  --accent-glow: rgba(198,40,40,.25);
+
+  --panel-bg: #0c0c0f;
+  --panel-header: #101014;
+  --panel-border: #29292f;
+
+  --button-bg: #111115;
+  --button-hover: #17171c;
+
+  --text: #d0d0d0;
+  --muted: #777;
+  --muted-dark: #4d4d4d;
+}
+
+
+/* =========================================================
+   SHONEN NEXUS THEMES
+   ========================================================= */
+
+body.theme-default {
+  --accent: #c62828;
+  --accent-dark: #551111;
+  --accent-soft: rgba(198,40,40,.08);
+  --accent-glow: rgba(198,40,40,.25);
+}
+
+body.theme-windbreaker {
+  --accent: #4aa3ff;
+  --accent-dark: #15395a;
+  --accent-soft: rgba(74,163,255,.09);
+  --accent-glow: rgba(74,163,255,.25);
+}
+
+body.theme-cote {
+  --accent: #b32020;
+  --accent-dark: #4b0e0e;
+  --accent-soft: rgba(179,32,32,.08);
+  --accent-glow: rgba(179,32,32,.25);
+}
+
+body.theme-bleach {
+  --accent: #e7e7e7;
+  --accent-dark: #444;
+  --accent-soft: rgba(255,255,255,.08);
+  --accent-glow: rgba(255,255,255,.22);
+}
+
+body.theme-jjk {
+  --accent: #9b6cff;
+  --accent-dark: #38265f;
+  --accent-soft: rgba(155,108,255,.09);
+  --accent-glow: rgba(155,108,255,.25);
+}
+
+body.theme-naruto {
+  --accent: #e56b24;
+  --accent-dark: #5d2810;
+  --accent-soft: rgba(229,107,36,.09);
+  --accent-glow: rgba(229,107,36,.25);
+}
+
+body.theme-onepiece {
+  --accent: #3fa9f5;
+  --accent-dark: #153c58;
+  --accent-soft: rgba(63,169,245,.09);
+  --accent-glow: rgba(63,169,245,.25);
+}
+
+
+/* =========================================================
+   MOBILE / CHESS.COM EMBED SAFETY
+   ========================================================= */
+
+@media (max-width: 760px) {
+
+  .social-grid {
+    grid-template-columns: 1fr;
+  }
+
+  .calendar-header-top {
+    flex-direction: column;
+    align-items: flex-start;
+  }
+
+  .calendar-month-nav h2 {
+    font-size: 15px;
+  }
+
+  .calendar-table td {
+    height: 36px;
+    padding: 3px;
+    font-size: 9px;
+  }
+
+  .radio-player {
+    grid-template-columns: 58px minmax(0, 1fr);
+    gap: 10px;
+  }
+
+  .radio-cover {
+    width: 58px;
+    height: 58px;
+  }
+
+  .radio-controls {
+    flex-wrap: wrap;
+  }
+
+  .radio-volume {
+    width: 60px;
+  }
+
+}
+
+@media (max-width: 480px) {
+
+  .panel-content {
+    padding: 10px;
+  }
+
+  .calendar-clock {
+    font-size: 19px;
+  }
+
+  .calendar-table th {
+    font-size: 7px;
+  }
+
+  .calendar-table td {
+    height: 32px;
+    font-size: 8px;
+  }
+
+  .calendar-footer {
+    flex-wrap: wrap;
+  }
+
+}
+
+
+/* =========================================================
+   RESPONSIVE / CHESS.COM SIDEBAR
    ========================================================= */
 
 @media (max-width: 520px) {
 
-    .calendar-panel {
-        padding: 16px;
-    }
+  [data-calendar-page] {
+    padding: 8px;
+  }
 
-    .calendar-header {
-        align-items: flex-start;
-    }
+  .calendar-header {
+    padding: 11px;
+  }
 
-    .calendar-header h2 {
-        font-size: 21px;
-    }
+  .header-top {
+    display: block;
+    text-align: center;
+  }
 
-    .calendar-navigation button {
-        width: 34px;
-        height: 34px;
+  .system {
+    display: block;
+    margin-top: 4px;
+  }
 
-        font-size: 21px;
-    }
+  .month-nav {
+    grid-template-columns: 32px minmax(0, 1fr) 32px;
+    gap: 5px;
+  }
 
-    .calendar-day {
-        min-height: 40px;
+  .nav-btn {
+    width: 32px;
+    height: 32px;
+  }
 
-        border-radius: 7px;
+  .month-nav h1 {
+    font-size: 18px;
+    letter-spacing: 2px;
+  }
 
-        font-size: 9px;
-    }
+  .time-panel {
+    padding: 12px 8px;
+  }
 
-    .calendar-weekdays span {
-        font-size: 6px;
-    }
+  .time {
+    font-size: 25px;
+    letter-spacing: 2px;
+  }
 
-    .timezone-controls {
-        flex-wrap: wrap;
-    }
+  .calendar-day {
+    min-height: 38px;
+    padding: 7px 2px;
+  }
 
-    .timezone-controls > span {
-        width: 100%;
+  .calendar-day.empty {
+    min-height: 38px;
+  }
 
-        margin: 2px 5px 4px;
+  .calendar-number {
+    font-size: 10px;
+  }
 
-        padding: 0;
-    }
+  .calendar-weekdays > div,
+  .calendar-weekdays > span {
+    font-size: 7px;
+  }
 
+  .calendar-event {
+    grid-template-columns: 58px minmax(0, 1fr);
+    gap: 7px;
+    padding: 8px;
+  }
+
+  .calendar-event-info strong {
+    font-size: 10px;
+  }
+
+  .auxiliary-tools {
+    padding: 9px;
+  }
 }
 
-@media (max-width: 420px) {
 
-    .calendar-panel {
+@media (max-width: 350px) {
 
-        padding:
-            15px;
+  [data-calendar-page] {
+    padding: 6px;
+  }
 
-    }
+  .calendar-day {
+    min-height: 34px;
+  }
 
+  .calendar-day.empty {
+    min-height: 34px;
+  }
 
-    .calendar-navigation button {
+  .calendar-number {
+    font-size: 9px;
+  }
 
-        width: 34px;
+  .time {
+    font-size: 21px;
+  }
 
-        height: 34px;
-
-    }
-
-
-    .calendar-day {
-
-        min-height:
-            36px;
-
-        font-size:
-            9px;
-
-    }
-
-
-    .timezone-controls {
-
-        align-items:
-            flex-start;
-
-        flex-direction:
-            column;
-
-    }
+  .month-nav h1 {
+    font-size: 15px;
+  }
+}
 
 
-    .timezone-label {
+/* =========================================================
+   REDUCED MOTION
+   ========================================================= */
 
-        padding:
-            0 4px 3px;
+@media (prefers-reduced-motion: reduce) {
 
-    }
+  html {
+    scroll-behavior: auto;
+  }
 
+  *,
+  *::before,
+  *::after {
+    transition-duration: .01ms !important;
+    animation-duration: .01ms !important;
+  }
 }

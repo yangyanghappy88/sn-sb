@@ -1,1408 +1,1016 @@
-const Radio = {
+let audio = null;
+let playlist = [];
+let currentIndex = Number(
+  localStorage.getItem("shonenTrack") || 0
+);
 
-    playlist: [],
+let playlistReady = false;
+let audioEventsAttached = false;
 
-    currentIndex: 0,
+const RADIO_DEFAULT_COVER =
+  "https://images.chesscomfiles.com/uploads/v1/group/994818.7076cfad.160x160o.be2581528dae@2x.png";
 
-    isPlaying: false,
-
-    shuffle: false,
-
-    repeat: false,
-
-    volume: 0.75,
-
-    audio: null,
-
-    initialized: false
-
-};
+const RADIO_PLAYLIST_URL =
+  `playlist.json?v=${Date.now()}`;
 
 
-/* dom */
+function getAudio() {
+  if (
+    !audio ||
+    !document.contains(audio)
+  ) {
+    audio =
+      document.getElementById("audio");
+  }
 
-const radio$ = selector =>
-    document.querySelector(selector);
-
-
-/* audio */
-
-function initRadioAudio() {
-    
-    Radio.audio =
-        document.createElement("audio");
-
-
-    Radio.audio.preload =
-        "metadata";
-
-
-    /*
-     * Explicitly prevent autoplay.
-     */
-
-    Radio.audio.autoplay =
-        false;
-
-
-    Radio.audio.volume =
-        Radio.volume;
-
-
-    /*
-     * Useful for browsers / iframe contexts.
-     */
-
-    Radio.audio.setAttribute(
-        "playsinline",
-        ""
-    );
-
-
-    /*
-     * Audio events
-     */
-
-    Radio.audio.addEventListener(
-        "timeupdate",
-        updateProgress
-    );
-
-
-    Radio.audio.addEventListener(
-        "loadedmetadata",
-        updateDuration
-    );
-
-
-    Radio.audio.addEventListener(
-        "ended",
-        handleTrackEnd
-    );
-
-
-    Radio.audio.addEventListener(
-        "play",
-        () => {
-
-            Radio.isPlaying = true;
-
-            updatePlayButton();
-
-            updateRadioStatus();
-
-        }
-    );
-
-
-    Radio.audio.addEventListener(
-        "pause",
-        () => {
-
-            Radio.isPlaying = false;
-
-            updatePlayButton();
-
-            updateRadioStatus();
-
-        }
-    );
-
-
-    Radio.audio.addEventListener(
-        "error",
-        event => {
-
-            console.error(
-                "Radio playback error:",
-                event
-            );
-
-            updateRadioStatus(
-                "ERROR"
-            );
-
-        }
-    );
-
+  return audio;
 }
 
 
-/* ============================================
-   LOAD PLAYLIST
-   ============================================ */
+function escapeHtml(value = "") {
+  return String(value).replace(
+    /[&<>'"]/g,
+    character => ({
+      "&": "&amp;",
+      "<": "&lt;",
+      ">": "&gt;",
+      "'": "&#39;",
+      '"': "&quot;"
+    })[character]
+  );
+}
+
+
+function formatTime(value) {
+  if (
+    !Number.isFinite(value) ||
+    value < 0
+  ) {
+    return "0:00";
+  }
+
+  const minutes =
+    Math.floor(value / 60);
+
+  const seconds =
+    Math.floor(value % 60);
+
+  return `${minutes}:${String(
+    seconds
+  ).padStart(2, "0")}`;
+}
+
+
+function getTrackCover(track) {
+  return (
+    track?.cover ||
+    RADIO_DEFAULT_COVER
+  );
+}
+
+
+function getTrackTitle(track) {
+  return (
+    track?.title ||
+    "UNTITLED TRANSMISSION"
+  );
+}
+
+
+function getTrackArtist(track) {
+  return (
+    track?.artist ||
+    "SHONEN NEXUS RADIO"
+  );
+}
+
+
+function getTrackGenre(track) {
+  return (
+    track?.genre ||
+    "ANIME AUDIO"
+  );
+}
+
+
+/* =========================
+   PLAYLIST
+   ========================= */
 
 async function loadPlaylist() {
+  console.log(
+    "SHONEN NEXUS RADIO: loading playlist..."
+  );
 
-    try {
+  try {
+    const response = await fetch(
+      RADIO_PLAYLIST_URL,
+      {
+        cache: "no-store"
+      }
+    );
 
-        const response =
-            await fetch(
-                "playlist.json",
-                {
-                    cache: "no-cache"
-                }
-            );
+    console.log(
+      "SHONEN NEXUS RADIO: playlist response:",
+      response.status,
+      response.url
+    );
 
-
-        if (!response.ok) {
-
-            throw new Error(
-                `Playlist request failed: ${response.status}`
-            );
-
-        }
-
-
-        const playlist =
-            await response.json();
-
-
-        if (!Array.isArray(playlist)) {
-
-            throw new Error(
-                "playlist.json must contain an array."
-            );
-
-        }
-
-
-        Radio.playlist =
-            playlist.filter(track => {
-
-                return (
-                    track &&
-                    typeof track.file === "string"
-                );
-
-            });
-
-
-        if (!Radio.playlist.length) {
-
-            throw new Error(
-                "Playlist contains no valid tracks."
-            );
-
-        }
-
-
-        loadTrack(0);
-
-        updatePlaylistUI();
-
-        updateRadioStatus(
-            "READY"
-        );
-
-
-    } catch (error) {
-
-        console.error(
-            "Could not load radio playlist:",
-            error
-        );
-
-
-        updateRadioStatus(
-            "OFFLINE"
-        );
-
+    if (!response.ok) {
+      throw new Error(
+        `Playlist request failed: ${response.status}`
+      );
     }
 
+    const data =
+      await response.json();
+
+    if (!Array.isArray(data)) {
+      throw new Error(
+        "Playlist JSON must contain an array."
+      );
+    }
+
+    playlist = data.filter(
+      track =>
+        track &&
+        typeof track.file === "string" &&
+        track.file.trim() !== ""
+    );
+
+    console.log(
+      `SHONEN NEXUS RADIO: ${playlist.length} tracks loaded.`
+    );
+
+  } catch (error) {
+
+    console.error(
+      "SHONEN NEXUS RADIO playlist error:",
+      error
+    );
+
+    playlist = [];
+  }
+
+  playlistReady = true;
+
+  if (!playlist.length) {
+    currentIndex = 0;
+  } else if (
+    currentIndex < 0 ||
+    currentIndex >= playlist.length
+  ) {
+    currentIndex = 0;
+  }
+
+  const player =
+    getAudio();
+
+  if (
+    player &&
+    playlist.length
+  ) {
+    loadTrack(
+      currentIndex,
+      true
+    );
+  }
+
+  if (
+    location.hash === "#social" &&
+    typeof window.renderRadioPage ===
+      "function"
+  ) {
+    window.renderRadioPage();
+  }
 }
 
 
-/* ============================================
-   LOAD TRACK
-   ============================================ */
+/* =========================
+   TRACK LOADING
+   ========================= */
 
-function loadTrack(index) {
+function loadTrack(
+  nextIndex,
+  restoreTime = true
+) {
+  const player =
+    getAudio();
 
-    if (!Radio.playlist.length) {
-        return;
-    }
+  if (
+    !player ||
+    !playlist.length
+  ) {
+    return;
+  }
 
+  currentIndex =
+    (
+      Number(nextIndex) +
+      playlist.length
+    ) % playlist.length;
 
-    /*
-     * Keep the index inside playlist bounds.
-     */
+  const track =
+    playlist[currentIndex];
+
+  if (!track?.file) {
+    return;
+  }
+
+  const trackURL =
+    new URL(
+      track.file,
+      document.baseURI
+    ).href;
+
+  console.log(
+    "SHONEN NEXUS RADIO: loading track:",
+    trackURL
+  );
+
+  player.src = trackURL;
+  player.load();
+
+  localStorage.setItem(
+    "shonenTrack",
+    String(currentIndex)
+  );
+
+  if (restoreTime) {
+
+    const savedTime =
+      Number(
+        localStorage.getItem(
+          "shonenTime"
+        ) || 0
+      );
 
     if (
-        index < 0 ||
-        index >= Radio.playlist.length
+      Number.isFinite(savedTime) &&
+      savedTime > 0
     ) {
 
-        index = 0;
+      player.addEventListener(
+        "loadedmetadata",
+        () => {
 
+          if (
+            Number.isFinite(
+              player.duration
+            ) &&
+            savedTime <
+              player.duration
+          ) {
+            player.currentTime =
+              savedTime;
+          }
+
+        },
+        {
+          once: true
+        }
+      );
     }
+  }
 
-
-    Radio.currentIndex =
-        index;
-
-
-    const track =
-        Radio.playlist[
-            Radio.currentIndex
-        ];
-
-
-    /*
-     * Stop the old track before changing
-     * the source.
-     */
-
-    if (Radio.audio) {
-
-        Radio.audio.pause();
-
-        Radio.audio.currentTime = 0;
-
-        Radio.audio.src =
-            encodeURI(track.file);
-
-    }
-
-
-    updateTrackInfo();
-
-    updatePlaylistUI();
-
-    resetProgress();
-
+  syncRadioUI();
 }
 
 
-/* ============================================
-   PLAY
-   ============================================ */
+/* =========================
+   RADIO INITIALIZATION
+   ========================= */
 
-async function playRadio() {
+function initializeRadio() {
+  const player =
+    getAudio();
 
-    if (!Radio.audio) {
-        return;
-    }
+  if (!player) {
+    return false;
+  }
 
+  const savedVolume =
+    Number(
+      localStorage.getItem(
+        "shonenVolume"
+      )
+    );
 
-    if (!Radio.playlist.length) {
-        return;
-    }
+  player.volume =
+    Number.isFinite(savedVolume)
+      ? Math.min(
+          Math.max(
+            savedVolume,
+            0
+          ),
+          1
+        )
+      : 0.75;
 
+  attachAudioEvents();
 
-    /*
-     * User interaction occurs here, so the
-     * browser permits playback.
-     */
+  if (
+    playlistReady &&
+    playlist.length &&
+    !player.src
+  ) {
+    loadTrack(
+      currentIndex,
+      true
+    );
+  }
 
-    try {
-
-        await Radio.audio.play();
-
-    } catch (error) {
-
-        console.error(
-            "Could not start radio:",
-            error
-        );
-
-        updateRadioStatus(
-            "PRESS PLAY"
-        );
-
-    }
-
+  return true;
 }
 
 
-/* ============================================
-   PAUSE
-   ============================================ */
-
-function pauseRadio() {
-
-    if (!Radio.audio) {
-        return;
-    }
-
-
-    Radio.audio.pause();
-
-}
-
-
-/* ============================================
-   TOGGLE PLAYBACK
-   ============================================ */
+/* =========================
+   PLAY / PAUSE
+   ========================= */
 
 function toggleRadio() {
+  const player =
+    getAudio();
 
-    if (Radio.isPlaying) {
+  if (
+    !player ||
+    !playlistReady ||
+    !playlist.length
+  ) {
+    return;
+  }
 
-        pauseRadio();
+  if (!player.src) {
+    loadTrack(
+      currentIndex,
+      false
+    );
+  }
 
-    } else {
+  if (player.paused) {
 
-        playRadio();
+    player
+      .play()
+      .catch(error => {
+        console.warn(
+          "SHONEN NEXUS RADIO playback blocked:",
+          error
+        );
+      });
 
-    }
+  } else {
 
+    player.pause();
+
+  }
 }
 
 
-/* ============================================
-   NEXT TRACK
-   ============================================ */
+/* =========================
+   RADIO UI
+   ========================= */
 
-function nextTrack() {
+function syncRadioUI() {
 
-    if (!Radio.playlist.length) {
-        return;
-    }
+  const player =
+    getAudio();
 
+  const track =
+    playlist[currentIndex];
 
-    let nextIndex;
-
-
-    if (Radio.shuffle) {
-
-        nextIndex =
-            getRandomTrackIndex();
-
-    } else {
-
-        nextIndex =
-            Radio.currentIndex + 1;
-
-
-        if (
-            nextIndex >=
-            Radio.playlist.length
-        ) {
-
-            nextIndex = 0;
-
-        }
-
-    }
-
-
-    loadTrack(nextIndex);
-
-
-    /*
-     * Only continue playback if the radio
-     * was already playing.
-     */
-
-    if (Radio.isPlaying) {
-
-        playRadio();
-
-    }
-
-}
-
-
-/* ============================================
-   PREVIOUS TRACK
-   ============================================ */
-
-function previousTrack() {
-
-    if (!Radio.playlist.length) {
-        return;
-    }
-
-
-    /*
-     * If we're more than 3 seconds into the
-     * track, restart it instead.
-     */
-
-    if (
-        Radio.audio &&
-        Radio.audio.currentTime > 3
-    ) {
-
-        Radio.audio.currentTime = 0;
-
-        return;
-
-    }
-
-
-    let previousIndex =
-        Radio.currentIndex - 1;
-
-
-    if (previousIndex < 0) {
-
-        previousIndex =
-            Radio.playlist.length - 1;
-
-    }
-
-
-    loadTrack(previousIndex);
-
-
-    if (Radio.isPlaying) {
-
-        playRadio();
-
-    }
-
-}
-
-
-/* ============================================
-   RANDOM TRACK
-   ============================================ */
-
-function getRandomTrackIndex() {
-
-    if (Radio.playlist.length <= 1) {
-
-        return Radio.currentIndex;
-
-    }
-
-
-    let randomIndex;
-
-
-    do {
-
-        randomIndex =
-            Math.floor(
-                Math.random() *
-                Radio.playlist.length
-            );
-
-    } while (
-        randomIndex ===
-        Radio.currentIndex
+  const title =
+    document.getElementById(
+      "radioTitle"
     );
 
-
-    return randomIndex;
-
-}
-
-
-/* ============================================
-   TRACK END
-   ============================================ */
-
-function handleTrackEnd() {
-
-    /*
-     * Repeat current track.
-     */
-
-    if (Radio.repeat) {
-
-        Radio.audio.currentTime = 0;
-
-        playRadio();
-
-        return;
-
-    }
-
-
-    /*
-     * Otherwise advance normally.
-     */
-
-    nextTrack();
-
-}
-
-
-/* ============================================
-   SHUFFLE
-   ============================================ */
-
-function toggleShuffle() {
-
-    Radio.shuffle =
-        !Radio.shuffle;
-
-
-    const button =
-        radio$('[data-radio="shuffle"]');
-
-
-    if (button) {
-
-        button.classList.toggle(
-            "active",
-            Radio.shuffle
-        );
-
-    }
-
-}
-
-
-/* ============================================
-   REPEAT
-   ============================================ */
-
-function toggleRepeat() {
-
-    Radio.repeat =
-        !Radio.repeat;
-
-
-    const button =
-        radio$('[data-radio="repeat"]');
-
-
-    if (button) {
-
-        button.classList.toggle(
-            "active",
-            Radio.repeat
-        );
-
-    }
-
-}
-
-
-/* ============================================
-   VOLUME
-   ============================================ */
-
-function setVolume(value) {
-
-    if (!Radio.audio) {
-        return;
-    }
-
-
-    let volume =
-        Number(value);
-
-
-    if (Number.isNaN(volume)) {
-        return;
-    }
-
-
-    /*
-     * Support both:
-     *
-     * 0 → 1
-     *
-     * 0 → 100
-     */
-
-    if (volume > 1) {
-
-        volume =
-            volume / 100;
-
-    }
-
-
-    volume =
-        Math.max(
-            0,
-            Math.min(1, volume)
-        );
-
-
-    Radio.volume =
-        volume;
-
-
-    Radio.audio.volume =
-        volume;
-
-
-    localStorage.setItem(
-        "shonen-radio-volume",
-        String(volume)
+  const artist =
+    document.getElementById(
+      "radioArtist"
     );
 
-
-    updateVolumeUI();
-
-}
-
-
-/* ============================================
-   RESTORE VOLUME
-   ============================================ */
-
-function restoreVolume() {
-
-    const saved =
-        localStorage.getItem(
-            "shonen-radio-volume"
-        );
-
-
-    if (saved !== null) {
-
-        const volume =
-            Number(saved);
-
-
-        if (!Number.isNaN(volume)) {
-
-            Radio.volume =
-                Math.max(
-                    0,
-                    Math.min(1, volume)
-                );
-
-        }
-
-    }
-
-
-    if (Radio.audio) {
-
-        Radio.audio.volume =
-            Radio.volume;
-
-    }
-
-
-    updateVolumeUI();
-
-}
-
-
-/* ============================================
-   PROGRESS
-   ============================================ */
-
-function updateProgress() {
-
-    if (!Radio.audio) {
-        return;
-    }
-
-
-    const progress =
-        radio$('[data-radio="progress"]');
-
-
-    if (!progress) {
-        return;
-    }
-
-
-    if (
-        !Radio.audio.duration ||
-        !Number.isFinite(
-            Radio.audio.duration
-        )
-    ) {
-
-        progress.value = 0;
-
-        return;
-
-    }
-
-
-    progress.value =
-        (
-            Radio.audio.currentTime /
-            Radio.audio.duration
-        ) * 100;
-
-}
-
-
-/* ============================================
-   SEEK
-   ============================================ */
-
-function seekRadio(value) {
-
-    if (!Radio.audio) {
-        return;
-    }
-
-
-    if (
-        !Radio.audio.duration ||
-        !Number.isFinite(
-            Radio.audio.duration
-        )
-    ) {
-
-        return;
-
-    }
-
-
-    const percentage =
-        Number(value) / 100;
-
-
-    Radio.audio.currentTime =
-        Radio.audio.duration *
-        percentage;
-
-}
-
-
-/* ============================================
-   RESET PROGRESS
-   ============================================ */
-
-function resetProgress() {
-
-    const progress =
-        radio$('[data-radio="progress"]');
-
-
-    if (progress) {
-
-        progress.value = 0;
-
-    }
-
-
-    const current =
-        radio$('[data-radio="current-time"]');
-
-
-    if (current) {
-
-        current.textContent =
-            "0:00";
-
-    }
-
-}
-
-
-/* ============================================
-   DURATION
-   ============================================ */
-
-function updateDuration() {
-
-    if (!Radio.audio) {
-        return;
-    }
-
-
-    const duration =
-        radio$('[data-radio="duration"]');
-
-
-    if (!duration) {
-        return;
-    }
-
-
-    duration.textContent =
-        formatTime(
-            Radio.audio.duration
-        );
-
-}
-
-
-/* ============================================
-   TIME DISPLAY
-   ============================================ */
-
-function formatTime(seconds) {
-
-    if (
-        !Number.isFinite(seconds)
-    ) {
-
-        return "0:00";
-
-    }
-
-
-    const minutes =
-        Math.floor(
-            seconds / 60
-        );
-
-
-    const remainingSeconds =
-        Math.floor(
-            seconds % 60
-        );
-
-
-    return `${minutes}:${String(
-        remainingSeconds
-    ).padStart(2, "0")}`;
-
-}
-
-
-/* ============================================
-   UPDATE CURRENT TIME
-   ============================================ */
-
-function updateCurrentTime() {
-
-    if (!Radio.audio) {
-        return;
-    }
-
-
-    const current =
-        radio$('[data-radio="current-time"]');
-
-
-    if (current) {
-
-        current.textContent =
-            formatTime(
-                Radio.audio.currentTime
-            );
-
-    }
-
-}
-
-
-/* ============================================
-   TRACK INFORMATION
-   ============================================ */
-
-function updateTrackInfo() {
-
-    const track =
-        Radio.playlist[
-            Radio.currentIndex
-        ];
-
-
-    if (!track) {
-        return;
-    }
-
-
-    const title =
-        radio$('[data-radio="title"]');
-
-
-    const artist =
-        radio$('[data-radio="artist"]');
-
+  const cover =
+    document.getElementById(
+      "radioCover"
+    );
+
+  const playButton =
+    document.getElementById(
+      "radioPlay"
+    );
+
+  if (track) {
 
     if (title) {
-
-        title.textContent =
-            track.title ||
-            "Unknown Track";
-
+      title.textContent =
+        getTrackTitle(track);
     }
-
 
     if (artist) {
-
-        artist.textContent =
-            track.artist ||
-            "Unknown Artist";
-
+      artist.textContent =
+        `${getTrackArtist(track)} • ${getTrackGenre(track)}`;
     }
 
+    if (cover) {
 
-    const number =
-        radio$('[data-radio="track-number"]');
+      cover.src =
+        getTrackCover(track);
 
-
-    if (number) {
-
-        number.textContent =
-            `${Radio.currentIndex + 1} / ${Radio.playlist.length}`;
-
+      cover.classList.toggle(
+        "playing",
+        Boolean(
+          player &&
+          !player.paused
+        )
+      );
     }
 
-}
+  } else {
 
+    if (title) {
+      title.textContent =
+        "NO AUDIO DETECTED";
+    }
 
-/* ============================================
-   PLAY BUTTON
-   ============================================ */
+    if (artist) {
+      artist.textContent =
+        "TRANSMISSION QUEUE EMPTY";
+    }
 
-function updatePlayButton() {
+    if (cover) {
 
-    const buttons =
-        $$('[data-radio="play"]');
+      cover.src =
+        RADIO_DEFAULT_COVER;
 
+      cover.classList.remove(
+        "playing"
+      );
+    }
+  }
 
-    buttons.forEach(button => {
+  if (playButton) {
 
-        button.textContent =
-            Radio.isPlaying
-                ? "Ⅱ"
-                : "▶";
+    playButton.textContent =
+      player &&
+      !player.paused
+        ? "❚❚ PAUSE"
+        : "▶ PLAY";
+  }
 
+  document
+    .querySelectorAll(".track")
+    .forEach(
+      (element, index) => {
 
-        button.setAttribute(
-            "aria-label",
-            Radio.isPlaying
-                ? "Pause"
-                : "Play"
+        element.classList.toggle(
+          "active",
+          index === currentIndex
         );
 
-    });
-
+      }
+    );
 }
 
 
-/* ============================================
-   STATUS
-   ============================================ */
+/* =========================
+   TRACK LIST
+   ========================= */
 
-function updateRadioStatus(
-    status = null
-) {
+function renderTrackList() {
 
-    const element =
-        radio$('[data-radio="status"]');
-
-
-    if (!element) {
-        return;
-    }
-
-
-    if (!status) {
-
-        status =
-            Radio.isPlaying
-                ? "PLAYING"
-                : "PAUSED";
-
-    }
-
-
-    element.textContent =
-        status;
-
-}
-
-
-/* ============================================
-   VOLUME UI
-   ============================================ */
-
-function updateVolumeUI() {
-
-    const volume =
-        radio$('[data-radio="volume"]');
-
-
-    if (!volume) {
-        return;
-    }
-
-
-    volume.value =
-        Radio.volume * 100;
-
-}
-
-
-/* ============================================
-   PLAYLIST UI
-   ============================================ */
-
-function updatePlaylistUI() {
-
-    const container =
-        radio$('[data-radio="playlist"]');
-
-
-    if (!container) {
-        return;
-    }
-
-
-    container.innerHTML = "";
-
-
-    Radio.playlist.forEach(
-        (track, index) => {
-
-            const item =
-                document.createElement("button");
-
-
-            item.type =
-                "button";
-
-
-            item.className =
-                "radio-track";
-
-
-            item.dataset.index =
-                index;
-
-
-            item.innerHTML = `
-
-                <span class="radio-track-number">
-                    ${String(index + 1).padStart(2, "0")}
-                </span>
-
-                <span class="radio-track-info">
-
-                    <strong>
-                        ${escapeHTML(
-                            track.title ||
-                            "Unknown Track"
-                        )}
-                    </strong>
-
-                    <small>
-                        ${escapeHTML(
-                            track.artist ||
-                            "Unknown Artist"
-                        )}
-                    </small>
-
-                </span>
-
-            `;
-
-
-            item.addEventListener(
-                "click",
-                () => {
-
-                    const wasPlaying =
-                        Radio.isPlaying;
-
-
-                    loadTrack(index);
-
-
-                    if (wasPlaying) {
-
-                        playRadio();
-
-                    }
-
-                }
-            );
-
-
-            container.appendChild(
-                item
-            );
-
-        }
+  const list =
+    document.getElementById(
+      "trackList"
     );
 
+  if (!list) {
+    return;
+  }
 
-    highlightCurrentTrack();
+  if (!playlistReady) {
 
-}
+    list.innerHTML = `
+      <div class="system-terminal">
 
+        <div class="terminal-line">
 
-/* ============================================
-   HIGHLIGHT CURRENT TRACK
-   ============================================ */
+          <span class="terminal-prompt">
+            &gt;
+          </span>
 
-function highlightCurrentTrack() {
+          <span class="terminal-muted">
+            SCANNING SHONEN AUDIO DATABASE...
+          </span>
 
-    $$(
-        '[data-radio="playlist"] .radio-track'
-    ).forEach(item => {
+        </div>
 
-        item.classList.toggle(
-            "active",
-            Number(item.dataset.index) ===
-            Radio.currentIndex
-        );
+      </div>
+    `;
+
+    return;
+  }
+
+  if (!playlist.length) {
+
+    list.innerHTML = `
+      <div class="system-terminal">
+
+        <div class="terminal-line">
+
+          <span class="terminal-prompt">
+            &gt;
+          </span>
+
+          <span>
+            NO AUDIO DETECTED
+          </span>
+
+        </div>
+
+        <div
+          class="terminal-line"
+          style="margin-top:8px;"
+        >
+
+          <span class="terminal-prompt">
+            &gt;
+          </span>
+
+          <span class="terminal-muted">
+            CHECK playlist.json AND music/
+          </span>
+
+        </div>
+
+      </div>
+    `;
+
+    return;
+  }
+
+  list.innerHTML =
+    playlist
+      .map(
+        (track, index) => {
+
+          const title =
+            escapeHtml(
+              getTrackTitle(track)
+            );
+
+          const artist =
+            escapeHtml(
+              getTrackArtist(track)
+            );
+
+          const genre =
+            escapeHtml(
+              getTrackGenre(track)
+            );
+
+          const cover =
+            escapeHtml(
+              getTrackCover(track)
+            );
+
+          const active =
+            index === currentIndex;
+
+          return `
+            <button
+              class="track ${
+                active
+                  ? "active"
+                  : ""
+              }"
+              data-i="${index}"
+              type="button"
+            >
+
+              <img
+                src="${cover}"
+                alt=""
+                loading="lazy"
+                onerror="
+                  this.src='${RADIO_DEFAULT_COVER}'
+                "
+              >
+
+              <span>
+
+                <strong>
+                  ${title}
+                </strong>
+
+                <br>
+
+                <small>
+                  ${artist} • ${genre}
+                </small>
+
+              </span>
+
+              <span class="track-play-icon">
+                ${
+                  active
+                    ? "●"
+                    : "▶"
+                }
+              </span>
+
+            </button>
+          `;
+        }
+      )
+      .join("");
+
+  list
+    .querySelectorAll(
+      ".track"
+    )
+    .forEach(button => {
+
+      button.addEventListener(
+        "click",
+        () => {
+
+          const selectedIndex =
+            Number(
+              button.dataset.i
+            );
+
+          loadTrack(
+            selectedIndex,
+            false
+          );
+
+          const player =
+            getAudio();
+
+          if (player) {
+
+            player
+              .play()
+              .catch(() => {});
+
+          }
+        }
+      );
 
     });
-
 }
 
 
-/* ============================================
-   ESCAPE HTML
-   ============================================ */
-
-function escapeHTML(value) {
-
-    return String(value)
-        .replaceAll("&", "&amp;")
-        .replaceAll("<", "&lt;")
-        .replaceAll(">", "&gt;")
-        .replaceAll('"', "&quot;")
-        .replaceAll("'", "&#039;");
-
-}
-
-
-/* ============================================
-   BIND RADIO CONTROLS
-   ============================================ */
+/* =========================
+   CONTROLS
+   ========================= */
 
 function bindRadioControls() {
 
-    /*
-     * Play
-     */
-
-    $$('[data-radio="play"]')
-        .forEach(button => {
-
-            button.addEventListener(
-                "click",
-                toggleRadio
-            );
-
-        });
-
-
-    /*
-     * Previous
-     */
-
-    $$('[data-radio="previous"]')
-        .forEach(button => {
-
-            button.addEventListener(
-                "click",
-                previousTrack
-            );
-
-        });
-
-
-    /*
-     * Next
-     */
-
-    $$('[data-radio="next"]')
-        .forEach(button => {
-
-            button.addEventListener(
-                "click",
-                nextTrack
-            );
-
-        });
-
-
-    /*
-     * Shuffle
-     */
-
-    $$('[data-radio="shuffle"]')
-        .forEach(button => {
-
-            button.addEventListener(
-                "click",
-                toggleShuffle
-            );
-
-        });
-
-
-    /*
-     * Repeat
-     */
-
-    $$('[data-radio="repeat"]')
-        .forEach(button => {
-
-            button.addEventListener(
-                "click",
-                toggleRepeat
-            );
-
-        });
-
-
-    /*
-     * Progress
-     */
-
-    $$('[data-radio="progress"]')
-        .forEach(input => {
-
-            input.addEventListener(
-                "input",
-                event => {
-
-                    seekRadio(
-                        event.target.value
-                    );
-
-                }
-            );
-
-        });
-
-
-    /*
-     * Volume
-     */
-
-    $$('[data-radio="volume"]')
-        .forEach(input => {
-
-            input.addEventListener(
-                "input",
-                event => {
-
-                    setVolume(
-                        event.target.value
-                    );
-
-                }
-            );
-
-        });
-
-}
-
-
-/* ============================================
-   RADIO CLOCK
-   ============================================ */
-
-function startRadioClock() {
-
-    setInterval(
-        updateCurrentTime,
-        500
+  const play =
+    document.getElementById(
+      "radioPlay"
     );
 
-}
+  const previous =
+    document.getElementById(
+      "radioPrev"
+    );
 
+  const next =
+    document.getElementById(
+      "radioNext"
+    );
 
-/* ============================================
-   RADIO INITIALIZATION
-   ============================================ */
+  const progress =
+    document.getElementById(
+      "progress"
+    );
 
-async function initRadio() {
+  const volume =
+    document.getElementById(
+      "radioVolume"
+    );
 
-    /*
-     * Only initialize if the page actually
-     * contains radio controls.
-     */
+  const player =
+    getAudio();
 
-    const radio =
-        document.querySelector(
-            "[data-radio-player]"
+  if (play) {
+    play.onclick =
+      toggleRadio;
+  }
+
+  if (previous) {
+
+    previous.onclick = () => {
+
+      if (!playlist.length) {
+        return;
+      }
+
+      loadTrack(
+        currentIndex - 1,
+        false
+      );
+
+      getAudio()
+        ?.play()
+        .catch(() => {});
+
+    };
+  }
+
+  if (next) {
+
+    next.onclick = () => {
+
+      if (!playlist.length) {
+        return;
+      }
+
+      loadTrack(
+        currentIndex + 1,
+        false
+      );
+
+      getAudio()
+        ?.play()
+        .catch(() => {});
+
+    };
+  }
+
+  if (progress) {
+
+    progress.oninput = () => {
+
+      const currentPlayer =
+        getAudio();
+
+      if (
+        !currentPlayer ||
+        !Number.isFinite(
+          currentPlayer.duration
+        ) ||
+        currentPlayer.duration <= 0
+      ) {
+        return;
+      }
+
+      currentPlayer.currentTime =
+        (
+          Number(
+            progress.value
+          ) / 100
+        ) *
+        currentPlayer.duration;
+    };
+  }
+
+  if (volume) {
+
+    const currentVolume =
+      player
+        ? player.volume
+        : 0.75;
+
+    volume.value =
+      String(currentVolume);
+
+    volume.oninput = () => {
+
+      const currentPlayer =
+        getAudio();
+
+      if (!currentPlayer) {
+        return;
+      }
+
+      const newVolume =
+        Math.min(
+          Math.max(
+            Number(
+              volume.value
+            ),
+            0
+          ),
+          1
         );
 
+      currentPlayer.volume =
+        newVolume;
 
-    if (!radio) {
+      localStorage.setItem(
+        "shonenVolume",
+        String(newVolume)
+      );
+    };
+  }
+}
+
+
+/* =========================
+   AUDIO EVENTS
+   ========================= */
+
+function attachAudioEvents() {
+
+  const player =
+    getAudio();
+
+  if (!player) {
+    return;
+  }
+
+  if (audioEventsAttached) {
+    return;
+  }
+
+  audioEventsAttached =
+    true;
+
+  player.addEventListener(
+    "play",
+    syncRadioUI
+  );
+
+  player.addEventListener(
+    "pause",
+    syncRadioUI
+  );
+
+  player.addEventListener(
+    "ended",
+    () => {
+
+      if (!playlist.length) {
         return;
+      }
+
+      loadTrack(
+        currentIndex + 1,
+        false
+      );
+
+      player
+        .play()
+        .catch(() => {});
+
+    }
+  );
+
+  player.addEventListener(
+    "error",
+    () => {
+
+      const track =
+        playlist[currentIndex];
+
+      console.error(
+        "Unable to load Shonen Nexus track:",
+        track?.file,
+        player.error
+      );
+
+      const artist =
+        document.getElementById(
+          "radioArtist"
+        );
+
+      if (artist) {
+
+        artist.textContent =
+          "TRANSMISSION ERROR — CHECK MUSIC FILE.";
+      }
+    }
+  );
+
+  player.addEventListener(
+    "timeupdate",
+    () => {
+
+      if (
+        Number.isFinite(
+          player.currentTime
+        )
+      ) {
+
+        localStorage.setItem(
+          "shonenTime",
+          String(
+            Math.floor(
+              player.currentTime
+            )
+          )
+        );
+      }
+
+      const progress =
+        document.getElementById(
+          "progress"
+        );
+
+      const elapsed =
+        document.getElementById(
+          "elapsed"
+        );
+
+      const duration =
+        document.getElementById(
+          "duration"
+        );
+
+      if (
+        progress &&
+        Number.isFinite(
+          player.duration
+        ) &&
+        player.duration > 0
+      ) {
+
+        progress.value =
+          String(
+            (
+              player.currentTime /
+              player.duration
+            ) * 100
+          );
+      }
+
+      if (elapsed) {
+
+        elapsed.textContent =
+          formatTime(
+            player.currentTime
+          );
+      }
+
+      if (duration) {
+
+        duration.textContent =
+          formatTime(
+            player.duration
+          );
+      }
+    }
+  );
+
+  player.addEventListener(
+    "loadedmetadata",
+    () => {
+
+      const duration =
+        document.getElementById(
+          "duration"
+        );
+
+      if (duration) {
+
+        duration.textContent =
+          formatTime(
+            player.duration
+          );
+      }
+    }
+  );
+}
+
+
+/* =========================
+   PUBLIC RADIO INTERFACE
+   ========================= */
+
+window.renderRadioPage =
+  function() {
+
+    const player =
+      getAudio();
+
+    if (!player) {
+      return;
     }
 
+    initializeRadio();
 
-    if (Radio.initialized) {
-        return;
-    }
-
-
-    Radio.initialized =
-        true;
-
-
-    initRadioAudio();
-
-    restoreVolume();
-
+    renderTrackList();
     bindRadioControls();
-
-    startRadioClock();
-
-    await loadPlaylist();
-
-}
+    syncRadioUI();
+  };
 
 
-/* ============================================
-   GLOBAL RADIO API
-   ============================================ */
+window.stopRadioForNavigation =
+  function() {
 
-window.ShonenRadio = {
+    const player =
+      getAudio();
 
-    play:
-        playRadio,
-
-    pause:
-        pauseRadio,
-
-    toggle:
-        toggleRadio,
-
-    next:
-        nextTrack,
-
-    previous:
-        previousTrack,
-
-    shuffle:
-        toggleShuffle,
-
-    repeat:
-        toggleRepeat,
-
-    volume:
-        setVolume,
-
-    seek:
-        seekRadio,
-
-    getState: () => ({
-        currentIndex:
-            Radio.currentIndex,
-
-        isPlaying:
-            Radio.isPlaying,
-
-        shuffle:
-            Radio.shuffle,
-
-        repeat:
-            Radio.repeat,
-
-        volume:
-            Radio.volume
-    })
-
-};
+    if (player) {
+      player.pause();
+    }
+  };
 
 
-/* ============================================
+/* =========================
    START RADIO
-   ============================================ */
+   ========================= */
 
-if (
-    document.readyState === "loading"
-) {
-
-    document.addEventListener(
-        "DOMContentLoaded",
-        initRadio
-    );
-
-} else {
-
-    initRadio();
-
-}
+loadPlaylist();

@@ -1,268 +1,468 @@
 <!DOCTYPE html>
 <html lang="en">
+
 <head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
 
-    <title>Shonen Nexus | Chess Club</title>
+  <meta charset="UTF-8">
 
-    <link rel="stylesheet" href="style.css">
+  <meta
+    name="viewport"
+    content="width=device-width, initial-scale=1.0"
+  >
+
+  <meta
+    name="theme-color"
+    content="#0b0b0d"
+  >
+
+  <meta
+    name="description"
+    content="Shonen Nexus — Anime, Chess & Community"
+  >
+
+  <title>Shonen Nexus</title>
+
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+
+  <link
+    rel="preconnect"
+    href="https://fonts.gstatic.com"
+    crossorigin
+  >
+
+  <link
+    href="https://fonts.googleapis.com/css2?family=Rajdhani:wght@400;500;600;700&display=swap"
+    rel="stylesheet"
+  >
+
+  <link
+    rel="stylesheet"
+    href="style.css"
+  >
+
 </head>
 
-<body>
 
-    <!-- mobile -->
+<body class="theme-default">
 
-    <header class="topbar">
+  <!-- =====================================================
+       AMBIENT BACKGROUND
+       ===================================================== -->
 
-        <button
-            class="menu-toggle"
-            id="menuToggle"
-            aria-label="Open navigation"
-            aria-expanded="false"
+  <div
+    class="ambient"
+    aria-hidden="true"
+  >
+
+    <div class="grid"></div>
+
+    <div class="scanline"></div>
+
+    <div class="orb orb-one"></div>
+
+    <div class="orb orb-two"></div>
+
+  </div>
+
+
+  <!-- =====================================================
+       SIDEBAR
+       ===================================================== -->
+
+  <aside
+    class="sidebar"
+    id="sidebar"
+  >
+
+    <!-- CLUB IDENTITY -->
+
+    <a
+      href="#home"
+      class="sidebar-brand"
+      aria-label="Return to Shonen Nexus home"
+    >
+
+      <div class="sidebar-logo-wrap">
+
+        <img
+          class="sidebar-logo"
+          src="https://images.chesscomfiles.com/uploads/v1/group/994818.7076cfad.160x160o.be2581528dae@2x.png"
+          alt="Shonen Nexus logo"
         >
-            <span></span>
-            <span></span>
-            <span></span>
-        </button>
 
-        <a href="index.html" class="club-brand">
-            <img
-                src="https://images.chesscomfiles.com/uploads/v1/group/994818.7076cfad.160x160o.be2581528dae@2x.png"
-                alt="Shonen Nexus"
-            >
-
-            <div class="brand-text">
-                <strong>SHONEN NEXUS</strong>
-                <small>ANIME × CHESS</small>
-            </div>
-        </a>
-
-    </header>
+      </div>
 
 
-    <!-- ============================= -->
-    <!-- SLIDE-OUT NAVIGATION -->
-    <!-- ============================= -->
+      <div class="sidebar-brand-text">
 
-    <nav class="side-nav" id="sideNav">
+        <strong>
+          SHONEN<br>NEXUS
+        </strong>
 
-        <div class="nav-header">
-            <span>NEXUS MENU</span>
+        <small>
+          ANIME × CHESS NETWORK
+        </small>
 
-            <button
-                class="nav-close"
-                id="navClose"
-                aria-label="Close navigation"
-            >
-                ×
-            </button>
-        </div>
+      </div>
 
-        <div class="nav-links">
+    </a>
 
-            <a href="index.html" class="nav-link active">
-                <span>⌂</span>
-                <span>HOME</span>
-            </a>
 
-            <a href="notes.html" class="nav-link">
-                <span>◈</span>
-                <span>NOTES</span>
-            </a>
+    <!-- SYSTEM STATUS -->
 
-            <a href="announcements.html" class="nav-link">
-                <span>!</span>
-                <span>ANNOUNCEMENTS</span>
-            </a>
+    <div class="sidebar-status">
 
-            <a href="forums.html" class="nav-link">
-                <span>☷</span>
-                <span>FORUMS</span>
-            </a>
+      <span class="status-indicator"></span>
 
-            <a href="events.html" class="nav-link">
-                <span>◇</span>
-                <span>CLUB EVENTS</span>
-            </a>
+      <div>
 
-            <div class="nav-divider"></div>
+        <strong>
+          SYSTEM ONLINE
+        </strong>
 
-            <a href="registry.html" class="nav-link">
-                <span>♟</span>
-                <span>REGISTRY</span>
-            </a>
+        <small>
+          SHONEN NETWORK
+        </small>
 
-            <a href="command.html" class="nav-link">
-                <span>⚔</span>
-                <span>COMMAND</span>
-            </a>
+      </div>
 
-            <a href="social.html" class="nav-link">
-                <span>♫</span>
-                <span>SOCIAL</span>
-            </a>
+    </div>
 
-        </div>
 
-        <div class="nav-footer">
-            <span>SHONEN NEXUS</span>
-            <small>CHESS × ANIME COMMUNITY</small>
-        </div>
+    <!-- NAVIGATION -->
+
+    <nav
+      id="mainNav"
+      class="sidebar-nav"
+      aria-label="Primary navigation"
+    >
+
+      <div class="nav-heading">
+
+        <span>
+          NAVIGATION
+        </span>
+
+        <span>
+          01—04
+        </span>
+
+      </div>
+
+
+      <a
+        href="#home"
+        class="nav-item active"
+        data-section="home"
+      >
+
+        <span class="nav-index">
+          01
+        </span>
+
+        <span class="nav-copy">
+
+          <strong>
+            HOME
+          </strong>
+
+          <small>
+            Nexus Overview
+          </small>
+
+        </span>
+
+        <span class="nav-arrow">
+          →
+        </span>
+
+      </a>
+
+
+      <a
+        href="#registry"
+        class="nav-item"
+        data-section="registry"
+      >
+
+        <span class="nav-index">
+          02
+        </span>
+
+        <span class="nav-copy">
+
+          <strong>
+            REGISTRY
+          </strong>
+
+          <small>
+            Members & Dice
+          </small>
+
+        </span>
+
+        <span class="nav-arrow">
+          →
+        </span>
+
+      </a>
+
+
+      <a
+        href="#social"
+        class="nav-item"
+        data-section="social"
+      >
+
+        <span class="nav-index">
+          03
+        </span>
+
+        <span class="nav-copy">
+
+          <strong>
+            SOCIAL
+          </strong>
+
+          <small>
+            Calendar & Radio
+          </small>
+
+        </span>
+
+        <span class="nav-arrow">
+          →
+        </span>
+
+      </a>
+
+
+      <a
+        href="#command"
+        class="nav-item"
+        data-section="command"
+      >
+
+        <span class="nav-index">
+          04
+        </span>
+
+        <span class="nav-copy">
+
+          <strong>
+            COMMAND
+          </strong>
+
+          <small>
+            Directives & Links
+          </small>
+
+        </span>
+
+        <span class="nav-arrow">
+          →
+        </span>
+
+      </a>
 
     </nav>
 
 
-    <!-- Overlay behind the navigation -->
+    <!-- SIDEBAR SYSTEM INFORMATION -->
 
-    <div
-        class="nav-overlay"
-        id="navOverlay"
-    ></div>
+    <div class="sidebar-system">
 
+      <div class="system-heading">
 
-    <!-- main page -->
+        <span>
+          SYSTEM
+        </span>
 
-    <main class="page">
+        <span>
+          STATUS
+        </span>
 
-        <section class="hero">
-
-            <div class="hero-logo">
-                <img
-                    src="https://images.chesscomfiles.com/uploads/v1/group/994818.7076cfad.160x160o.be2581528dae@2x.png"
-                    alt="Shonen Nexus Club Logo"
-                >
-            </div>
-
-            <div class="hero-content">
-
-                <p class="eyebrow">
-                    CHESS.COM CLUB
-                </p>
-
-                <h1>
-                    SHONEN<br>
-                    <span>NEXUS</span>
-                </h1>
-
-                <p class="hero-description">
-                    Anime × Chess × Community
-                </p>
-
-            </div>
-
-        </section>
+      </div>
 
 
-        <!-- abt -->
+      <div class="system-row">
 
-        <section class="panel about-panel">
+        <span>
+          NETWORK
+        </span>
 
-            <div class="panel-label">
-                <span>01</span>
-                ABOUT
-            </div>
+        <strong>
+          ONLINE
+        </strong>
 
-            <h2>
-                Welcome to the Nexus.
-            </h2>
-
-            <p>
-                Whether you're a longtime fan of the Big Three,
-                grew up watching classic shonen, or you're here for
-                the newest generation, you're welcome here.
-            </p>
-
-            <p>
-                This is a place where anime fans and chess players
-                from every generation can come together.
-            </p>
-
-        </section>
+      </div>
 
 
-        <!-- quick links -->
+      <div class="system-row">
 
-        <section class="panel links-panel">
+        <span>
+          REGISTRY
+        </span>
 
-            <div class="panel-label">
-                <span>02</span>
-                QUICK LINKS
-            </div>
+        <strong>
+          CONNECTED
+        </strong>
 
-            <div class="quick-links">
-
-                <a href="notes.html" class="quick-link">
-                    <span class="quick-icon">◈</span>
-                    <span>
-                        <strong>NOTES</strong>
-                        <small>Club information</small>
-                    </span>
-                    <b>→</b>
-                </a>
-
-                <a href="announcements.html" class="quick-link">
-                    <span class="quick-icon">!</span>
-                    <span>
-                        <strong>ANNOUNCEMENTS</strong>
-                        <small>Latest club news</small>
-                    </span>
-                    <b>→</b>
-                </a>
-
-                <a href="forums.html" class="quick-link">
-                    <span class="quick-icon">☷</span>
-                    <span>
-                        <strong>FORUMS</strong>
-                        <small>Community discussion</small>
-                    </span>
-                    <b>→</b>
-                </a>
-
-                <a href="events.html" class="quick-link">
-                    <span class="quick-icon">◇</span>
-                    <span>
-                        <strong>CLUB EVENTS</strong>
-                        <small>Games & activities</small>
-                    </span>
-                    <b>→</b>
-                </a>
-
-            </div>
-
-        </section>
+      </div>
 
 
-        <!-- clubl link -->
+      <div class="system-row">
 
-        <section class="club-link-panel">
+        <span>
+          RADIO
+        </span>
 
-            <a
-                href="https://www.chess.com/club/shonen-nexus"
-                target="_blank"
-                rel="noopener noreferrer"
-            >
-                OPEN SHONEN NEXUS ON CHESS.COM
-                <span>↗</span>
-            </a>
+        <strong>
+          STANDBY
+        </strong>
 
-        </section>
+      </div>
 
-    </main>
+    </div>
 
 
-    <!-- global -->
+    <!-- BUILD INFORMATION -->
 
-    <div
-        class="scanline-overlay"
-        id="scanlineOverlay"
-        aria-hidden="true"
-    ></div>
+    <div class="sidebar-footer">
+
+      <div class="boot-label">
+        SHONEN NEXUS
+      </div>
+
+      <div class="boot-version">
+        NEXUS BUILD 1.0
+      </div>
 
 
-    <!-- script -->
+      <div class="boot-line">
 
-    <script src="script.js"></script>
+        <span>
+          BOOT
+        </span>
+
+        <strong>
+          COMPLETE
+        </strong>
+
+      </div>
+
+
+      <div class="boot-line">
+
+        <span>
+          PROTOCOL
+        </span>
+
+        <strong>
+          ACTIVE
+        </strong>
+
+      </div>
+
+    </div>
+
+  </aside>
+
+
+  <!-- =====================================================
+       MOBILE NAVIGATION BUTTON
+       ===================================================== -->
+
+  <button
+    id="navToggle"
+    class="nav-toggle"
+    type="button"
+    aria-expanded="false"
+    aria-controls="sidebar"
+    aria-label="Open navigation"
+  >
+
+    <span></span>
+    <span></span>
+    <span></span>
+
+  </button>
+
+
+  <!-- =====================================================
+       APPLICATION SHELL
+       script.js renders the actual pages here.
+       ===================================================== -->
+
+  <main
+    id="app"
+    class="app-shell"
+    tabindex="-1"
+  >
+
+    <div class="system-terminal">
+
+      <div class="terminal-line">
+
+        <span class="terminal-prompt">
+          &gt;
+        </span>
+
+        <span>
+          INITIALIZING SHONEN NEXUS...
+        </span>
+
+      </div>
+
+    </div>
+
+  </main>
+
+
+  <!-- =====================================================
+       SITE FOOTER
+       ===================================================== -->
+
+  <footer class="site-footer">
+
+    <div class="footer-system">
+
+      <span>
+        SHONEN NEXUS
+      </span>
+
+      <span>
+        ANIME × CHESS NETWORK
+      </span>
+
+      <span>
+        NEXUS BUILD 1.0
+      </span>
+
+    </div>
+
+  </footer>
+
+
+  <!-- =====================================================
+       RADIO AUDIO ENGINE
+       ===================================================== -->
+
+  <audio
+    id="audio"
+    preload="metadata"
+  ></audio>
+
+
+  <!-- =====================================================
+       SCRIPTS
+       ===================================================== -->
+
+<script src="registry.js"></script>
+<script src="calendar.js"></script>
+<script src="radio.js"></script>
+<script src="script.js"></script>
 
 </body>
+
 </html>
