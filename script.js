@@ -1,7 +1,10 @@
 const SHONEN_NEXUS = {
-  clubUrl: "https://www.chess.com/club/shonen-nexus",
+  clubUrl:
+    "https://www.chess.com/club/shonen-nexus",
+
   inviteUrl:
     "https://www.chess.com/club/shonen-nexus/join?utm_campaign=club_invite_link&utm_source=chesscom&utm_medium=copy",
+
   logoUrl:
     "https://images.chesscomfiles.com/uploads/v1/group/994818.7076cfad.160x160o.be2581528dae@2x.png",
 
@@ -25,23 +28,50 @@ const SHONEN_NEXUS = {
   ]
 };
 
-const $ = (selector, parent = document) =>
+
+/* =========================
+   DOM HELPERS
+   ========================= */
+
+const $ = (
+  selector,
+  parent = document
+) =>
   parent.querySelector(selector);
 
-const $$ = (selector, parent = document) =>
+const $$ = (
+  selector,
+  parent = document
+) =>
   [...parent.querySelectorAll(selector)];
+
+
+/* =========================
+   STATE
+   ========================= */
 
 const SHONEN_STATE = {
   currentSection: "home",
+  currentTheme: "default",
   backgroundImage: null,
   bootTimer: null,
   welcomeTimer: null
 };
 
+
+/* =========================
+   CORE ELEMENTS
+   ========================= */
+
 const app = $("#app");
 const sidebar = $("#sidebar");
 const navToggle = $("#navToggle");
 const navOverlay = $("#navOverlay");
+
+
+/* =========================
+   UTILITIES
+   ========================= */
 
 function escapeHtml(value = "") {
   return String(value).replace(
@@ -57,15 +87,28 @@ function escapeHtml(value = "") {
   );
 }
 
-function systemHeader(kicker, title, description) {
+function systemHeader(
+  kicker,
+  title,
+  description
+) {
   return `
     <header class="system-page-header">
-      <div class="system-kicker">${escapeHtml(kicker)}</div>
-      <h1>${escapeHtml(title)}</h1>
-      <p>${escapeHtml(description)}</p>
+      <div class="system-kicker">
+        ${escapeHtml(kicker)}
+      </div>
+
+      <h1>
+        ${escapeHtml(title)}
+      </h1>
+
+      <p>
+        ${escapeHtml(description)}
+      </p>
     </header>
   `;
 }
+
 
 /* =========================
    NAVIGATION
@@ -74,8 +117,17 @@ function systemHeader(kicker, title, description) {
 function openSidebar() {
   sidebar?.classList.add("open");
   navToggle?.classList.add("active");
-  navToggle?.setAttribute("aria-expanded", "true");
-  navToggle?.setAttribute("aria-label", "Close navigation");
+
+  navToggle?.setAttribute(
+    "aria-expanded",
+    "true"
+  );
+
+  navToggle?.setAttribute(
+    "aria-label",
+    "Close navigation"
+  );
+
   document.body.classList.add("nav-open");
   navOverlay?.classList.add("active");
 }
@@ -83,14 +135,25 @@ function openSidebar() {
 function closeSidebar() {
   sidebar?.classList.remove("open");
   navToggle?.classList.remove("active");
-  navToggle?.setAttribute("aria-expanded", "false");
-  navToggle?.setAttribute("aria-label", "Open navigation");
+
+  navToggle?.setAttribute(
+    "aria-expanded",
+    "false"
+  );
+
+  navToggle?.setAttribute(
+    "aria-label",
+    "Open navigation"
+  );
+
   document.body.classList.remove("nav-open");
   navOverlay?.classList.remove("active");
 }
 
 function toggleSidebar() {
-  if (sidebar?.classList.contains("open")) {
+  if (
+    sidebar?.classList.contains("open")
+  ) {
     closeSidebar();
   } else {
     openSidebar();
@@ -105,21 +168,30 @@ function getRoute() {
     .trim()
     .toLowerCase();
 
-  return SHONEN_NEXUS.sections.includes(requested)
+  return SHONEN_NEXUS.sections.includes(
+    requested
+  )
     ? requested
     : "home";
 }
 
 function updateNavigation(section) {
-  $$(".nav-item, .main-nav a").forEach(link => {
-    const href = link.getAttribute("href") || "";
-    const target = href
-      .replace("#", "")
-      .trim()
-      .toLowerCase();
+  $$(".nav-item, .main-nav a").forEach(
+    link => {
+      const href =
+        link.getAttribute("href") || "";
 
-    link.classList.toggle("active", target === section);
-  });
+      const target = href
+        .replace("#", "")
+        .trim()
+        .toLowerCase();
+
+      link.classList.toggle(
+        "active",
+        target === section
+      );
+    }
+  );
 }
 
 function initNavigation() {
@@ -127,35 +199,56 @@ function initNavigation() {
     console.warn(
       "Shonen Nexus navigation elements not found."
     );
+
     return;
   }
 
-  navToggle.addEventListener("click", toggleSidebar);
+  navToggle.addEventListener(
+    "click",
+    toggleSidebar
+  );
 
-  navOverlay?.addEventListener("click", closeSidebar);
+  navOverlay?.addEventListener(
+    "click",
+    closeSidebar
+  );
 
-  $$(".nav-item, .main-nav a").forEach(link => {
-    link.addEventListener("click", () => {
-      if (
-        window.matchMedia("(max-width: 899px)").matches
-      ) {
+  $$(".nav-item, .main-nav a").forEach(
+    link => {
+      link.addEventListener(
+        "click",
+        () => {
+          if (
+            window.matchMedia(
+              "(max-width: 899px)"
+            ).matches
+          ) {
+            closeSidebar();
+          }
+        }
+      );
+    }
+  );
+
+  document.addEventListener(
+    "keydown",
+    event => {
+      if (event.key === "Escape") {
         closeSidebar();
       }
-    });
-  });
-
-  document.addEventListener("keydown", event => {
-    if (event.key === "Escape") {
-      closeSidebar();
     }
-  });
+  );
 
-  window.addEventListener("resize", () => {
-    if (window.innerWidth >= 900) {
-      closeSidebar();
+  window.addEventListener(
+    "resize",
+    () => {
+      if (window.innerWidth >= 900) {
+        closeSidebar();
+      }
     }
-  });
+  );
 }
+
 
 /* =========================
    SCROLL
@@ -170,7 +263,9 @@ function scrollToTop() {
 
 function scrollToBottom() {
   window.scrollTo({
-    top: document.documentElement.scrollHeight,
+    top:
+      document.documentElement
+        .scrollHeight,
     behavior: "smooth"
   });
 }
@@ -180,79 +275,136 @@ window.scrollToBottom = scrollToBottom;
 
 function initScrollState() {
   const update = () => {
-    const atTop = window.scrollY <= 10;
+    const atTop =
+      window.scrollY <= 10;
 
     const atBottom =
-      window.innerHeight + window.scrollY >=
-      document.documentElement.scrollHeight - 10;
+      window.innerHeight +
+        window.scrollY >=
+      document.documentElement
+        .scrollHeight - 10;
 
-    document.body.classList.toggle("at-top", atTop);
+    document.body.classList.toggle(
+      "at-top",
+      atTop
+    );
+
     document.body.classList.toggle(
       "at-bottom",
       atBottom
     );
   };
 
-  window.addEventListener("scroll", update, {
-    passive: true
-  });
+  window.addEventListener(
+    "scroll",
+    update,
+    {
+      passive: true
+    }
+  );
 
   update();
 }
 
+
 /* =========================
    THEME
    ========================= */
+
+/* =========================
+   THEME SYSTEM
+   ========================= */
+
+function updateThemeButtons() {
+  $$("[data-theme]").forEach(button => {
+    button.classList.toggle(
+      "active",
+      button.dataset.theme === SHONEN_STATE.currentTheme
+    );
+  });
+}
 
 function setTheme(theme) {
   if (!SHONEN_NEXUS.themes.includes(theme)) {
     theme = "default";
   }
 
+  // Remove all existing theme classes
   SHONEN_NEXUS.themes.forEach(themeName => {
-    document.body.classList.remove(
-      `theme-${themeName}`
-    );
+    document.body.classList.remove(`theme-${themeName}`);
   });
 
+  // Add selected theme class
   if (theme !== "default") {
     document.body.classList.add(`theme-${theme}`);
   }
 
-  localStorage.setItem("shonen-theme", theme);
+  SHONEN_STATE.currentTheme = theme;
 
-  $$("[data-theme]").forEach(button => {
-    button.classList.toggle(
-      "active",
-      button.dataset.theme === theme
-    );
-  });
+  // Save selection
+  try {
+    localStorage.setItem("shonen-theme", theme);
+  } catch (error) {
+    console.warn("Unable to save theme:", error);
+  }
+
+  updateThemeButtons();
 }
 
-window.setTheme = setTheme;
-
 function initTheme() {
-  const saved =
-    localStorage.getItem("shonen-theme") ||
-    "default";
+  let savedTheme = "default";
 
-  setTheme(saved);
+  try {
+    savedTheme =
+      localStorage.getItem("shonen-theme") || "default";
+  } catch (error) {
+    console.warn("Unable to load saved theme:", error);
+  }
 
+  setTheme(savedTheme);
+}
+
+function bindThemeEvents() {
   $$("[data-theme]").forEach(button => {
     button.addEventListener("click", () => {
       setTheme(button.dataset.theme);
     });
   });
+
+  updateThemeButtons();
 }
+
+window.setTheme = setTheme;
+
+function initTheme() {
+  let saved = "default";
+
+  try {
+    saved =
+      localStorage.getItem(
+        "shonen-theme"
+      ) || "default";
+  } catch (error) {
+    console.warn(
+      "Unable to read Shonen theme:",
+      error
+    );
+  }
+
+  setTheme(saved);
+}
+
 
 /* =========================
    SYSTEM EFFECTS
    ========================= */
 
 function runScanline() {
-  const line = document.createElement("div");
+  const line =
+    document.createElement("div");
 
-  line.className = "shonen-system-scanline";
+  line.className =
+    "shonen-system-scanline";
 
   document.body.appendChild(line);
 
@@ -267,59 +419,75 @@ function runScanline() {
 
 window.runScanline = runScanline;
 
-function initScanline() {
-  $$('[data-action="scanline"]').forEach(button => {
-    button.addEventListener("click", runScanline);
-  });
+function toggleFocusMode(button) {
+  const active =
+    document.body.classList.toggle(
+      "focus-mode"
+    );
+
+  button?.classList.toggle(
+    "active",
+    active
+  );
 }
 
-function initFocusMode() {
-  $$('[data-action="focus"]').forEach(button => {
-    button.addEventListener("click", () => {
-      const active =
-        document.body.classList.toggle("focus-mode");
-
-      button.classList.toggle("active", active);
-    });
-  });
-}
 
 /* =========================
    INVITE
    ========================= */
 
-async function copyInviteLink(button = null) {
+async function copyInviteLink(
+  button = null
+) {
   try {
-    if (navigator.clipboard?.writeText) {
+    if (
+      navigator.clipboard?.writeText
+    ) {
       await navigator.clipboard.writeText(
         SHONEN_NEXUS.inviteUrl
       );
     } else {
       const textarea =
-        document.createElement("textarea");
+        document.createElement(
+          "textarea"
+        );
 
-      textarea.value = SHONEN_NEXUS.inviteUrl;
-      textarea.style.position = "fixed";
+      textarea.value =
+        SHONEN_NEXUS.inviteUrl;
+
+      textarea.style.position =
+        "fixed";
+
       textarea.style.opacity = "0";
 
-      document.body.appendChild(textarea);
+      document.body.appendChild(
+        textarea
+      );
 
       textarea.select();
+
       document.execCommand("copy");
+
       textarea.remove();
     }
 
-    if (!button) return;
+    if (!button) {
+      return;
+    }
 
     const original =
       button.dataset.originalText ||
-      button.textContent;
+      button.textContent.trim();
 
-    button.dataset.originalText = original;
-    button.textContent = "COPIED ✓";
+    button.dataset.originalText =
+      original;
+
+    button.textContent =
+      "COPIED ✓";
 
     setTimeout(() => {
-      button.textContent = original;
+      button.textContent =
+        original;
     }, 1800);
   } catch (error) {
     console.error(
@@ -329,31 +497,34 @@ async function copyInviteLink(button = null) {
   }
 }
 
-window.copyInviteLink = copyInviteLink;
+window.copyInviteLink =
+  copyInviteLink;
 
-function initInviteButtons() {
-  $$('[data-action="copy-invite"]').forEach(button => {
-    button.addEventListener("click", () => {
-      copyInviteLink(button);
-    });
-  });
-}
 
 /* =========================
    WELCOME
    ========================= */
 
 function createWelcomeScreen() {
-  if ($("#welcomeScreen")) return;
+  if ($("#welcomeScreen")) {
+    return;
+  }
 
-  const screen = document.createElement("div");
+  const screen =
+    document.createElement("div");
 
-  screen.id = "welcomeScreen";
-  screen.className = "welcome-screen";
+  screen.id =
+    "welcomeScreen";
+
+  screen.className =
+    "welcome-screen";
 
   screen.innerHTML = `
     <div class="welcome-content">
-      <p>SHONEN NEXUS</p>
+
+      <p>
+        SHONEN NEXUS
+      </p>
 
       <h2>
         WELCOME TO THE NEXUS
@@ -362,6 +533,7 @@ function createWelcomeScreen() {
       <p>
         ANIME × CHESS × COMMUNITY
       </p>
+
     </div>
   `;
 
@@ -371,42 +543,54 @@ function createWelcomeScreen() {
 function showWelcome() {
   createWelcomeScreen();
 
-  const screen = $("#welcomeScreen");
+  const screen =
+    $("#welcomeScreen");
 
-  if (!screen) return;
+  if (!screen) {
+    return;
+  }
 
-  screen.classList.remove("active");
+  screen.classList.remove(
+    "active"
+  );
 
   void screen.offsetWidth;
 
-  screen.classList.add("active");
+  screen.classList.add(
+    "active"
+  );
 
-  clearTimeout(SHONEN_STATE.welcomeTimer);
+  clearTimeout(
+    SHONEN_STATE.welcomeTimer
+  );
 
   SHONEN_STATE.welcomeTimer =
     setTimeout(() => {
-      screen.classList.remove("active");
+      screen.classList.remove(
+        "active"
+      );
     }, 2400);
 }
 
-window.showWelcome = showWelcome;
+window.showWelcome =
+  showWelcome;
 
-function initWelcomeButtons() {
-  $$('[data-action="welcome"]').forEach(button => {
-    button.addEventListener("click", showWelcome);
-  });
-}
 
 /* =========================
    BACKGROUND
    ========================= */
 
 function toggleBackground(button) {
-  const root = document.documentElement;
+  const root =
+    document.documentElement;
+
   const property =
     "--theme-background-override-image";
 
-  if (!SHONEN_STATE.backgroundImage) {
+  if (
+    SHONEN_STATE.backgroundImage ===
+    null
+  ) {
     SHONEN_STATE.backgroundImage =
       getComputedStyle(root)
         .getPropertyValue(property)
@@ -414,12 +598,15 @@ function toggleBackground(button) {
   }
 
   const current =
-    root.style.getPropertyValue(property).trim() ||
+    root.style
+      .getPropertyValue(property)
+      .trim() ||
     getComputedStyle(root)
       .getPropertyValue(property)
       .trim();
 
-  const isOff = current === "none";
+  const isOff =
+    current === "none";
 
   root.style.setProperty(
     property,
@@ -428,24 +615,22 @@ function toggleBackground(button) {
       : "none"
   );
 
-  const label = button.querySelector(
-    "[data-background-label]"
-  );
+  const label =
+    button?.querySelector(
+      "[data-background-label]"
+    );
 
   if (label) {
-    label.textContent = isOff ? "ON" : "OFF";
+    label.textContent =
+      isOff ? "ON" : "OFF";
   }
 
-  button.classList.toggle("active", isOff);
+  button?.classList.toggle(
+    "active",
+    isOff
+  );
 }
 
-function initBackgroundToggle() {
-  $$('[data-action="background"]').forEach(button => {
-    button.addEventListener("click", () => {
-      toggleBackground(button);
-    });
-  });
-}
 
 /* =========================
    HOME
@@ -460,12 +645,19 @@ function renderHome() {
     )}
 
     <section class="system-panel">
+
       <div class="panel-label">
-        <span>NEXUS IDENTIFICATION</span>
-        <span>SHONEN-NEXUS</span>
+        <span>
+          NEXUS IDENTIFICATION
+        </span>
+
+        <span>
+          SHONEN-NEXUS
+        </span>
       </div>
 
       <div class="home-identity">
+
         <div class="home-logo-wrap">
           <img
             src="${SHONEN_NEXUS.logoUrl}"
@@ -475,6 +667,7 @@ function renderHome() {
         </div>
 
         <div>
+
           <div class="system-kicker">
             SHONEN NEXUS
           </div>
@@ -496,14 +689,23 @@ function renderHome() {
             players from every generation can
             come together.
           </p>
+
         </div>
+
       </div>
+
     </section>
 
     <section class="system-panel">
+
       <div class="panel-label">
-        <span>NEXUS DIRECT LINKS</span>
-        <span>ACTIVE</span>
+        <span>
+          NEXUS DIRECT LINKS
+        </span>
+
+        <span>
+          ACTIVE
+        </span>
       </div>
 
       <div class="registry-grid">
@@ -582,35 +784,81 @@ function renderHome() {
         </button>
 
       </div>
+
     </section>
 
     <section class="system-panel">
+
       <div class="panel-label">
-        <span>MODULE DIRECTORY</span>
-        <span>06 SYSTEMS</span>
+        <span>
+          MODULE DIRECTORY
+        </span>
+
+        <span>
+          06 SYSTEMS
+        </span>
       </div>
 
       <div class="registry-grid">
 
         ${[
-          ["01", "HOME", "NEXUS OVERVIEW", "#home"],
-          ["02", "REGISTRY", "MEMBERS & DICE", "#registry"],
-          ["03", "COMMAND", "CLUB DIRECTIVES", "#command"],
-          ["04", "SOCIAL", "RADIO & NETWORK", "#social"],
-          ["05", "CALENDAR", "TIME & EVENTS", "#calendar"],
-          ["06", "TOOLS", "AUXILIARY CONTROLS", "#tools"]
+          [
+            "01",
+            "HOME",
+            "NEXUS OVERVIEW",
+            "#home"
+          ],
+          [
+            "02",
+            "REGISTRY",
+            "MEMBERS & DICE",
+            "#registry"
+          ],
+          [
+            "03",
+            "COMMAND",
+            "CLUB DIRECTIVES",
+            "#command"
+          ],
+          [
+            "04",
+            "SOCIAL",
+            "RADIO & NETWORK",
+            "#social"
+          ],
+          [
+            "05",
+            "CALENDAR",
+            "TIME & EVENTS",
+            "#calendar"
+          ],
+          [
+            "06",
+            "TOOLS",
+            "AUXILIARY CONTROLS",
+            "#tools"
+          ]
         ]
           .map(
-            ([number, title, meta, href]) => `
+            ([
+              number,
+              title,
+              meta,
+              href
+            ]) => `
               <a
                 href="${href}"
                 class="member-card"
               >
-                <div class="member-avatar module-number">
+
+                <div
+                  class="member-avatar module-number"
+                >
                   ${number}
                 </div>
 
                 <div>
+
                   <div class="member-name">
                     ${title}
                   </div>
@@ -618,23 +866,32 @@ function renderHome() {
                   <div class="member-meta">
                     ${meta}
                   </div>
+
                 </div>
 
                 <div class="member-time">
                   →
                 </div>
+
               </a>
             `
           )
           .join("")}
 
       </div>
+
     </section>
 
     <section class="system-panel">
+
       <div class="panel-label">
-        <span>NEXUS BOOT LOG</span>
-        <span>LIVE</span>
+        <span>
+          NEXUS BOOT LOG
+        </span>
+
+        <span>
+          LIVE
+        </span>
       </div>
 
       <div
@@ -642,16 +899,22 @@ function renderHome() {
         id="homeBootLog"
       >
         <div class="terminal-line">
-          <span class="terminal-prompt">&gt;</span>
+
+          <span class="terminal-prompt">
+            &gt;
+          </span>
 
           <span class="terminal-muted">
             Initializing Shonen Nexus operating system...
           </span>
+
         </div>
       </div>
+
     </section>
   `;
 }
+
 
 /* =========================
    REGISTRY
@@ -669,9 +932,17 @@ function renderRegistry() {
       class="system-panel"
       data-registry-page
     >
+
       <div class="panel-label">
-        <span>NEWEST MEMBERS</span>
-        <span>CHESS.COM PUBAPI</span>
+
+        <span>
+          NEWEST MEMBERS
+        </span>
+
+        <span>
+          CHESS.COM PUBAPI
+        </span>
+
       </div>
 
       <div
@@ -679,18 +950,27 @@ function renderRegistry() {
         data-registry="newest"
         aria-live="polite"
       >
+
         <div class="system-terminal">
+
           <div class="terminal-line">
-            <span class="terminal-prompt">&gt;</span>
+
+            <span class="terminal-prompt">
+              &gt;
+            </span>
 
             <span class="terminal-muted">
               Synchronizing Nexus registry...
             </span>
+
           </div>
+
         </div>
+
       </div>
 
       <div class="registry-actions">
+
         <span
           data-registry="updated"
           data-registry-status
@@ -705,51 +985,77 @@ function renderRegistry() {
         >
           REFRESH REGISTRY
         </button>
+
       </div>
+
     </section>
 
     <section class="system-panel">
+
       <div class="panel-label">
-        <span>NEXUS STATUS</span>
+
+        <span>
+          NEXUS STATUS
+        </span>
 
         <span data-registry="status">
           STANDBY
         </span>
+
       </div>
 
       <div class="registry-status-readout">
 
         <div class="readout-row">
           <span>CLUB</span>
-          <strong>SHONEN NEXUS</strong>
+          <strong>
+            SHONEN NEXUS
+          </strong>
         </div>
 
         <div class="readout-row">
           <span>DATABASE</span>
-          <strong>CHESS.COM</strong>
+          <strong>
+            CHESS.COM
+          </strong>
         </div>
 
         <div class="readout-row">
           <span>STATUS</span>
-          <strong class="online">ONLINE</strong>
+          <strong class="online">
+            ONLINE
+          </strong>
         </div>
 
         <div class="readout-row">
           <span>MEMBERS</span>
-          <strong data-registry="member-count">—</strong>
+          <strong data-registry="member-count">
+            —
+          </strong>
         </div>
 
       </div>
+
     </section>
 
     <section class="system-panel">
+
       <div class="panel-label">
-        <span>MEMBER DICE</span>
-        <span>RANDOMIZED</span>
+
+        <span>
+          MEMBER DICE
+        </span>
+
+        <span>
+          RANDOMIZED
+        </span>
+
       </div>
 
       <div class="personnel-selection">
+
         <div>
+
           <div class="personnel-id">
             NEXUS SUBJECT SELECTION
           </div>
@@ -764,10 +1070,14 @@ function renderRegistry() {
           <div class="personnel-status">
             ROLL THE DICE TO SELECT A MEMBER
           </div>
+
         </div>
+
       </div>
 
-      <div class="registry-actions registry-actions-left">
+      <div
+        class="registry-actions registry-actions-left"
+      >
 
         <button
           class="system-button"
@@ -787,9 +1097,11 @@ function renderRegistry() {
         </a>
 
       </div>
+
     </section>
   `;
 }
+
 
 /* =========================
    COMMAND
@@ -816,9 +1128,15 @@ function renderCommand() {
     )}
 
     <section class="system-panel">
+
       <div class="panel-label">
-        <span>COMMAND MODULES</span>
-        <span>ONLINE</span>
+        <span>
+          COMMAND MODULES
+        </span>
+
+        <span>
+          ONLINE
+        </span>
       </div>
 
       <div class="registry-grid">
@@ -829,11 +1147,13 @@ function renderCommand() {
           target="_blank"
           rel="noopener noreferrer"
         >
+
           <div class="member-avatar module-number">
             ♟
           </div>
 
           <div>
+
             <div class="member-name">
               CLUB HUB
             </div>
@@ -841,11 +1161,13 @@ function renderCommand() {
             <div class="member-meta">
               SHONEN NEXUS CHESS.COM CLUB
             </div>
+
           </div>
 
           <div class="member-time">
             ↗
           </div>
+
         </a>
 
         <a
@@ -854,11 +1176,13 @@ function renderCommand() {
           target="_blank"
           rel="noopener noreferrer"
         >
+
           <div class="member-avatar module-number">
             !
           </div>
 
           <div>
+
             <div class="member-name">
               ANNOUNCEMENTS
             </div>
@@ -866,11 +1190,13 @@ function renderCommand() {
             <div class="member-meta">
               OFFICIAL CLUB UPDATES
             </div>
+
           </div>
 
           <div class="member-time">
             ↗
           </div>
+
         </a>
 
         <a
@@ -879,11 +1205,13 @@ function renderCommand() {
           target="_blank"
           rel="noopener noreferrer"
         >
+
           <div class="member-avatar module-number">
             #
           </div>
 
           <div>
+
             <div class="member-name">
               CLUB FORUM
             </div>
@@ -891,20 +1219,31 @@ function renderCommand() {
             <div class="member-meta">
               COMMUNITY DISCUSSION
             </div>
+
           </div>
 
           <div class="member-time">
             ↗
           </div>
+
         </a>
 
       </div>
+
     </section>
 
     <section class="system-panel">
+
       <div class="panel-label">
-        <span>CORE DIRECTIVES</span>
-        <span>AUTHORIZED</span>
+
+        <span>
+          CORE DIRECTIVES
+        </span>
+
+        <span>
+          AUTHORIZED
+        </span>
+
       </div>
 
       <div class="registry-grid">
@@ -912,20 +1251,29 @@ function renderCommand() {
         ${directives
           .map(
             (directive, index) => `
-              <div class="member-card directive-card">
+              <div
+                class="member-card directive-card"
+              >
 
                 <div class="directive-number">
-                  ${String(index + 1).padStart(2, "0")}
+                  ${String(index + 1).padStart(
+                    2,
+                    "0"
+                  )}
                 </div>
 
                 <div>
+
                   <div class="member-name">
-                    ${escapeHtml(directive)}
+                    ${escapeHtml(
+                      directive
+                    )}
                   </div>
 
                   <div class="member-meta">
                     NEXUS COMMUNITY DIRECTIVE
                   </div>
+
                 </div>
 
               </div>
@@ -934,43 +1282,66 @@ function renderCommand() {
           .join("")}
 
       </div>
+
     </section>
   `;
 }
+
 
 /* =========================
    SOCIAL
    ========================= */
 
 function renderSocial() {
-  app.innerHTML = `
+  return `
     <section class="page social-page">
 
       <div class="page-header">
+
         <div>
+
           <div class="eyebrow">
             NEXUS NODE // SOCIAL
           </div>
 
-          <h1>SOCIAL</h1>
+          <h1>
+            SOCIAL
+          </h1>
 
           <p class="page-description">
             Shonen Nexus media, radio and network systems.
           </p>
+
         </div>
 
         <div class="system-status">
+
           <span class="status-dot"></span>
-          <span>NETWORK ONLINE</span>
+
+          <span>
+            NETWORK ONLINE
+          </span>
+
         </div>
+
       </div>
 
       <div class="social-grid">
 
-        <article class="panel social-channel-panel">
+        <article
+          class="panel social-channel-panel"
+        >
+
           <div class="panel-header">
-            <span>CHANNEL</span>
-            <span class="panel-code">COM-01</span>
+
+            <span>
+              CHANNEL
+            </span>
+
+            <span class="panel-code">
+              COM-01
+            </span>
+
           </div>
 
           <div class="channel-list">
@@ -981,14 +1352,27 @@ function renderSocial() {
               target="_blank"
               rel="noopener noreferrer"
             >
-              <div class="channel-icon">♟</div>
 
-              <div class="channel-info">
-                <strong>CHESS.COM</strong>
-                <small>SHONEN NEXUS</small>
+              <div class="channel-icon">
+                ♟
               </div>
 
-              <span class="channel-arrow">↗</span>
+              <div class="channel-info">
+
+                <strong>
+                  CHESS.COM
+                </strong>
+
+                <small>
+                  SHONEN NEXUS
+                </small>
+
+              </div>
+
+              <span class="channel-arrow">
+                ↗
+              </span>
+
             </a>
 
             <button
@@ -996,55 +1380,103 @@ function renderSocial() {
               type="button"
               data-action="copy-invite"
             >
-              <div class="channel-icon">+</div>
 
-              <div class="channel-info">
-                <strong>INVITE</strong>
-                <small>COPY CLUB INVITE LINK</small>
+              <div class="channel-icon">
+                +
               </div>
 
-              <span class="channel-arrow">COPY</span>
+              <div class="channel-info">
+
+                <strong>
+                  INVITE
+                </strong>
+
+                <small>
+                  COPY CLUB INVITE LINK
+                </small>
+
+              </div>
+
+              <span class="channel-arrow">
+                COPY
+              </span>
+
             </button>
 
           </div>
+
         </article>
 
         <article class="panel network-panel">
+
           <div class="panel-header">
-            <span>NEXUS STATUS</span>
-            <span class="panel-code">SYS-04</span>
+
+            <span>
+              NEXUS STATUS
+            </span>
+
+            <span class="panel-code">
+              SYS-04
+            </span>
+
           </div>
 
           <div class="system-readout">
 
             <div class="readout-row">
-              <span>CONNECTION</span>
-              <strong class="online">ESTABLISHED</strong>
+              <span>
+                CONNECTION
+              </span>
+
+              <strong class="online">
+                ESTABLISHED
+              </strong>
             </div>
 
             <div class="readout-row">
-              <span>CLUB NODE</span>
-              <strong>SHONEN-NEXUS</strong>
+              <span>
+                CLUB NODE
+              </span>
+
+              <strong>
+                SHONEN-NEXUS
+              </strong>
             </div>
 
             <div class="readout-row">
-              <span>ACCESS</span>
-              <strong>PUBLIC</strong>
+              <span>
+                ACCESS
+              </span>
+
+              <strong>
+                PUBLIC
+              </strong>
             </div>
 
             <div class="readout-row">
-              <span>PROTOCOL</span>
-              <strong>ACTIVE</strong>
+              <span>
+                PROTOCOL
+              </span>
+
+              <strong>
+                ACTIVE
+              </strong>
             </div>
 
           </div>
 
           <div class="terminal-note">
-            <span>&gt;</span>
+
+            <span>
+              &gt;
+            </span>
+
             <span>
               NEXUS COMMUNICATION NODE OPERATIONAL.
             </span>
+
           </div>
+
         </article>
 
       </div>
@@ -1052,26 +1484,38 @@ function renderSocial() {
       <article class="panel radio-panel">
 
         <div class="panel-header">
-          <span>NEXUS RADIO</span>
-          <span class="panel-code">MEDIA-07</span>
+
+          <span>
+            NEXUS RADIO
+          </span>
+
+          <span class="panel-code">
+            MEDIA-07
+          </span>
+
         </div>
 
         <div class="radio-layout">
 
           <div class="radio-cover-wrap">
+
             <img
               id="radioCover"
               class="radio-cover"
               src="${SHONEN_NEXUS.logoUrl}"
               alt="Shonen Nexus Radio cover"
             >
+
           </div>
 
           <div class="radio-player">
 
             <div class="radio-system-label">
+
               <span class="status-dot"></span>
+
               AUDIO TRANSMISSION
+
             </div>
 
             <h2 id="radioTitle">
@@ -1084,7 +1528,9 @@ function renderSocial() {
 
             <div class="radio-progress">
 
-              <span id="elapsed">0:00</span>
+              <span id="elapsed">
+                0:00
+              </span>
 
               <input
                 id="progress"
@@ -1096,13 +1542,18 @@ function renderSocial() {
                 aria-label="Track progress"
               >
 
-              <span id="duration">0:00</span>
+              <span id="duration">
+                0:00
+              </span>
 
             </div>
 
             <div class="radio-controls">
 
-              <button id="radioPrev" type="button">
+              <button
+                id="radioPrev"
+                type="button"
+              >
                 ◀◀
               </button>
 
@@ -1114,14 +1565,20 @@ function renderSocial() {
                 ▶ PLAY
               </button>
 
-              <button id="radioNext" type="button">
+              <button
+                id="radioNext"
+                type="button"
+              >
                 ▶▶
               </button>
 
             </div>
 
             <div class="radio-volume">
-              <span>VOL</span>
+
+              <span>
+                VOL
+              </span>
 
               <input
                 id="radioVolume"
@@ -1132,28 +1589,40 @@ function renderSocial() {
                 value="0.75"
                 aria-label="Volume"
               >
+
             </div>
 
           </div>
+
         </div>
 
         <div class="radio-playlist">
 
           <div class="playlist-header">
-            <span>TRANSMISSION QUEUE</span>
 
             <span>
-              <span class="status-dot"></span>
-              LIVE
+              TRANSMISSION QUEUE
             </span>
+
+            <span>
+
+              <span class="status-dot"></span>
+
+              LIVE
+
+            </span>
+
           </div>
 
           <div
             id="trackList"
             class="track-list"
           >
+
             <div class="system-terminal">
+
               <div class="terminal-line">
+
                 <span class="terminal-prompt">
                   &gt;
                 </span>
@@ -1161,19 +1630,39 @@ function renderSocial() {
                 <span class="terminal-muted">
                   SCANNING NEXUS AUDIO DATABASE...
                 </span>
+
               </div>
+
             </div>
+
           </div>
 
         </div>
+
       </article>
 
       <div class="social-footer-readout">
-        <span>SHONEN NEXUS</span>
-        <span>//</span>
-        <span>SOCIAL COMMUNICATION NODE</span>
-        <span>//</span>
-        <span>STATUS: ONLINE</span>
+
+        <span>
+          SHONEN NEXUS
+        </span>
+
+        <span>
+          //
+        </span>
+
+        <span>
+          SOCIAL COMMUNICATION NODE
+        </span>
+
+        <span>
+          //
+        </span>
+
+        <span>
+          STATUS: ONLINE
+        </span>
+
       </div>
 
       <audio
@@ -1183,14 +1672,8 @@ function renderSocial() {
 
     </section>
   `;
-
-  if (
-    typeof window.renderRadioPage ===
-    "function"
-  ) {
-    window.renderRadioPage();
-  }
 }
+
 
 /* =========================
    CALENDAR
@@ -1208,12 +1691,17 @@ function renderCalendarPage() {
       class="system-panel shonen-calendar-panel"
       data-calendar-page
     >
+
       <div class="panel-label">
-        <span>NEXUS CALENDAR</span>
+
+        <span>
+          NEXUS CALENDAR
+        </span>
 
         <span data-calendar="timezone">
           LOCAL
         </span>
+
       </div>
 
       <div class="shonen-calendar-header">
@@ -1244,18 +1732,12 @@ function renderCalendarPage() {
 
       <div class="shonen-time-panel">
 
-        <div
-          class="shonen-clock"
-          id="calendarClock"
-        >
-          --:--:--
-        </div>
+        <div class="shonen-timezone">
 
-        <div
-          class="shonen-timezone"
-          data-calendar="timezone"
-        >
-          Detecting timezone...
+          <span data-calendar="timezone">
+            LOCAL
+          </span>
+
         </div>
 
         <div class="shonen-location">
@@ -1265,6 +1747,7 @@ function renderCalendarPage() {
       </div>
 
       <div class="shonen-calendar-weekdays">
+
         ${[
           "SUN",
           "MON",
@@ -1274,23 +1757,17 @@ function renderCalendarPage() {
           "FRI",
           "SAT"
         ]
-          .map(day => `<span>${day}</span>`)
+          .map(
+            day =>
+              `<span>${day}</span>`
+          )
           .join("")}
+
       </div>
 
       <div
         class="shonen-calendar-grid"
         data-calendar="grid"
-      ></div>
-
-      <div
-        class="calendar-events"
-        data-calendar="events"
-      ></div>
-
-      <div
-        class="selected-calendar-event"
-        data-calendar="selected-event"
       ></div>
 
       <div class="shonen-calendar-footer">
@@ -1303,18 +1780,12 @@ function renderCalendarPage() {
           LOCAL / UTC+9
         </button>
 
-        <button
-          class="system-button"
-          type="button"
-          data-calendar="today"
-        >
-          TODAY
-        </button>
-
       </div>
+
     </section>
   `;
 }
+
 
 /* =========================
    TOOLS
@@ -1331,8 +1802,15 @@ function renderTools() {
     <section class="system-panel">
 
       <div class="panel-label">
-        <span>NEXUS // AUXILIARY CONTROLS</span>
-        <span>ONLINE</span>
+
+        <span>
+          NEXUS // AUXILIARY CONTROLS
+        </span>
+
+        <span>
+          ONLINE
+        </span>
+
       </div>
 
       <div class="shonen-tools-grid">
@@ -1342,8 +1820,13 @@ function renderTools() {
           type="button"
           data-action="top"
         >
-          <span class="shonen-tool-icon">↑</span>
-          <small>TOP</small>
+          <span class="shonen-tool-icon">
+            ↑
+          </span>
+
+          <small>
+            TOP
+          </small>
         </button>
 
         <button
@@ -1351,8 +1834,13 @@ function renderTools() {
           type="button"
           data-action="bottom"
         >
-          <span class="shonen-tool-icon">↓</span>
-          <small>BOTTOM</small>
+          <span class="shonen-tool-icon">
+            ↓
+          </span>
+
+          <small>
+            BOTTOM
+          </small>
         </button>
 
         <button
@@ -1360,8 +1848,13 @@ function renderTools() {
           type="button"
           data-action="copy-invite"
         >
-          <span class="shonen-tool-icon">COPY</span>
-          <small>INVITE</small>
+          <span class="shonen-tool-icon">
+            COPY
+          </span>
+
+          <small>
+            INVITE
+          </small>
         </button>
 
         <button
@@ -1375,7 +1868,10 @@ function renderTools() {
           >
             ON
           </span>
-          <small>BACKGROUND</small>
+
+          <small>
+            BACKGROUND
+          </small>
         </button>
 
         <button
@@ -1383,8 +1879,13 @@ function renderTools() {
           type="button"
           data-action="scanline"
         >
-          <span class="shonen-tool-icon">SCAN</span>
-          <small>SYSTEM</small>
+          <span class="shonen-tool-icon">
+            SCAN
+          </span>
+
+          <small>
+            SYSTEM
+          </small>
         </button>
 
         <button
@@ -1392,8 +1893,13 @@ function renderTools() {
           type="button"
           data-action="focus"
         >
-          <span class="shonen-tool-icon">FOCUS</span>
-          <small>MODE</small>
+          <span class="shonen-tool-icon">
+            FOCUS
+          </span>
+
+          <small>
+            MODE
+          </small>
         </button>
 
         <button
@@ -1401,15 +1907,27 @@ function renderTools() {
           type="button"
           data-action="welcome"
         >
-          <span class="shonen-tool-icon">NEXUS</span>
-          <small>BOOT</small>
+          <span class="shonen-tool-icon">
+            NEXUS
+          </span>
+
+          <small>
+            BOOT
+          </small>
         </button>
 
       </div>
 
       <div class="shonen-tools-status">
-        <span>&gt;</span>
-        <span>ALL AUXILIARY CONTROLS READY.</span>
+
+        <span>
+          &gt;
+        </span>
+
+        <span>
+          ALL AUXILIARY CONTROLS READY.
+        </span>
+
       </div>
 
     </section>
@@ -1417,20 +1935,48 @@ function renderTools() {
     <section class="system-panel">
 
       <div class="panel-label">
-        <span>THEME SYSTEM</span>
-        <span>07 THEMES</span>
+
+        <span>
+          THEME SYSTEM
+        </span>
+
+        <span>
+          07 THEMES
+        </span>
+
       </div>
 
       <div class="theme-selector">
 
         ${[
-          ["default", "DEFAULT"],
-          ["windbreaker", "WIND BREAKER"],
-          ["cote", "CLASSROOM OF THE ELITE"],
-          ["bleach", "BLEACH"],
-          ["jjk", "JUJUTSU KAISEN"],
-          ["naruto", "NARUTO"],
-          ["onepiece", "ONE PIECE"]
+          [
+            "default",
+            "DEFAULT"
+          ],
+          [
+            "windbreaker",
+            "WIND BREAKER"
+          ],
+          [
+            "cote",
+            "CLASSROOM OF THE ELITE"
+          ],
+          [
+            "bleach",
+            "BLEACH"
+          ],
+          [
+            "jjk",
+            "JUJUTSU KAISEN"
+          ],
+          [
+            "naruto",
+            "NARUTO"
+          ],
+          [
+            "onepiece",
+            "ONE PIECE"
+          ]
         ]
           .map(
             ([theme, label]) => `
@@ -1446,9 +1992,14 @@ function renderTools() {
           .join("")}
 
       </div>
+
     </section>
-  `;
+    ${renderThemeSelector()}
+  `
+
+  ;
 }
+
 
 /* =========================
    PAGE MAP
@@ -1463,16 +2014,22 @@ const pages = {
   tools: renderTools
 };
 
+
 /* =========================
    HOME BOOT
    ========================= */
 
 function startHomeBoot() {
-  clearInterval(SHONEN_STATE.bootTimer);
+  clearInterval(
+    SHONEN_STATE.bootTimer
+  );
 
-  const box = $("#homeBootLog");
+  const box =
+    $("#homeBootLog");
 
-  if (!box) return;
+  if (!box) {
+    return;
+  }
 
   const messages = [
     "SHONEN NEXUS OS kernel initialized.",
@@ -1493,25 +2050,41 @@ function startHomeBoot() {
   box.innerHTML = "";
 
   const addLine = () => {
-    if (!document.body.contains(box)) {
-      clearInterval(SHONEN_STATE.bootTimer);
+    if (
+      !document.body.contains(box)
+    ) {
+      clearInterval(
+        SHONEN_STATE.bootTimer
+      );
+
       return;
     }
 
-    if (index >= messages.length) {
-      clearInterval(SHONEN_STATE.bootTimer);
+    if (
+      index >= messages.length
+    ) {
+      clearInterval(
+        SHONEN_STATE.bootTimer
+      );
+
       return;
     }
 
-    const line = document.createElement("div");
+    const line =
+      document.createElement("div");
 
-    line.className = "terminal-line";
+    line.className =
+      "terminal-line";
 
     line.innerHTML = `
-      <span class="terminal-prompt">&gt;</span>
+      <span class="terminal-prompt">
+        &gt;
+      </span>
 
       <span class="terminal-ok">
-        ${escapeHtml(messages[index++])}
+        ${escapeHtml(
+          messages[index++]
+        )}
       </span>
     `;
 
@@ -1520,98 +2093,216 @@ function startHomeBoot() {
 
   addLine();
 
-  SHONEN_STATE.bootTimer = setInterval(
-    addLine,
-    360
-  );
+  SHONEN_STATE.bootTimer =
+    setInterval(
+      addLine,
+      360
+    );
 }
+
 
 /* =========================
    PAGE EVENT BRIDGES
    ========================= */
 
+function bindHomeEvents() {
+  $$(
+    '[data-action="copy-invite"]'
+  ).forEach(button => {
+    button.addEventListener(
+      "click",
+      () => {
+        copyInviteLink(button);
+      }
+    );
+  });
+
+  $$(
+    '[data-action="welcome"]'
+  ).forEach(button => {
+    button.addEventListener(
+      "click",
+      showWelcome
+    );
+  });
+}
+
+function bindSocialEvents() {
+  $$(
+    '[data-action="copy-invite"]'
+  ).forEach(button => {
+    button.addEventListener(
+      "click",
+      () => {
+        copyInviteLink(button);
+      }
+    );
+  });
+}
+
 function bindToolsEvents() {
-  $$('[data-action="top"]').forEach(button => {
-    button.addEventListener("click", scrollToTop);
+  $$(
+    '[data-action="top"]'
+  ).forEach(button => {
+    button.addEventListener(
+      "click",
+      scrollToTop
+    );
   });
 
-  $$('[data-action="bottom"]').forEach(button => {
-    button.addEventListener("click", scrollToBottom);
+  $$(
+    '[data-action="bottom"]'
+  ).forEach(button => {
+    button.addEventListener(
+      "click",
+      scrollToBottom
+    );
   });
 
-  $$('[data-action="copy-invite"]').forEach(button => {
-    button.addEventListener("click", () => {
-      copyInviteLink(button);
-    });
+  $$(
+    '[data-action="copy-invite"]'
+  ).forEach(button => {
+    button.addEventListener(
+      "click",
+      () => {
+        copyInviteLink(button);
+      }
+    );
   });
 
-  $$('[data-action="scanline"]').forEach(button => {
-    button.addEventListener("click", runScanline);
+  $$(
+    '[data-action="background"]'
+  ).forEach(button => {
+    button.addEventListener(
+      "click",
+      () => {
+        toggleBackground(button);
+      }
+    );
   });
 
-  $$('[data-action="focus"]').forEach(button => {
-    button.addEventListener("click", () => {
-      const active =
-        document.body.classList.toggle("focus-mode");
-
-      button.classList.toggle("active", active);
-    });
+  $$(
+    '[data-action="scanline"]'
+  ).forEach(button => {
+    button.addEventListener(
+      "click",
+      runScanline
+    );
   });
 
-  $$('[data-action="background"]').forEach(button => {
-    button.addEventListener("click", () => {
-      toggleBackground(button);
-    });
+  $$(
+    '[data-action="focus"]'
+  ).forEach(button => {
+    button.addEventListener(
+      "click",
+      () => {
+        toggleFocusMode(button);
+      }
+    );
   });
+
+  $$(
+    '[data-action="welcome"]'
+  ).forEach(button => {
+    button.addEventListener(
+      "click",
+      showWelcome
+    );
+  });
+
+  $$("[data-theme]").forEach(
+    button => {
+      button.addEventListener(
+        "click",
+        () => {
+          setTheme(
+            button.dataset.theme
+          );
+        }
+      );
+    }
+  );
+
+  updateThemeButtons();
+  bindThemeEvents();
 }
 
 function bindRegistryEvents() {
-  $$('[data-action="registry-refresh"]').forEach(
-    button => {
-      button.addEventListener("click", () => {
-        window.ShonenRegistry?.load?.();
-      });
-    }
-  );
+  $$(
+    '[data-action="registry-refresh"]'
+  ).forEach(button => {
+    button.addEventListener(
+      "click",
+      () => {
+        window.ShonenRegistry
+          ?.load?.();
+      }
+    );
+  });
 
-  $$('[data-action="member-dice"]').forEach(
-    button => {
-      button.addEventListener("click", () => {
-        window.ShonenRegistry?.random?.();
-      });
-    }
-  );
+  $$(
+    '[data-action="member-dice"]'
+  ).forEach(button => {
+    button.addEventListener(
+      "click",
+      () => {
+        window.ShonenRegistry
+          ?.random?.();
+      }
+    );
+  });
 }
 
 function bindCalendarEvents() {
-  $$('[data-calendar="previous"]').forEach(
-    button => {
-      button.addEventListener("click", () => {
-        window.ShonenCalendar?.previousMonth?.();
-      });
-    }
-  );
-
-  $$('[data-calendar="next"]').forEach(button => {
-    button.addEventListener("click", () => {
-      window.ShonenCalendar?.nextMonth?.();
-    });
+  $$(
+    '[data-calendar="previous"]'
+  ).forEach(button => {
+    button.addEventListener(
+      "click",
+      () => {
+        window.ShonenCalendar
+          ?.previousMonth?.();
+      }
+    );
   });
 
-  $$('[data-calendar="today"]').forEach(button => {
-    button.addEventListener("click", () => {
-      window.ShonenCalendar?.refresh?.();
-    });
+  $$(
+    '[data-calendar="next"]'
+  ).forEach(button => {
+    button.addEventListener(
+      "click",
+      () => {
+        window.ShonenCalendar
+          ?.nextMonth?.();
+      }
+    );
   });
 
-  $$('[data-action="timezone-toggle"]').forEach(
-    button => {
-      button.addEventListener("click", () => {
-        window.ShonenCalendar?.toggleTimezone?.();
-      });
-    }
-  );
+  $$(
+    '[data-calendar="today"]'
+  ).forEach(button => {
+    button.addEventListener(
+      "click",
+      () => {
+        window.ShonenCalendar
+          ?.refresh?.();
+      }
+    );
+  });
+
+  $$(
+    '[data-action="timezone-toggle"]'
+  ).forEach(button => {
+    button.addEventListener(
+      "click",
+      () => {
+        window.ShonenCalendar
+          ?.toggleTimezone?.();
+      }
+    );
+  });
 }
+
 
 /* =========================
    RENDER
@@ -1622,48 +2313,62 @@ function render() {
     console.error(
       "SHONEN NEXUS: #app not found."
     );
+
     return;
   }
 
-  const route = getRoute();
+  const route =
+    getRoute();
 
-  SHONEN_STATE.currentSection = route;
+  SHONEN_STATE.currentSection =
+    route;
 
   if (
     route !== "social" &&
-    typeof window.stopRadioForNavigation ===
+    typeof window
+      .stopRadioForNavigation ===
       "function"
   ) {
     window.stopRadioForNavigation();
   }
 
-  const renderer = pages[route] || pages.home;
+  const renderer =
+    pages[route] ||
+    pages.home;
 
-  app.innerHTML = renderer();
+  app.innerHTML =
+    renderer();
 
   updateNavigation(route);
+
   closeSidebar();
 
-  if (route === "home") {
-    startHomeBoot();
-  }
+  switch (route) {
+    case "home":
+      bindHomeEvents();
+      startHomeBoot();
+      break;
 
-  if (route === "registry") {
-    bindRegistryEvents();
-    window.ShonenRegistry?.load?.();
-  }
+    case "registry":
+      bindRegistryEvents();
+      window.ShonenRegistry
+        ?.load?.();
+      break;
 
-  if (route === "social") {
-    window.renderRadioPage?.();
-  }
+    case "social":
+      bindSocialEvents();
+      window.renderRadioPage?.();
+      break;
 
-  if (route === "calendar") {
-    bindCalendarEvents();
-    window.ShonenCalendar?.refresh?.();
-  }
+    case "calendar":
+      bindCalendarEvents();
+      window.ShonenCalendar
+        ?.refresh?.();
+      break;
 
-  if (route === "tools") {
-    bindToolsEvents();
+    case "tools":
+      bindToolsEvents();
+      break;
   }
 
   app.focus?.({
@@ -1671,39 +2376,56 @@ function render() {
   });
 }
 
+
 /* =========================
    KEYBOARD
    ========================= */
 
 function initKeyboardShortcuts() {
-  document.addEventListener("keydown", event => {
-    const active = document.activeElement;
-    const tag = active?.tagName;
+  document.addEventListener(
+    "keydown",
+    event => {
+      const active =
+        document.activeElement;
 
-    if (
-      tag === "INPUT" ||
-      tag === "TEXTAREA" ||
-      tag === "SELECT" ||
-      active?.isContentEditable
-    ) {
-      return;
-    }
+      const tag =
+        active?.tagName;
 
-    if (event.key === "Home") {
-      event.preventDefault();
-      scrollToTop();
-    }
+      if (
+        tag === "INPUT" ||
+        tag === "TEXTAREA" ||
+        tag === "SELECT" ||
+        active?.isContentEditable
+      ) {
+        return;
+      }
 
-    if (event.key === "End") {
-      event.preventDefault();
-      scrollToBottom();
-    }
+      if (
+        event.key === "Home"
+      ) {
+        event.preventDefault();
 
-    if (event.key.toLowerCase() === "g") {
-      showWelcome();
+        scrollToTop();
+      }
+
+      if (
+        event.key === "End"
+      ) {
+        event.preventDefault();
+
+        scrollToBottom();
+      }
+
+      if (
+        event.key.toLowerCase() ===
+        "g"
+      ) {
+        showWelcome();
+      }
     }
-  });
+  );
 }
+
 
 /* =========================
    STARTUP
@@ -1713,20 +2435,13 @@ function init() {
   initNavigation();
   initScrollState();
   initTheme();
-  initScanline();
-  initFocusMode();
-  initInviteButtons();
-  initWelcomeButtons();
-  initBackgroundToggle();
   initKeyboardShortcuts();
 
-  window.addEventListener(
-    "hashchange",
-    render
-  );
+  window.addEventListener("hashchange", render);
 
   render();
 }
+
 
 /* =========================
    BOOT
@@ -1743,22 +2458,110 @@ function bootShonenNexus() {
     "color:#4bdd91;font-weight:800;"
   );
 
-  console.log("Club:", SHONEN_NEXUS.clubUrl);
+  console.log(
+    "Club:",
+    SHONEN_NEXUS.clubUrl
+  );
 
   console.log(
     "Modules:",
-    SHONEN_NEXUS.sections.join(" / ")
+    SHONEN_NEXUS.sections.join(
+      " / "
+    )
   );
 
   init();
 }
 
-if (document.readyState === "loading") {
+
+if (
+  document.readyState ===
+  "loading"
+) {
   document.addEventListener(
     "DOMContentLoaded",
     bootShonenNexus,
-    { once: true }
+    {
+      once: true
+    }
   );
 } else {
   bootShonenNexus();
+}
+
+/* =========================
+   THEME BUTTONS
+   ========================= */
+
+function renderThemeSelector() {
+  return `
+    <section class="system-panel">
+
+      <div class="panel-label">
+        <span>THEME SYSTEM</span>
+        <span>07 THEMES</span>
+      </div>
+
+      <div class="theme-selector">
+
+        <button
+          class="theme-button"
+          type="button"
+          data-theme="default"
+        >
+          DEFAULT
+        </button>
+
+        <button
+          class="theme-button"
+          type="button"
+          data-theme="windbreaker"
+        >
+          WIND BREAKER
+        </button>
+
+        <button
+          class="theme-button"
+          type="button"
+          data-theme="cote"
+        >
+          CLASSROOM OF THE ELITE
+        </button>
+
+        <button
+          class="theme-button"
+          type="button"
+          data-theme="bleach"
+        >
+          BLEACH
+        </button>
+
+        <button
+          class="theme-button"
+          type="button"
+          data-theme="jjk"
+        >
+          JUJUTSU KAISEN
+        </button>
+
+        <button
+          class="theme-button"
+          type="button"
+          data-theme="naruto"
+        >
+          NARUTO
+        </button>
+
+        <button
+          class="theme-button"
+          type="button"
+          data-theme="onepiece"
+        >
+          ONE PIECE
+        </button>
+
+      </div>
+
+    </section>
+  `;
 }
