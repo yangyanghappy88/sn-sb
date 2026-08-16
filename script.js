@@ -3025,6 +3025,10 @@ function init() {
 
   initKeyboardShortcuts();
 
+  initNavigation();
+
+  initActiveNavigation();
+
   window.addEventListener(
     "hashchange",
     render
@@ -3082,5 +3086,198 @@ if (
 } else {
 
   bootShonenNexus();
+
+}
+
+function initNavigation() {
+
+    const navToggle = $("#navToggle");
+    const sidebar = $("#sidebar");
+
+    const navOverlay = $("#navOverlay");
+
+if (navOverlay) {
+
+    navOverlay.addEventListener(
+        "click",
+        closeMenu
+    );
+
+}
+
+    if (!navToggle || !sidebar) {
+        console.warn(
+            "Shonen Nexus navigation elements not found."
+        );
+
+        return;
+    }
+
+
+    function openMenu() {
+
+        sidebar.classList.add("open");
+
+        navToggle.classList.add("active");
+
+        navToggle.setAttribute(
+            "aria-expanded",
+            "true"
+        );
+
+        navToggle.setAttribute(
+            "aria-label",
+            "Close navigation"
+        );
+
+        document.body.classList.add(
+            "nav-open"
+        );
+
+            if (navOverlay) {
+    navOverlay.classList.add("active");
+}
+
+    }
+
+    function closeMenu() {
+
+        sidebar.classList.remove("open");
+
+        navToggle.classList.remove("active");
+
+        navToggle.setAttribute(
+            "aria-expanded",
+            "false"
+        );
+
+        navToggle.setAttribute(
+            "aria-label",
+            "Open navigation"
+        );
+
+        document.body.classList.remove(
+            "nav-open"
+        );
+
+        if (navOverlay) {
+    navOverlay.classList.remove("active");
+}
+
+    }
+
+
+    function toggleMenu() {
+
+        if (
+            sidebar.classList.contains("open")
+        ) {
+
+            closeMenu();
+
+        } else {
+
+            openMenu();
+
+        }
+
+    }
+
+
+    /* hamburger */
+
+    navToggle.addEventListener(
+        "click",
+        toggleMenu
+    );
+
+
+    /* navigation links */
+
+    $$(".nav-item").forEach(
+        link => {
+
+            link.addEventListener(
+                "click",
+                () => {
+
+                    if (
+                        window.matchMedia(
+                            "(max-width: 899px)"
+                        ).matches
+                    ) {
+
+                        closeMenu();
+
+                    }
+
+                }
+            );
+
+        }
+    );
+
+
+    /* escape key */
+
+    document.addEventListener(
+        "keydown",
+        event => {
+
+            if (
+                event.key === "Escape"
+            ) {
+
+                closeMenu();
+
+            }
+
+        }
+    );
+
+
+    /* reset on desktop */
+
+    window.addEventListener(
+        "resize",
+        () => {
+
+            if (
+                window.innerWidth >= 900
+            ) {
+
+                closeMenu();
+
+            }
+
+        }
+    );
+
+}
+
+function initActiveNavigation() {
+
+    $$(".nav-item").forEach(link => {
+
+        const target =
+            link.getAttribute("href");
+
+        if (!target) {
+            return;
+        }
+
+
+        const section =
+            target.startsWith("#")
+                ? target.slice(1)
+                : "";
+
+
+        link.classList.toggle(
+            "active",
+            section === "home"
+        );
+
+    });
 
 }

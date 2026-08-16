@@ -2243,3 +2243,562 @@ body.theme-onepiece {
   }
 
 }
+
+/* =========================================================
+   SHONEN NEXUS SIDEBAR — FINAL OVERRIDE
+   ========================================================= */
+
+.sidebar {
+  position: fixed;
+  inset: 0 auto 0 0;
+  z-index: 9000;
+
+  width: var(--sidebar-width);
+  height: 100vh;
+
+  padding: 24px 18px;
+
+  display: flex;
+  flex-direction: column;
+
+  background:
+    linear-gradient(
+      180deg,
+      rgba(19, 10, 12, .98),
+      rgba(8, 8, 8, .99)
+    );
+
+  border-right: 1px solid var(--border-red);
+
+  overflow-x: hidden;
+  overflow-y: auto;
+
+  transform: translateX(0);
+
+  transition:
+    transform .3s ease,
+    opacity .3s ease;
+}
+
+
+/* top accent */
+
+.sidebar::before {
+  content: "";
+
+  position: absolute;
+
+  top: 0;
+  left: 0;
+
+  width: 70px;
+  height: 2px;
+
+  background: var(--accent-bright);
+}
+
+
+/* keep sidebar contents above decoration */
+
+.sidebar > * {
+  position: relative;
+  z-index: 1;
+}
+
+
+/* =========================================================
+   SIDEBAR BRAND
+   ========================================================= */
+
+.sidebar-brand {
+  display: flex;
+  align-items: center;
+
+  gap: 12px;
+
+  margin-bottom: 22px;
+}
+
+.sidebar-logo-wrap {
+  flex: 0 0 auto;
+}
+
+.sidebar-logo {
+  display: block;
+
+  width: 52px;
+  height: 52px;
+
+  object-fit: cover;
+
+  border: 1px solid var(--border-red);
+
+  background: #101010;
+}
+
+.sidebar-brand-text {
+  min-width: 0;
+}
+
+.sidebar-brand-text strong {
+  display: block;
+
+  color: #eee;
+
+  font-size: 15px;
+  font-weight: 700;
+
+  line-height: 1;
+
+  letter-spacing: 2px;
+}
+
+.sidebar-brand-text small {
+  display: block;
+
+  margin-top: 5px;
+
+  color: var(--text-muted);
+
+  font-family: var(--font-mono);
+  font-size: 8px;
+
+  letter-spacing: 1px;
+}
+
+
+/* =========================================================
+   SIDEBAR STATUS
+   ========================================================= */
+
+.sidebar-status {
+  display: flex;
+  align-items: center;
+
+  gap: 9px;
+
+  margin-bottom: 22px;
+  padding: 10px;
+
+  background: rgba(255,255,255,.025);
+
+  border: 1px solid #242424;
+}
+
+.status-indicator {
+  width: 7px;
+  height: 7px;
+
+  flex: 0 0 auto;
+
+  border-radius: 50%;
+
+  background: var(--success);
+
+  box-shadow:
+    0 0 8px rgba(69,212,138,.6);
+}
+
+.sidebar-status strong {
+  display: block;
+
+  font-size: 10px;
+
+  letter-spacing: 1.5px;
+}
+
+.sidebar-status small {
+  display: block;
+
+  margin-top: 2px;
+
+  color: var(--text-muted);
+
+  font-family: var(--font-mono);
+
+  font-size: 7px;
+
+  letter-spacing: 1px;
+}
+
+
+/* =========================================================
+   NAVIGATION
+   ========================================================= */
+
+.sidebar-nav {
+  width: 100%;
+}
+
+.nav-heading {
+  display: flex;
+  justify-content: space-between;
+
+  margin-bottom: 7px;
+
+  color: var(--text-muted);
+
+  font-family: var(--font-mono);
+
+  font-size: 8px;
+
+  letter-spacing: 1.5px;
+}
+
+.nav-item {
+  position: relative;
+
+  display: grid;
+
+  grid-template-columns:
+    28px
+    minmax(0, 1fr)
+    auto;
+
+  align-items: center;
+
+  gap: 8px;
+
+  width: 100%;
+
+  padding: 11px 9px;
+
+  margin-bottom: 4px;
+
+  color: var(--text-soft);
+
+  border: 1px solid transparent;
+
+  transition:
+    background .2s ease,
+    border-color .2s ease,
+    color .2s ease,
+    transform .2s ease;
+}
+
+.nav-item:hover {
+  color: #fff;
+
+  background: var(--accent-soft);
+
+  border-color: var(--border-red);
+
+  transform: translateX(2px);
+}
+
+.nav-item.active {
+  color: #fff;
+
+  background:
+    linear-gradient(
+      90deg,
+      rgba(165,29,45,.2),
+      transparent
+    );
+
+  border-color: var(--border-red);
+}
+
+.nav-item.active::before {
+  content: "";
+
+  position: absolute;
+
+  left: -1px;
+  top: 5px;
+  bottom: 5px;
+
+  width: 2px;
+
+  background: var(--accent-bright);
+}
+
+.nav-index {
+  color: var(--accent-bright);
+
+  font-family: var(--font-mono);
+
+  font-size: 9px;
+}
+
+.nav-copy {
+  min-width: 0;
+}
+
+.nav-copy strong {
+  display: block;
+
+  font-size: 12px;
+
+  letter-spacing: 1.5px;
+}
+
+.nav-copy small {
+  display: block;
+
+  margin-top: 2px;
+
+  color: var(--text-muted);
+
+  font-family: var(--font-mono);
+
+  font-size: 7px;
+
+  letter-spacing: .7px;
+}
+
+.nav-arrow {
+  color: var(--text-muted);
+}
+
+
+/* =========================================================
+   SIDEBAR SYSTEM
+   ========================================================= */
+
+.sidebar-system {
+  margin-top: auto;
+
+  padding-top: 18px;
+}
+
+.sidebar-system .system-heading {
+  display: flex;
+  justify-content: space-between;
+
+  padding-bottom: 7px;
+  margin-bottom: 7px;
+
+  border-bottom: 1px solid #252525;
+
+  color: var(--text-muted);
+
+  font-family: var(--font-mono);
+
+  font-size: 8px;
+
+  letter-spacing: 1.5px;
+}
+
+.sidebar-system .system-row {
+  display: flex;
+  justify-content: space-between;
+
+  padding: 4px 0;
+
+  font-family: var(--font-mono);
+
+  font-size: 8px;
+}
+
+.sidebar-system .system-row span {
+  color: var(--text-muted);
+}
+
+.sidebar-system .system-row strong {
+  color: #ccc;
+}
+
+
+/* =========================================================
+   SIDEBAR FOOTER
+   ========================================================= */
+
+.sidebar-footer {
+  margin-top: 18px;
+
+  padding-top: 14px;
+
+  border-top: 1px solid #242424;
+
+  font-family: var(--font-mono);
+}
+
+.boot-label {
+  color: var(--accent-bright);
+
+  font-size: 10px;
+
+  letter-spacing: 2px;
+}
+
+.boot-version {
+  margin-top: 3px;
+
+  color: var(--text-muted);
+
+  font-size: 8px;
+
+  letter-spacing: 1px;
+}
+
+.boot-line {
+  display: flex;
+  justify-content: space-between;
+
+  margin-top: 5px;
+
+  font-size: 8px;
+}
+
+.boot-line span {
+  color: var(--text-muted);
+}
+
+.boot-line strong {
+  color: #ccc;
+}
+
+
+/* =========================================================
+   NAV TOGGLE
+   ========================================================= */
+
+.nav-toggle {
+  position: fixed;
+
+  top: 12px;
+  right: 12px;
+
+  z-index: 10001;
+
+  width: 46px;
+  height: 46px;
+
+  display: flex;
+
+  flex-direction: column;
+
+  align-items: center;
+  justify-content: center;
+
+  gap: 5px;
+
+  padding: 0;
+
+  background: #0d0d0d;
+
+  border: 1px solid var(--border-red);
+
+  cursor: pointer;
+}
+
+.nav-toggle span {
+  display: block;
+
+  width: 23px;
+  height: 2px;
+
+  background: #d0d0d0;
+
+  transition:
+    transform .25s ease,
+    opacity .25s ease;
+}
+
+
+/* hamburger → X */
+
+.nav-toggle.active span:nth-child(1) {
+  transform:
+    translateY(7px)
+    rotate(45deg);
+}
+
+.nav-toggle.active span:nth-child(2) {
+  opacity: 0;
+}
+
+.nav-toggle.active span:nth-child(3) {
+  transform:
+    translateY(-7px)
+    rotate(-45deg);
+}
+
+
+/* =========================================================
+   MOBILE
+   ========================================================= */
+
+@media (max-width: 899px) {
+
+  .sidebar {
+    transform: translateX(-105%);
+
+    box-shadow:
+      12px 0 30px rgba(0,0,0,.45);
+  }
+
+  .sidebar.open {
+    transform: translateX(0);
+  }
+
+  .nav-toggle {
+    display: flex;
+  }
+
+  #app {
+    margin-left: 0;
+
+    width: 100%;
+
+    padding-top: 75px;
+  }
+
+}
+
+
+/* =========================================================
+   DESKTOP
+   ========================================================= */
+
+@media (min-width: 900px) {
+
+  .nav-toggle {
+    display: none;
+  }
+
+  .sidebar {
+    transform: translateX(0);
+  }
+
+  #app {
+    margin-left: var(--sidebar-width);
+
+    width:
+      calc(100% - var(--sidebar-width));
+  }
+
+  .site-footer {
+    margin-left: var(--sidebar-width);
+
+    width:
+      calc(100% - var(--sidebar-width));
+  }
+
+}
+
+.nav-overlay {
+  position: fixed;
+  inset: 0;
+
+  z-index: 8999;
+
+  background: rgba(0,0,0,.65);
+
+  opacity: 0;
+  pointer-events: none;
+
+  transition: opacity .25s ease;
+}
+
+.nav-overlay.active {
+  opacity: 1;
+  pointer-events: auto;
+}
+
+@media (min-width: 900px) {
+  .nav-overlay {
+    display: none;
+  }
+}
