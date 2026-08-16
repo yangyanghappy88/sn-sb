@@ -4046,3 +4046,52 @@ body::after {
   background: #b11226;
   color: #fff;
 }
+
+/* =========================================================
+   YOUTUBE TERMINAL STATUS
+   ========================================================= */
+
+.youtube-terminal-status {
+  position: relative;
+  z-index: 2;
+
+  display: flex;
+  align-items: center;
+  gap: 9px;
+
+  margin-top: 20px;
+  padding-top: 13px;
+
+  border-top: 1px solid
+    rgba(255, 255, 255, 0.07);
+
+  color:
+    rgba(255, 255, 255, 0.38);
+
+  font-family:
+    "Courier New",
+    monospace;
+
+  font-size: 10px;
+  font-weight: 700;
+
+  letter-spacing: 0.1em;
+
+  text-transform: uppercase;
+}
+
+
+.youtube-terminal-status[data-status="success"] {
+  color: #4bdd91;
+}
+
+
+.youtube-terminal-status[data-status="search"] {
+  color: #ff4655;
+}
+
+
+.youtube-terminal-status .terminal-prompt {
+  color: #b11226;
+  font-weight: 900;
+}

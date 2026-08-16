@@ -1868,73 +1868,413 @@ function bindYouTubeEvents() {
   const placeholder =
     $(".youtube-placeholder");
 
+  if (!searchForm || !searchInput) {
+    return;
+  }
 
-  if (
-    searchForm &&
-    searchInput
+
+  /* -------------------------------------------------------
+     TERMINAL STATUS
+     ------------------------------------------------------- */
+
+  function setYouTubeStatus(
+    message,
+    type = "normal"
   ) {
-    searchForm.addEventListener(
-      "submit",
-      event => {
-        event.preventDefault();
+    const terminal =
+      $(".youtube-terminal");
 
-        const query =
-          searchInput.value.trim();
+    if (!terminal) {
+      return;
+    }
 
-        if (!query) {
-          searchInput.focus();
-          return;
+    let status =
+      terminal.querySelector(
+        ".youtube-terminal-status"
+      );
+
+    if (!status) {
+      status =
+        document.createElement("div");
+
+      status.className =
+        "youtube-terminal-status";
+
+      terminal.appendChild(status);
+    }
+
+    status.dataset.status =
+      type;
+
+    status.innerHTML = `
+      <span class="terminal-prompt">
+        &gt;
+      </span>
+
+      <span>
+        ${escapeHtml(message)}
+      </span>
+    `;
+  }
+
+
+  /* -------------------------------------------------------
+     EXTRACT YOUTUBE VIDEO ID
+     ------------------------------------------------------- */
+
+  function getYouTubeVideoId(value) {
+    const input =
+      String(value || "").trim();
+
+    if (!input) {
+      return null;
+    }
+
+
+    /*
+     * Plain YouTube video ID
+     *
+     * Example:
+     * dQw4w9WgXcQ
+     */
+
+    if (
+      /^[a-zA-Z0-9_-]{11}$/.test(input)
+    ) {
+      return input;
+    }
+
+
+    /*
+     * youtube.com/watch?v=VIDEO_ID
+     */
+
+    try {
+      const url =
+        new URL(input);
+
+      const hostname =
+        url.hostname
+          .toLowerCase()
+          .replace(/^www\./, "");
+
+
+      if (
+        hostname === "youtube.com" ||
+        hostname === "m.youtube.com"
+      ) {
+        const id =
+          url.searchParams.get("v");
+
+        if (
+          id &&
+          /^[a-zA-Z0-9_-]{11}$/.test(id)
+        ) {
+          return id;
         }
-
-        const youtubeSearchURL =
-          `https://www.youtube.com/results?search_query=${encodeURIComponent(query)}`;
-
-        window.open(
-          youtubeSearchURL,
-          "_blank",
-          "noopener,noreferrer"
-        );
       }
+
+
+      /*
+       * youtu.be/VIDEO_ID
+       */
+
+      if (
+        hostname === "youtu.be"
+      ) {
+        const id =
+          url.pathname
+            .replace(/^\/+/, "")
+            .split("/")[0];
+
+        if (
+          /^[a-zA-Z0-9_-]{11}$/.test(id)
+        ) {
+          return id;
+        }
+      }
+
+
+      /*
+       * youtube.com/embed/VIDEO_ID
+       */
+
+      if (
+        hostname === "youtube.com"
+      ) {
+        const parts =
+          url.pathname
+            .split("/")
+            .filter(Boolean);
+
+        const embedIndex =
+          parts.indexOf("embed");
+
+        if (
+          embedIndex !== -1 &&
+          parts[embedIndex + 1]
+        ) {
+          const id =
+            parts[embedIndex + 1];
+
+          if (
+            /^[a-zA-Z0-9_-]{11}$/.test(id)
+          ) {
+            return id;
+          }
+        }
+      }
+
+    } catch (error) {
+      /*
+       * Not a URL.
+       * That's okay — it may simply
+       * be a search query.
+       */
+    }
+
+
+    return null;
+  }
+
+
+  /* -------------------------------------------------------
+     LOAD VIDEO
+     ------------------------------------------------------- */
+
+  function loadYouTubeVideo(
+    videoId
+  ) {
+    if (!player) {
+      return;
+    }
+
+
+    if (
+      !/^[a-zA-Z0-9_-]{11}$/.test(
+        videoId
+      )
+    ) {
+      return;
+    }
+
+
+    const embedURL =
+      `https://www.youtube.com/embed/${videoId}?autoplay=1&rel=0`;
+
+
+    setYouTubeStatus(
+      `VIDEO TRANSMISSION LOCKED // ${videoId}`,
+      "success"
+    );
+
+
+    /*
+     * Set iframe source.
+     */
+
+    player.src =
+      embedURL;
+
+
+    /*
+     * Hide the placeholder.
+     */
+
+    placeholder?.classList.add(
+      "hidden"
+    );
+
+
+    /*
+     * Make sure iframe is visible.
+     */
+
+    player.classList.add(
+      "active"
     );
   }
 
 
-  $$(".youtube-preset").forEach(
-    button => {
-      button.addEventListener(
-        "click",
-        () => {
-          const query =
-            button.dataset.youtubeQuery || "";
+  /* -------------------------------------------------------
+     SEARCH YOUTUBE
+     ------------------------------------------------------- */
 
-          if (!searchInput) {
-            return;
-          }
+  function searchYouTube(
+    query
+  ) {
+    const cleanQuery =
+      String(query || "").trim();
 
-          searchInput.value =
-            query;
+    if (!cleanQuery) {
+      searchInput.focus();
+      return;
+    }
 
-          searchInput.focus();
-        }
+
+    /*
+     * First check whether the user
+     * pasted a YouTube URL or ID.
+     */
+
+    const videoId =
+      getYouTubeVideoId(
+        cleanQuery
+      );
+
+
+    if (videoId) {
+      loadYouTubeVideo(
+        videoId
+      );
+
+      return;
+    }
+
+
+    /*
+     * Otherwise perform a normal
+     * YouTube search.
+     */
+
+    const youtubeSearchURL =
+      `https://www.youtube.com/results?search_query=${encodeURIComponent(
+        cleanQuery
+      )}`;
+
+
+    setYouTubeStatus(
+      `SEARCHING YOUTUBE NETWORK // ${cleanQuery}`,
+      "search"
+    );
+
+
+    /*
+     * Open the search in a new tab.
+     *
+     * YouTube does not provide a simple
+     * public client-side search API that
+     * can safely give us arbitrary search
+     * results here without API credentials.
+     */
+
+    window.open(
+      youtubeSearchURL,
+      "_blank",
+      "noopener,noreferrer"
+    );
+  }
+
+
+  /* -------------------------------------------------------
+     FORM SUBMIT
+     ------------------------------------------------------- */
+
+  searchForm.addEventListener(
+    "submit",
+    event => {
+      event.preventDefault();
+
+      searchYouTube(
+        searchInput.value
       );
     }
   );
 
 
-  /*
-   * Keep the optional player available
-   * for future direct video loading.
-   */
+  /* -------------------------------------------------------
+     PRESET BUTTONS
+     ------------------------------------------------------- */
+
+  $$(".youtube-preset").forEach(
+    button => {
+
+      button.addEventListener(
+        "click",
+        () => {
+
+          const query =
+            button.dataset.youtubeQuery ||
+            "";
+
+          if (!query) {
+            return;
+          }
+
+
+          searchInput.value =
+            query;
+
+
+          /*
+           * Put cursor in search field.
+           */
+
+          searchInput.focus();
+
+
+          /*
+           * Automatically perform
+           * the search.
+           */
+
+          searchYouTube(
+            query
+          );
+        }
+      );
+
+    }
+  );
+
+
+  /* -------------------------------------------------------
+     PLAYER LOAD
+     ------------------------------------------------------- */
+
   if (player) {
+
     player.addEventListener(
       "load",
       () => {
-        placeholder?.classList.add(
-          "hidden"
-        );
+
+        if (
+          player.src &&
+          player.src !==
+            "about:blank"
+        ) {
+
+          placeholder?.classList.add(
+            "hidden"
+          );
+
+
+          player.classList.add(
+            "active"
+          );
+
+
+          setYouTubeStatus(
+            "VIDEO TRANSMISSION ACTIVE",
+            "success"
+          );
+
+        }
+
       }
     );
+
   }
+
+
+  /* -------------------------------------------------------
+     INITIAL TERMINAL STATE
+     ------------------------------------------------------- */
+
+  setYouTubeStatus(
+    "YOUTUBE TRANSMISSION NODE READY",
+    "normal"
+  );
 }
 
 
