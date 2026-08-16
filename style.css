@@ -3358,3 +3358,691 @@ body::after {
     transition-duration: 0.01ms !important;
   }
 }
+
+.youtube-interface {
+  display: grid;
+  grid-template-columns: minmax(0, 1fr);
+  gap: 24px;
+  padding: 4px 0 0;
+}
+
+
+/* ---------------------------------------------------------
+   YOUTUBE TERMINAL
+   --------------------------------------------------------- */
+
+.youtube-terminal {
+  position: relative;
+  padding: 30px;
+  border: 1px solid rgba(177, 18, 38, 0.35);
+  background:
+    linear-gradient(
+      135deg,
+      rgba(177, 18, 38, 0.08),
+      rgba(0, 0, 0, 0.15)
+    ),
+    rgba(10, 10, 12, 0.75);
+
+  overflow: hidden;
+}
+
+
+/*
+ * Decorative red system line.
+ */
+
+.youtube-terminal::before {
+  content: "";
+  position: absolute;
+
+  top: 0;
+  left: 0;
+
+  width: 100%;
+  height: 2px;
+
+  background:
+    linear-gradient(
+      90deg,
+      transparent,
+      #b11226,
+      #ff4655,
+      #b11226,
+      transparent
+    );
+
+  opacity: 0.9;
+}
+
+
+/*
+ * Subtle scanline effect.
+ */
+
+.youtube-terminal::after {
+  content: "";
+
+  position: absolute;
+  inset: 0;
+
+  pointer-events: none;
+
+  background:
+    repeating-linear-gradient(
+      0deg,
+      transparent 0,
+      transparent 3px,
+      rgba(255, 255, 255, 0.012) 4px
+    );
+
+  opacity: 0.5;
+}
+
+
+.youtube-terminal .radio-system-label {
+  position: relative;
+  z-index: 1;
+
+  display: flex;
+  align-items: center;
+  gap: 9px;
+
+  margin-bottom: 14px;
+
+  color: #4bdd91;
+
+  font-family:
+    "Courier New",
+    monospace;
+
+  font-size: 11px;
+  font-weight: 800;
+  letter-spacing: 0.18em;
+}
+
+
+.youtube-terminal h2 {
+  position: relative;
+  z-index: 1;
+
+  margin: 0 0 10px;
+
+  color: #f2f2f2;
+
+  font-family:
+    "Arial Black",
+    "Helvetica Neue",
+    sans-serif;
+
+  font-size: clamp(25px, 4vw, 42px);
+  font-weight: 900;
+
+  letter-spacing: -0.04em;
+  line-height: 1;
+}
+
+
+.youtube-terminal p {
+  position: relative;
+  z-index: 1;
+
+  max-width: 720px;
+
+  margin: 0;
+
+  color: rgba(255, 255, 255, 0.56);
+
+  font-family:
+    "Courier New",
+    monospace;
+
+  font-size: 13px;
+  line-height: 1.7;
+}
+
+
+/* ---------------------------------------------------------
+   YOUTUBE SEARCH
+   --------------------------------------------------------- */
+
+.youtube-search {
+  display: flex;
+  flex-direction: column;
+  gap: 16px;
+}
+
+
+.youtube-search-row {
+  display: grid;
+
+  grid-template-columns:
+    minmax(0, 1fr)
+    auto;
+
+  gap: 10px;
+}
+
+
+#youtubeSearch {
+  width: 100%;
+  min-width: 0;
+
+  box-sizing: border-box;
+
+  padding: 15px 17px;
+
+  border: 1px solid
+    rgba(255, 255, 255, 0.13);
+
+  border-radius: 0;
+
+  outline: none;
+
+  background:
+    rgba(5, 5, 7, 0.9);
+
+  color: #f5f5f5;
+
+  font-family:
+    "Courier New",
+    monospace;
+
+  font-size: 13px;
+  font-weight: 700;
+
+  letter-spacing: 0.08em;
+
+  transition:
+    border-color 160ms ease,
+    box-shadow 160ms ease,
+    background 160ms ease;
+}
+
+
+#youtubeSearch::placeholder {
+  color: rgba(255, 255, 255, 0.28);
+}
+
+
+#youtubeSearch:hover {
+  border-color:
+    rgba(177, 18, 38, 0.55);
+}
+
+
+#youtubeSearch:focus {
+  border-color: #b11226;
+
+  background:
+    rgba(177, 18, 38, 0.055);
+
+  box-shadow:
+    0 0 0 1px rgba(177, 18, 38, 0.18),
+    0 0 24px rgba(177, 18, 38, 0.08);
+}
+
+
+/* ---------------------------------------------------------
+   SEARCH BUTTON
+   --------------------------------------------------------- */
+
+.youtube-search-row .system-button {
+  min-width: 130px;
+}
+
+
+/* ---------------------------------------------------------
+   SEARCH PRESETS
+   --------------------------------------------------------- */
+
+.youtube-search-presets {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 8px;
+}
+
+
+.youtube-preset {
+  position: relative;
+
+  padding: 9px 13px;
+
+  border: 1px solid
+    rgba(255, 255, 255, 0.12);
+
+  border-radius: 0;
+
+  background:
+    rgba(255, 255, 255, 0.025);
+
+  color:
+    rgba(255, 255, 255, 0.62);
+
+  cursor: pointer;
+
+  font-family:
+    "Courier New",
+    monospace;
+
+  font-size: 10px;
+  font-weight: 800;
+
+  letter-spacing: 0.12em;
+
+  transition:
+    color 150ms ease,
+    border-color 150ms ease,
+    background 150ms ease,
+    transform 150ms ease;
+}
+
+
+.youtube-preset:hover {
+  color: #fff;
+
+  border-color:
+    rgba(177, 18, 38, 0.75);
+
+  background:
+    rgba(177, 18, 38, 0.1);
+
+  transform: translateY(-1px);
+}
+
+
+.youtube-preset:active {
+  transform: translateY(0);
+}
+
+
+.youtube-preset:focus-visible {
+  outline: 2px solid #ff4655;
+  outline-offset: 2px;
+}
+
+
+/* ---------------------------------------------------------
+   OPTIONAL VIDEO TRANSMISSION
+   --------------------------------------------------------- */
+
+.youtube-embed-wrap {
+  position: relative;
+
+  width: 100%;
+
+  border: 1px solid
+    rgba(255, 255, 255, 0.1);
+
+  background:
+    #050507;
+
+  overflow: hidden;
+}
+
+
+/* ---------------------------------------------------------
+   VIDEO HEADER
+   --------------------------------------------------------- */
+
+.youtube-embed-header {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+
+  min-height: 42px;
+
+  padding: 0 15px;
+
+  border-bottom: 1px solid
+    rgba(255, 255, 255, 0.08);
+
+  background:
+    rgba(255, 255, 255, 0.025);
+
+  color:
+    rgba(255, 255, 255, 0.5);
+
+  font-family:
+    "Courier New",
+    monospace;
+
+  font-size: 10px;
+  font-weight: 800;
+
+  letter-spacing: 0.15em;
+}
+
+
+.youtube-embed-header span:last-child {
+  color: #ff4655;
+}
+
+
+/* ---------------------------------------------------------
+   VIDEO PLACEHOLDER
+   --------------------------------------------------------- */
+
+.youtube-placeholder {
+  position: absolute;
+
+  z-index: 2;
+
+  top: 43px;
+  right: 0;
+  bottom: 0;
+  left: 0;
+
+  display: flex;
+
+  flex-direction: column;
+
+  align-items: center;
+  justify-content: center;
+
+  gap: 9px;
+
+  min-height: 420px;
+
+  background:
+    radial-gradient(
+      circle at center,
+      rgba(177, 18, 38, 0.08),
+      transparent 55%
+    ),
+    #050507;
+
+  text-align: center;
+
+  transition:
+    opacity 200ms ease,
+    visibility 200ms ease;
+}
+
+
+.youtube-placeholder.hidden {
+  opacity: 0;
+  visibility: hidden;
+  pointer-events: none;
+}
+
+
+.youtube-placeholder-icon {
+  display: grid;
+
+  width: 68px;
+  height: 68px;
+
+  place-items: center;
+
+  margin-bottom: 8px;
+
+  border: 1px solid
+    rgba(255, 70, 85, 0.45);
+
+  color: #ff4655;
+
+  font-size: 24px;
+
+  background:
+    rgba(177, 18, 38, 0.08);
+
+  box-shadow:
+    0 0 35px
+    rgba(177, 18, 38, 0.12);
+}
+
+
+.youtube-placeholder strong {
+  color: rgba(255, 255, 255, 0.8);
+
+  font-family:
+    "Courier New",
+    monospace;
+
+  font-size: 12px;
+
+  letter-spacing: 0.16em;
+}
+
+
+.youtube-placeholder small {
+  color: rgba(255, 255, 255, 0.32);
+
+  font-family:
+    "Courier New",
+    monospace;
+
+  font-size: 9px;
+
+  letter-spacing: 0.1em;
+}
+
+
+/* ---------------------------------------------------------
+   YOUTUBE IFRAME
+   --------------------------------------------------------- */
+
+.youtube-player {
+  display: block;
+
+  width: 100%;
+
+  aspect-ratio: 16 / 9;
+
+  min-height: 420px;
+
+  border: 0;
+
+  background: #000;
+}
+
+
+/* ---------------------------------------------------------
+   FOOTER READOUT
+   --------------------------------------------------------- */
+
+.social-footer-readout {
+  display: flex;
+
+  flex-wrap: wrap;
+
+  align-items: center;
+
+  justify-content: center;
+
+  gap: 10px;
+
+  padding: 22px 10px 35px;
+
+  color:
+    rgba(255, 255, 255, 0.28);
+
+  font-family:
+    "Courier New",
+    monospace;
+
+  font-size: 9px;
+  font-weight: 800;
+
+  letter-spacing: 0.16em;
+
+  text-align: center;
+}
+
+
+.social-footer-readout span:last-child {
+  color: #4bdd91;
+}
+
+
+/* ---------------------------------------------------------
+   STATUS DOT
+   --------------------------------------------------------- */
+
+.youtube-interface .status-dot,
+.youtube-terminal .status-dot {
+  display: inline-block;
+
+  width: 7px;
+  height: 7px;
+
+  flex: 0 0 7px;
+
+  border-radius: 50%;
+
+  background: #4bdd91;
+
+  box-shadow:
+    0 0 8px
+    rgba(75, 221, 145, 0.8);
+
+  animation:
+    youtubePulse 1.8s ease-in-out infinite;
+}
+
+
+@keyframes youtubePulse {
+  0%,
+  100% {
+    opacity: 1;
+    box-shadow:
+      0 0 7px
+      rgba(75, 221, 145, 0.75);
+  }
+
+  50% {
+    opacity: 0.45;
+    box-shadow:
+      0 0 14px
+      rgba(75, 221, 145, 0.25);
+  }
+}
+
+
+/* =========================================================
+   RESPONSIVE
+   ========================================================= */
+
+@media (max-width: 700px) {
+
+  .youtube-terminal {
+    padding: 22px 18px;
+  }
+
+
+  .youtube-terminal h2 {
+    font-size: 27px;
+  }
+
+
+  .youtube-search-row {
+    grid-template-columns: 1fr;
+  }
+
+
+  .youtube-search-row .system-button {
+    width: 100%;
+  }
+
+
+  .youtube-preset {
+    flex: 1 1 auto;
+
+    text-align: center;
+  }
+
+
+  .youtube-player {
+    min-height: 240px;
+  }
+
+
+  .youtube-placeholder {
+    min-height: 240px;
+  }
+
+
+  .youtube-placeholder-icon {
+    width: 52px;
+    height: 52px;
+
+    font-size: 19px;
+  }
+
+
+  .youtube-footer-readout {
+    font-size: 8px;
+  }
+}
+
+
+@media (max-width: 450px) {
+
+  .youtube-terminal {
+    padding: 20px 15px;
+  }
+
+
+  .youtube-terminal h2 {
+    font-size: 23px;
+  }
+
+
+  .youtube-terminal p {
+    font-size: 11px;
+  }
+
+
+  .youtube-search-presets {
+    display: grid;
+
+    grid-template-columns: 1fr 1fr;
+  }
+
+
+  .youtube-preset {
+    width: 100%;
+  }
+
+
+  .youtube-embed-header {
+    padding: 0 10px;
+
+    font-size: 8px;
+  }
+
+
+  .youtube-player {
+    min-height: 200px;
+  }
+
+
+  .youtube-placeholder {
+    min-height: 200px;
+  }
+
+
+  .youtube-placeholder small {
+    max-width: 240px;
+
+    line-height: 1.5;
+  }
+
+
+  .social-footer-readout {
+    gap: 6px;
+
+    font-size: 7px;
+  }
+}
+
+
+/* =========================================================
+   RED SELECTION / SYSTEM DETAILS
+   ========================================================= */
+
+.youtube-interface ::selection,
+.youtube-embed-wrap ::selection {
+  background: #b11226;
+  color: #fff;
+}
