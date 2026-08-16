@@ -111,36 +111,6 @@ function getActiveTimezone() {
 
 
 /* ============================================
-   CHECK VALID TIMEZONE
-   ============================================ */
-
-function isValidTimezone(
-    timezone
-) {
-
-    try {
-
-        Intl.DateTimeFormat(
-            "en-US",
-            {
-                timeZone:
-                    timezone
-            }
-        );
-
-
-        return true;
-
-    } catch {
-
-        return false;
-
-    }
-
-}
-
-
-/* ============================================
    LOAD SAVED TIMEZONE
    ============================================ */
 
@@ -400,81 +370,6 @@ function getDateKey(
 
 
 /* ============================================
-   GET EVENTS FOR DAY
-   ============================================ */
-
-function getEventsForDay(
-    year,
-    month,
-    day
-) {
-
-    const target =
-        `${year}-${String(month + 1).padStart(2, "0")}-${String(day).padStart(2, "0")}`;
-
-
-    return CALENDAR_EVENTS.filter(
-        event => {
-
-            return (
-                getDateKey(
-                    new Date(event.date)
-                ) === target
-            );
-
-        }
-    );
-
-}
-
-
-/* ============================================
-   FORMAT EVENT TIME
-   ============================================ */
-
-function formatEventTime(
-    date
-) {
-
-    return new Intl.DateTimeFormat(
-        undefined,
-        {
-            timeZone:
-                getActiveTimezone(),
-
-            hour: "numeric",
-
-            minute: "2-digit"
-        }
-    ).format(date);
-
-}
-
-
-/* ============================================
-   FORMAT EVENT DATE
-   ============================================ */
-
-function formatEventDate(
-    date
-) {
-
-    return new Intl.DateTimeFormat(
-        undefined,
-        {
-            timeZone:
-                getActiveTimezone(),
-
-            month: "short",
-
-            day: "numeric"
-        }
-    ).format(date);
-
-}
-
-
-/* ============================================
    CHECK IF DAY IS TODAY
    ============================================ */
 
@@ -566,7 +461,7 @@ function renderCalendar() {
 
 
     /*
-     * Blank cells before first day.
+     * Blank cells before the first day.
      */
 
     for (
@@ -616,14 +511,6 @@ function renderCalendar() {
             "calendar-day";
 
 
-        const events =
-            getEventsForDay(
-                year,
-                month,
-                day
-            );
-
-
         const today =
             isTodayInTimezone(
                 year,
@@ -641,44 +528,13 @@ function renderCalendar() {
         }
 
 
-        if (events.length) {
-
-            cell.classList.add(
-                "has-event"
-            );
-
-        }
-
-
         cell.innerHTML = `
 
             <span class="calendar-number">
                 ${day}
             </span>
 
-            ${
-                events.length
-                    ? `<span class="calendar-event-dot"></span>`
-                    : ""
-            }
-
         `;
-
-
-        if (events.length) {
-
-            cell.addEventListener(
-                "click",
-                () => {
-
-                    showCalendarEvents(
-                        events
-                    );
-
-                }
-            );
-
-        }
 
 
         calendar.appendChild(
@@ -686,175 +542,6 @@ function renderCalendar() {
         );
 
     }
-
-
-    updateCalendarEventList();
-
-}
-
-
-/* ============================================
-   EVENT LIST
-   ============================================ */
-
-function updateCalendarEventList() {
-
-    const container =
-        document.querySelector(
-            '[data-calendar="events"]'
-        );
-
-
-    if (!container) {
-
-        return;
-
-    }
-
-
-    const sorted =
-        [...CALENDAR_EVENTS]
-            .sort(
-                (a, b) =>
-                    new Date(a.date) -
-                    new Date(b.date)
-            );
-
-
-    container.innerHTML = "";
-
-
-    sorted.forEach(
-        event => {
-
-            const item =
-                document.createElement(
-                    "div"
-                );
-
-
-            item.className =
-                "calendar-event";
-
-
-            const date =
-                new Date(
-                    event.date
-                );
-
-
-            item.innerHTML = `
-
-                <div class="calendar-event-date">
-
-                    <strong>
-                        ${escapeCalendarHTML(
-                            formatEventDate(
-                                date
-                            )
-                        )}
-                    </strong>
-
-                    <small>
-                        ${escapeCalendarHTML(
-                            formatEventTime(
-                                date
-                            )
-                        )}
-                    </small>
-
-                </div>
-
-                <div class="calendar-event-info">
-
-                    <strong>
-                        ${escapeCalendarHTML(
-                            event.title
-                        )}
-                    </strong>
-
-                    <small>
-                        ${escapeCalendarHTML(
-                            event.type ||
-                            "event"
-                        ).toUpperCase()}
-                    </small>
-
-                </div>
-
-            `;
-
-
-            container.appendChild(
-                item
-            );
-
-        }
-    );
-
-}
-
-
-/* ============================================
-   SHOW DAY EVENTS
-   ============================================ */
-
-function showCalendarEvents(
-    events
-) {
-
-    if (!events.length) {
-
-        return;
-
-    }
-
-
-    const display =
-        document.querySelector(
-            '[data-calendar="selected-event"]'
-        );
-
-
-    if (!display) {
-
-        console.log(
-            events
-        );
-
-        return;
-
-    }
-
-
-    display.innerHTML =
-        events
-            .map(
-                item => `
-
-                    <div class="selected-calendar-event">
-
-                        <strong>
-                            ${escapeCalendarHTML(
-                                item.title
-                            )}
-                        </strong>
-
-                        <small>
-                            ${escapeCalendarHTML(
-                                formatEventTime(
-                                    new Date(
-                                        item.date
-                                    )
-                                )
-                            )}
-                        </small>
-
-                    </div>
-
-                `
-            )
-            .join("");
 
 }
 
@@ -1040,44 +727,6 @@ function initCalendarNavigation() {
 
 
 /* ============================================
-   HTML ESCAPE
-   ============================================ */
-
-function escapeCalendarHTML(
-    value
-) {
-
-    return String(value)
-
-        .replaceAll(
-            "&",
-            "&amp;"
-        )
-
-        .replaceAll(
-            "<",
-            "&lt;"
-        )
-
-        .replaceAll(
-            ">",
-            "&gt;"
-        )
-
-        .replaceAll(
-            '"',
-            "&quot;"
-        )
-
-        .replaceAll(
-            "'",
-            "&#039;"
-        );
-
-}
-
-
-/* ============================================
    PUBLIC CALENDAR API
    ============================================ */
 
@@ -1116,7 +765,8 @@ window.ShonenCalendar = {
 function initCalendar() {
 
     /*
-     * Only initialize on a calendar page.
+     * Only initialize on a page that contains
+     * the calendar.
      */
 
     if (
@@ -1143,19 +793,7 @@ function initCalendar() {
         true;
 
 
-    /*
-     * Detect browser timezone first.
-     */
-
-    detectLocalTimezone();
-
-
-    /*
-     * Then load user's saved preference.
-     */
-
     loadSavedTimezone();
-
 
     initTimezoneButtons();
 
@@ -1164,17 +802,6 @@ function initCalendar() {
     updateTimezoneUI();
 
     renderCalendar();
-
-
-    console.log(
-        "[Shonen Calendar] Local timezone:",
-        detectLocalTimezone()
-    );
-
-    console.log(
-        "[Shonen Calendar] Active timezone:",
-        getActiveTimezone()
-    );
 
 }
 
