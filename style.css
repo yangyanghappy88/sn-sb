@@ -886,3 +886,414 @@ body::after{
     transition-duration:.01ms!important
   }
 }
+
+/* =========================================================
+   SHONEN NEXUS // CALENDAR
+   ========================================================= */
+
+.shonen-calendar-panel {
+  position: relative;
+  overflow: hidden;
+}
+
+.shonen-calendar-header {
+  display: grid;
+  grid-template-columns: 44px 1fr 44px;
+  align-items: center;
+  gap: 14px;
+  margin-bottom: 22px;
+}
+
+.shonen-calendar-header h2 {
+  margin: 0;
+  text-align: center;
+  font-size: clamp(1.3rem, 3vw, 2rem);
+  font-weight: 700;
+  letter-spacing: 0.08em;
+  text-transform: uppercase;
+  color: var(--text-primary, #f1f1f1);
+}
+
+.shonen-calendar-header .system-button {
+  min-width: 44px;
+  width: 44px;
+  height: 44px;
+  padding: 0;
+  display: grid;
+  place-items: center;
+}
+
+
+/* =========================================================
+   CLOCK
+   ========================================================= */
+
+.shonen-time-panel {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  padding: 26px 20px;
+  margin-bottom: 24px;
+  border: 1px solid rgba(177, 18, 38, 0.35);
+  background: rgba(0, 0, 0, 0.28);
+  text-align: center;
+}
+
+.shonen-clock {
+  font-size: clamp(2rem, 7vw, 4.5rem);
+  line-height: 1;
+  font-weight: 700;
+  letter-spacing: 0.12em;
+  color: var(--accent, #b11226);
+  text-shadow: 0 0 18px rgba(177, 18, 38, 0.3);
+  font-variant-numeric: tabular-nums;
+}
+
+.shonen-timezone {
+  margin-top: 12px;
+  font-size: 0.75rem;
+  font-weight: 700;
+  letter-spacing: 0.16em;
+  text-transform: uppercase;
+  color: var(--text-secondary, #a8a8ad);
+}
+
+.shonen-location {
+  margin-top: 6px;
+  font-size: 0.65rem;
+  letter-spacing: 0.14em;
+  text-transform: uppercase;
+  color: var(--text-muted, #666);
+}
+
+
+/* =========================================================
+   WEEKDAYS
+   ========================================================= */
+
+.shonen-calendar-weekdays {
+  display: grid;
+  grid-template-columns: repeat(7, minmax(0, 1fr));
+  gap: 6px;
+  margin-bottom: 6px;
+}
+
+.shonen-calendar-weekdays span {
+  padding: 10px 4px;
+  text-align: center;
+  font-size: 0.65rem;
+  font-weight: 700;
+  letter-spacing: 0.12em;
+  color: var(--text-secondary, #888);
+  border-bottom: 1px solid rgba(177, 18, 38, 0.25);
+}
+
+
+/* =========================================================
+   CALENDAR GRID
+   ========================================================= */
+
+.shonen-calendar-grid {
+  display: grid;
+  grid-template-columns: repeat(7, minmax(0, 1fr));
+  gap: 6px;
+}
+
+.calendar-day {
+  position: relative;
+  min-height: 72px;
+  padding: 12px 10px;
+  border: 1px solid rgba(255, 255, 255, 0.07);
+  border-radius: 2px;
+  background: rgba(255, 255, 255, 0.025);
+  color: var(--text-primary, #e8e8e8);
+  cursor: pointer;
+  transition:
+    border-color 0.2s ease,
+    background 0.2s ease,
+    transform 0.2s ease;
+  font: inherit;
+  text-align: left;
+}
+
+.calendar-day:hover {
+  border-color: rgba(177, 18, 38, 0.65);
+  background: rgba(177, 18, 38, 0.09);
+  transform: translateY(-1px);
+}
+
+.calendar-day.empty {
+  min-height: 72px;
+  border-color: transparent;
+  background: transparent;
+  cursor: default;
+  pointer-events: none;
+}
+
+.calendar-number {
+  display: block;
+  font-size: 0.85rem;
+  font-weight: 600;
+  letter-spacing: 0.04em;
+}
+
+.calendar-day.today {
+  border-color: rgba(177, 18, 38, 0.85);
+  background: rgba(177, 18, 38, 0.1);
+  box-shadow:
+    inset 0 0 0 1px rgba(177, 18, 38, 0.15),
+    0 0 18px rgba(177, 18, 38, 0.08);
+}
+
+.calendar-day.today .calendar-number {
+  color: #d72842;
+}
+
+.calendar-day.has-event {
+  border-color: rgba(177, 18, 38, 0.4);
+}
+
+.calendar-day.has-event:hover {
+  border-color: #b11226;
+}
+
+.calendar-event-dot {
+  position: absolute;
+  right: 10px;
+  bottom: 10px;
+  width: 6px;
+  height: 6px;
+  border-radius: 50%;
+  background: #b11226;
+  box-shadow: 0 0 8px rgba(177, 18, 38, 0.7);
+}
+
+
+/* =========================================================
+   EVENT LIST
+   ========================================================= */
+
+.calendar-events {
+  display: grid;
+  gap: 8px;
+  margin-top: 24px;
+}
+
+.calendar-event {
+  display: grid;
+  grid-template-columns: 100px 1fr;
+  gap: 16px;
+  align-items: center;
+  padding: 14px 16px;
+  border-left: 2px solid #b11226;
+  background: rgba(255, 255, 255, 0.025);
+  transition:
+    background 0.2s ease,
+    border-color 0.2s ease;
+}
+
+.calendar-event:hover {
+  background: rgba(177, 18, 38, 0.07);
+  border-color: #d72842;
+}
+
+.calendar-event-date {
+  display: flex;
+  flex-direction: column;
+  gap: 3px;
+}
+
+.calendar-event-date strong {
+  font-size: 0.8rem;
+  letter-spacing: 0.08em;
+  text-transform: uppercase;
+  color: var(--text-primary, #eee);
+}
+
+.calendar-event-date small {
+  font-size: 0.65rem;
+  letter-spacing: 0.06em;
+  color: var(--text-muted, #777);
+}
+
+.calendar-event-info {
+  display: flex;
+  flex-direction: column;
+  gap: 4px;
+}
+
+.calendar-event-info strong {
+  font-size: 0.85rem;
+  font-weight: 700;
+  letter-spacing: 0.06em;
+  color: var(--text-primary, #eee);
+}
+
+.calendar-event-info small {
+  font-size: 0.6rem;
+  font-weight: 700;
+  letter-spacing: 0.14em;
+  color: #b11226;
+}
+
+
+/* =========================================================
+   SELECTED EVENT
+   ========================================================= */
+
+.selected-calendar-event {
+  display: grid;
+  gap: 5px;
+  margin-top: 14px;
+  padding: 16px;
+  border: 1px solid rgba(177, 18, 38, 0.35);
+  background: rgba(177, 18, 38, 0.06);
+}
+
+.selected-calendar-event strong {
+  font-size: 0.85rem;
+  letter-spacing: 0.06em;
+  color: var(--text-primary, #eee);
+}
+
+.selected-calendar-event small {
+  font-size: 0.68rem;
+  letter-spacing: 0.08em;
+  color: var(--text-secondary, #999);
+}
+
+
+/* =========================================================
+   CALENDAR FOOTER
+   ========================================================= */
+
+.shonen-calendar-footer {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  gap: 12px;
+  margin-top: 24px;
+  padding-top: 18px;
+  border-top: 1px solid rgba(255, 255, 255, 0.07);
+}
+
+.shonen-calendar-footer .system-button {
+  min-width: 130px;
+}
+
+
+/* =========================================================
+   TIMEZONE CONTROLS
+   ========================================================= */
+
+[data-calendar-timezone] {
+  transition:
+    border-color 0.2s ease,
+    background 0.2s ease,
+    color 0.2s ease;
+}
+
+[data-calendar-timezone].active {
+  border-color: #b11226;
+  background: rgba(177, 18, 38, 0.12);
+  color: #fff;
+}
+
+
+/* =========================================================
+   CALENDAR RESPONSIVE
+   ========================================================= */
+
+@media (max-width: 700px) {
+
+  .shonen-calendar-header {
+    grid-template-columns: 38px 1fr 38px;
+    gap: 8px;
+  }
+
+  .shonen-calendar-header .system-button {
+    width: 38px;
+    min-width: 38px;
+    height: 38px;
+  }
+
+  .shonen-calendar-grid,
+  .shonen-calendar-weekdays {
+    gap: 3px;
+  }
+
+  .calendar-day {
+    min-height: 58px;
+    padding: 9px 7px;
+  }
+
+  .calendar-day.empty {
+    min-height: 58px;
+  }
+
+  .calendar-number {
+    font-size: 0.75rem;
+  }
+
+  .calendar-event-dot {
+    right: 7px;
+    bottom: 7px;
+    width: 5px;
+    height: 5px;
+  }
+
+  .calendar-event {
+    grid-template-columns: 82px 1fr;
+    gap: 12px;
+    padding: 12px;
+  }
+
+  .shonen-calendar-footer {
+    flex-direction: column;
+    align-items: stretch;
+  }
+
+  .shonen-calendar-footer .system-button {
+    width: 100%;
+  }
+
+}
+
+
+@media (max-width: 450px) {
+
+  .shonen-time-panel {
+    padding: 22px 14px;
+  }
+
+  .shonen-calendar-weekdays span {
+    padding: 8px 2px;
+    font-size: 0.55rem;
+  }
+
+  .calendar-day {
+    min-height: 48px;
+    padding: 7px 5px;
+  }
+
+  .calendar-day.empty {
+    min-height: 48px;
+  }
+
+  .calendar-number {
+    font-size: 0.7rem;
+  }
+
+  .calendar-event {
+    grid-template-columns: 1fr;
+    gap: 8px;
+  }
+
+  .calendar-event-date {
+    flex-direction: row;
+    gap: 10px;
+    align-items: baseline;
+  }
+
+}
