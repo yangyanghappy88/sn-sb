@@ -20,12 +20,16 @@ const CalendarState = {
         new Date(),
 
     selectedTimezone:
-        "local",
+        CALENDAR_CONFIG.defaultTimezone,
+
+    detectedTimezone:
+        null,
 
     initialized:
         false
 
 };
+
 
 const CALENDAR_EVENTS = [
 
@@ -65,25 +69,60 @@ const CALENDAR_EVENTS = [
 ];
 
 
-/* ============================================
-   DETECT LOCAL TIMEZONE
-   ============================================ */
+/* detect */
 
 function detectLocalTimezone() {
 
-    try {
+    if (CalendarState.detectedTimezone) {
 
-        return (
-            Intl.DateTimeFormat()
-                .resolvedOptions()
-                .timeZone
-        ) || "UTC";
-
-    } catch {
-
-        return "UTC";
+        return CalendarState.detectedTimezone;
 
     }
+
+
+    try {
+
+        const timezone =
+            Intl.DateTimeFormat()
+                .resolvedOptions()
+                .timeZone;
+
+
+        /*
+         * Make sure the browser actually returned
+         * a valid IANA timezone.
+         */
+
+        if (
+            typeof timezone === "string" &&
+            timezone.length > 0
+        ) {
+
+            CalendarState.detectedTimezone =
+                timezone;
+
+            return timezone;
+
+        }
+
+    } catch (error) {
+
+        console.warn(
+            "Unable to detect local timezone:",
+            error
+        );
+
+    }
+
+
+    /*
+     * Fallback.
+     */
+
+    CalendarState.detectedTimezone =
+        "UTC";
+
+    return "UTC";
 
 }
 
@@ -110,20 +149,65 @@ function getActiveTimezone() {
 
 
 /* ============================================
+   CHECK VALID TIMEZONE
+   ============================================ */
+
+function isValidTimezone(
+    timezone
+) {
+
+    try {
+
+        Intl.DateTimeFormat(
+            "en-US",
+            {
+                timeZone:
+                    timezone
+            }
+        );
+
+
+        return true;
+
+    } catch {
+
+        return false;
+
+    }
+
+}
+
+
+/* ============================================
    LOAD SAVED TIMEZONE
    ============================================ */
 
 function loadSavedTimezone() {
 
-    const saved =
-        localStorage.getItem(
-            CALENDAR_CONFIG.storageKey
+    let saved = null;
+
+
+    try {
+
+        saved =
+            localStorage.getItem(
+                CALENDAR_CONFIG.storageKey
+            );
+
+    } catch (error) {
+
+        console.warn(
+            "Unable to read saved timezone:",
+            error
         );
+
+    }
 
 
     if (
         saved === "local" ||
-        saved === CALENDAR_CONFIG.tokyoTimezone
+        saved ===
+        CALENDAR_CONFIG.tokyoTimezone
     ) {
 
         CalendarState.selectedTimezone =
@@ -145,10 +229,21 @@ function loadSavedTimezone() {
 
 function saveTimezone() {
 
-    localStorage.setItem(
-        CALENDAR_CONFIG.storageKey,
-        CalendarState.selectedTimezone
-    );
+    try {
+
+        localStorage.setItem(
+            CALENDAR_CONFIG.storageKey,
+            CalendarState.selectedTimezone
+        );
+
+    } catch (error) {
+
+        console.warn(
+            "Unable to save timezone:",
+            error
+        );
+
+    }
 
 }
 
@@ -166,6 +261,11 @@ function setCalendarTimezone(
         timezone !==
         CALENDAR_CONFIG.tokyoTimezone
     ) {
+
+        console.warn(
+            "Unsupported calendar timezone:",
+            timezone
+        );
 
         return;
 
@@ -300,6 +400,29 @@ function formatMonthTitle(
 
 
 /* ============================================
+   FORMAT DATE IN ACTIVE TIMEZONE
+   ============================================ */
+
+function formatCalendarDate(
+    date
+) {
+
+    return new Intl.DateTimeFormat(
+        "en-CA",
+        {
+            timeZone:
+                getActiveTimezone(),
+
+            year: "numeric",
+            month: "2-digit",
+            day: "2-digit"
+        }
+    ).format(date);
+
+}
+
+
+/* ============================================
    EVENT DATE KEY
    ============================================ */
 
@@ -307,21 +430,7 @@ function getDateKey(
     date
 ) {
 
-    const formatter =
-        new Intl.DateTimeFormat(
-            "en-CA",
-            {
-                timeZone:
-                    getActiveTimezone(),
-
-                year: "numeric",
-                month: "2-digit",
-                day: "2-digit"
-            }
-        );
-
-
-    return formatter.format(
+    return formatCalendarDate(
         date
     );
 
@@ -381,6 +490,58 @@ function formatEventTime(
 
 
 /* ============================================
+   FORMAT EVENT DATE
+   ============================================ */
+
+function formatEventDate(
+    date
+) {
+
+    return new Intl.DateTimeFormat(
+        undefined,
+        {
+            timeZone:
+                getActiveTimezone(),
+
+            month: "short",
+
+            day: "numeric"
+        }
+    ).format(date);
+
+}
+
+
+/* ============================================
+   CHECK IF DAY IS TODAY
+   ============================================ */
+
+function isTodayInTimezone(
+    year,
+    month,
+    day
+) {
+
+    const today =
+        new Date();
+
+
+    const todayKey =
+        getDateKey(
+            today
+        );
+
+
+    const targetKey =
+        `${year}-${String(month + 1).padStart(2, "0")}-${String(day).padStart(2, "0")}`;
+
+
+    return todayKey === targetKey;
+
+}
+
+
+/* ============================================
    RENDER CALENDAR
    ============================================ */
 
@@ -393,7 +554,9 @@ function renderCalendar() {
 
 
     if (!calendar) {
+
         return;
+
     }
 
 
@@ -441,7 +604,7 @@ function renderCalendar() {
 
 
     /*
-     * Blank cells before the first day.
+     * Blank cells before first day.
      */
 
     for (
@@ -451,7 +614,9 @@ function renderCalendar() {
     ) {
 
         const empty =
-            document.createElement("div");
+            document.createElement(
+                "div"
+            );
 
 
         empty.className =
@@ -476,7 +641,9 @@ function renderCalendar() {
     ) {
 
         const cell =
-            document.createElement("button");
+            document.createElement(
+                "button"
+            );
 
 
         cell.type =
@@ -496,16 +663,14 @@ function renderCalendar() {
 
 
         const today =
-            new Date();
+            isTodayInTimezone(
+                year,
+                month,
+                day
+            );
 
 
-        const isToday =
-            today.getFullYear() === year &&
-            today.getMonth() === month &&
-            today.getDate() === day;
-
-
-        if (isToday) {
+        if (today) {
 
             cell.classList.add(
                 "today"
@@ -579,7 +744,9 @@ function updateCalendarEventList() {
 
 
     if (!container) {
+
         return;
+
     }
 
 
@@ -619,18 +786,18 @@ function updateCalendarEventList() {
                 <div class="calendar-event-date">
 
                     <strong>
-                        ${new Intl.DateTimeFormat(
-                            undefined,
-                            {
-                                month: "short",
-                                day: "numeric"
-                            }
-                        ).format(date)}
+                        ${escapeCalendarHTML(
+                            formatEventDate(
+                                date
+                            )
+                        )}
                     </strong>
 
                     <small>
-                        ${formatEventTime(
-                            date
+                        ${escapeCalendarHTML(
+                            formatEventTime(
+                                date
+                            )
                         )}
                     </small>
 
@@ -675,24 +842,11 @@ function showCalendarEvents(
 ) {
 
     if (!events.length) {
+
         return;
+
     }
 
-
-    const event =
-        events[0];
-
-
-    const date =
-        new Date(
-            event.date
-        );
-
-
-    /*
-     * Use a custom small event display
-     * if the page provides one.
-     */
 
     const display =
         document.querySelector(
@@ -711,31 +865,34 @@ function showCalendarEvents(
     }
 
 
-    display.innerHTML = events
-        .map(
-            item => `
+    display.innerHTML =
+        events
+            .map(
+                item => `
 
-                <div class="selected-calendar-event">
+                    <div class="selected-calendar-event">
 
-                    <strong>
-                        ${escapeCalendarHTML(
-                            item.title
-                        )}
-                    </strong>
+                        <strong>
+                            ${escapeCalendarHTML(
+                                item.title
+                            )}
+                        </strong>
 
-                    <small>
-                        ${formatEventTime(
-                            new Date(
-                                item.date
-                            )
-                        )}
-                    </small>
+                        <small>
+                            ${escapeCalendarHTML(
+                                formatEventTime(
+                                    new Date(
+                                        item.date
+                                    )
+                                )
+                            )}
+                        </small>
 
-                </div>
+                    </div>
 
-            `
-        )
-        .join("");
+                `
+            )
+            .join("");
 
 }
 
@@ -854,14 +1011,16 @@ function initTimezoneButtons() {
         .querySelectorAll(
             '[data-action="timezone-toggle"]'
         )
-        .forEach(button => {
+        .forEach(
+            button => {
 
-            button.addEventListener(
-                "click",
-                toggleCalendarTimezone
-            );
+                button.addEventListener(
+                    "click",
+                    toggleCalendarTimezone
+                );
 
-        });
+            }
+        );
 
 }
 
@@ -876,40 +1035,44 @@ function initCalendarNavigation() {
         .querySelectorAll(
             '[data-calendar="previous"]'
         )
-        .forEach(button => {
+        .forEach(
+            button => {
 
-            button.addEventListener(
-                "click",
-                () => {
+                button.addEventListener(
+                    "click",
+                    () => {
 
-                    changeCalendarMonth(
-                        -1
-                    );
+                        changeCalendarMonth(
+                            -1
+                        );
 
-                }
-            );
+                    }
+                );
 
-        });
+            }
+        );
 
 
     document
         .querySelectorAll(
             '[data-calendar="next"]'
         )
-        .forEach(button => {
+        .forEach(
+            button => {
 
-            button.addEventListener(
-                "click",
-                () => {
+                button.addEventListener(
+                    "click",
+                    () => {
 
-                    changeCalendarMonth(
-                        1
-                    );
+                        changeCalendarMonth(
+                            1
+                        );
 
-                }
-            );
+                    }
+                );
 
-        });
+            }
+        );
 
 }
 
@@ -976,7 +1139,10 @@ window.ShonenCalendar = {
         renderCalendar,
 
     getTimezone:
-        getActiveTimezone
+        getActiveTimezone,
+
+    detectTimezone:
+        detectLocalTimezone
 
 };
 
@@ -988,8 +1154,7 @@ window.ShonenCalendar = {
 function initCalendar() {
 
     /*
-     * Only initialize on a page that contains
-     * the calendar.
+     * Only initialize on a calendar page.
      */
 
     if (
@@ -1016,7 +1181,19 @@ function initCalendar() {
         true;
 
 
+    /*
+     * Detect browser timezone first.
+     */
+
+    detectLocalTimezone();
+
+
+    /*
+     * Then load user's saved preference.
+     */
+
     loadSavedTimezone();
+
 
     initTimezoneButtons();
 
@@ -1026,12 +1203,21 @@ function initCalendar() {
 
     renderCalendar();
 
+
+    console.log(
+        "[Shonen Calendar] Local timezone:",
+        detectLocalTimezone()
+    );
+
+    console.log(
+        "[Shonen Calendar] Active timezone:",
+        getActiveTimezone()
+    );
+
 }
 
 
-/* ============================================
-   START
-   ============================================ */
+/* start */
 
 if (
     document.readyState ===
