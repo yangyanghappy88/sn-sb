@@ -23,8 +23,7 @@ const SHONEN_NEXUS = {
     "registry",
     "command",
     "social",
-    "calendar",
-    "tools"
+    "calendar"
   ]
 };
 
@@ -52,8 +51,6 @@ const $$ = (
 
 const SHONEN_STATE = {
   currentSection: "home",
-  currentTheme: "default",
-  backgroundImage: null,
   bootTimer: null,
   welcomeTimer: null
 };
@@ -251,257 +248,6 @@ function initNavigation() {
 
 
 /* =========================
-   SCROLL
-   ========================= */
-
-function scrollToTop() {
-  window.scrollTo({
-    top: 0,
-    behavior: "smooth"
-  });
-}
-
-function scrollToBottom() {
-  window.scrollTo({
-    top:
-      document.documentElement
-        .scrollHeight,
-    behavior: "smooth"
-  });
-}
-
-window.scrollToTop = scrollToTop;
-window.scrollToBottom = scrollToBottom;
-
-function initScrollState() {
-  const update = () => {
-    const atTop =
-      window.scrollY <= 10;
-
-    const atBottom =
-      window.innerHeight +
-        window.scrollY >=
-      document.documentElement
-        .scrollHeight - 10;
-
-    document.body.classList.toggle(
-      "at-top",
-      atTop
-    );
-
-    document.body.classList.toggle(
-      "at-bottom",
-      atBottom
-    );
-  };
-
-  window.addEventListener(
-    "scroll",
-    update,
-    {
-      passive: true
-    }
-  );
-
-  update();
-}
-
-
-/* =========================
-   THEME
-   ========================= */
-
-/* =========================
-   THEME SYSTEM
-   ========================= */
-
-function updateThemeButtons() {
-  $$("[data-theme]").forEach(button => {
-    button.classList.toggle(
-      "active",
-      button.dataset.theme === SHONEN_STATE.currentTheme
-    );
-  });
-}
-
-function setTheme(theme) {
-  if (!SHONEN_NEXUS.themes.includes(theme)) {
-    theme = "default";
-  }
-
-  // Remove all existing theme classes
-  SHONEN_NEXUS.themes.forEach(themeName => {
-    document.body.classList.remove(`theme-${themeName}`);
-  });
-
-  // Add selected theme class
-  if (theme !== "default") {
-    document.body.classList.add(`theme-${theme}`);
-  }
-
-  SHONEN_STATE.currentTheme = theme;
-
-  // Save selection
-  try {
-    localStorage.setItem("shonen-theme", theme);
-  } catch (error) {
-    console.warn("Unable to save theme:", error);
-  }
-
-  updateThemeButtons();
-}
-
-function initTheme() {
-  let savedTheme = "default";
-
-  try {
-    savedTheme =
-      localStorage.getItem("shonen-theme") || "default";
-  } catch (error) {
-    console.warn("Unable to load saved theme:", error);
-  }
-
-  setTheme(savedTheme);
-}
-
-function bindThemeEvents() {
-  $$("[data-theme]").forEach(button => {
-    button.addEventListener("click", () => {
-      setTheme(button.dataset.theme);
-    });
-  });
-
-  updateThemeButtons();
-}
-
-window.setTheme = setTheme;
-
-function initTheme() {
-  let saved = "default";
-
-  try {
-    saved =
-      localStorage.getItem(
-        "shonen-theme"
-      ) || "default";
-  } catch (error) {
-    console.warn(
-      "Unable to read Shonen theme:",
-      error
-    );
-  }
-
-  setTheme(saved);
-}
-
-
-/* =========================
-   SYSTEM EFFECTS
-   ========================= */
-
-function runScanline() {
-  const line =
-    document.createElement("div");
-
-  line.className =
-    "shonen-system-scanline";
-
-  document.body.appendChild(line);
-
-  requestAnimationFrame(() => {
-    line.classList.add("run");
-  });
-
-  setTimeout(() => {
-    line.remove();
-  }, 1900);
-}
-
-window.runScanline = runScanline;
-
-function toggleFocusMode(button) {
-  const active =
-    document.body.classList.toggle(
-      "focus-mode"
-    );
-
-  button?.classList.toggle(
-    "active",
-    active
-  );
-}
-
-
-/* =========================
-   INVITE
-   ========================= */
-
-async function copyInviteLink(
-  button = null
-) {
-  try {
-    if (
-      navigator.clipboard?.writeText
-    ) {
-      await navigator.clipboard.writeText(
-        SHONEN_NEXUS.inviteUrl
-      );
-    } else {
-      const textarea =
-        document.createElement(
-          "textarea"
-        );
-
-      textarea.value =
-        SHONEN_NEXUS.inviteUrl;
-
-      textarea.style.position =
-        "fixed";
-
-      textarea.style.opacity = "0";
-
-      document.body.appendChild(
-        textarea
-      );
-
-      textarea.select();
-
-      document.execCommand("copy");
-
-      textarea.remove();
-    }
-
-    if (!button) {
-      return;
-    }
-
-    const original =
-      button.dataset.originalText ||
-      button.textContent.trim();
-
-    button.dataset.originalText =
-      original;
-
-    button.textContent =
-      "COPIED ✓";
-
-    setTimeout(() => {
-      button.textContent =
-        original;
-    }, 1800);
-  } catch (error) {
-    console.error(
-      "Shonen Nexus clipboard error:",
-      error
-    );
-  }
-}
-
-window.copyInviteLink =
-  copyInviteLink;
-
-
-/* =========================
    WELCOME
    ========================= */
 
@@ -577,62 +323,6 @@ window.showWelcome =
 
 
 /* =========================
-   BACKGROUND
-   ========================= */
-
-function toggleBackground(button) {
-  const root =
-    document.documentElement;
-
-  const property =
-    "--theme-background-override-image";
-
-  if (
-    SHONEN_STATE.backgroundImage ===
-    null
-  ) {
-    SHONEN_STATE.backgroundImage =
-      getComputedStyle(root)
-        .getPropertyValue(property)
-        .trim() || "none";
-  }
-
-  const current =
-    root.style
-      .getPropertyValue(property)
-      .trim() ||
-    getComputedStyle(root)
-      .getPropertyValue(property)
-      .trim();
-
-  const isOff =
-    current === "none";
-
-  root.style.setProperty(
-    property,
-    isOff
-      ? SHONEN_STATE.backgroundImage
-      : "none"
-  );
-
-  const label =
-    button?.querySelector(
-      "[data-background-label]"
-    );
-
-  if (label) {
-    label.textContent =
-      isOff ? "ON" : "OFF";
-  }
-
-  button?.classList.toggle(
-    "active",
-    isOff
-  );
-}
-
-
-/* =========================
    HOME
    ========================= */
 
@@ -700,7 +390,7 @@ function renderHome() {
 
       <div class="panel-label">
         <span>
-          NEXUS DIRECT LINKS
+          NEXUS DIRECT LINK
         </span>
 
         <span>
@@ -716,6 +406,7 @@ function renderHome() {
           target="_blank"
           rel="noopener noreferrer"
         >
+
           <div class="member-avatar module-number">
             ♟
           </div>
@@ -733,37 +424,15 @@ function renderHome() {
           <div class="member-time">
             ↗
           </div>
+
         </a>
-
-        <button
-          class="member-card"
-          type="button"
-          data-action="copy-invite"
-        >
-          <div class="member-avatar module-number">
-            +
-          </div>
-
-          <div>
-            <div class="member-name">
-              JOIN THE NEXUS
-            </div>
-
-            <div class="member-meta">
-              COPY CLUB INVITE LINK
-            </div>
-          </div>
-
-          <div class="member-time">
-            COPY
-          </div>
-        </button>
 
         <button
           class="member-card"
           type="button"
           data-action="welcome"
         >
+
           <div class="member-avatar module-number">
             N
           </div>
@@ -781,6 +450,7 @@ function renderHome() {
           <div class="member-time">
             RUN
           </div>
+
         </button>
 
       </div>
@@ -795,7 +465,7 @@ function renderHome() {
         </span>
 
         <span>
-          06 SYSTEMS
+          05 SYSTEMS
         </span>
       </div>
 
@@ -831,12 +501,6 @@ function renderHome() {
             "CALENDAR",
             "TIME & EVENTS",
             "#calendar"
-          ],
-          [
-            "06",
-            "TOOLS",
-            "AUXILIARY CONTROLS",
-            "#tools"
           ]
         ]
           .map(
@@ -898,6 +562,7 @@ function renderHome() {
         class="system-terminal"
         id="homeBootLog"
       >
+
         <div class="terminal-line">
 
           <span class="terminal-prompt">
@@ -909,6 +574,7 @@ function renderHome() {
           </span>
 
         </div>
+
       </div>
 
     </section>
@@ -1008,6 +674,7 @@ function renderRegistry() {
 
         <div class="readout-row">
           <span>CLUB</span>
+
           <strong>
             SHONEN NEXUS
           </strong>
@@ -1015,6 +682,7 @@ function renderRegistry() {
 
         <div class="readout-row">
           <span>DATABASE</span>
+
           <strong>
             CHESS.COM
           </strong>
@@ -1022,6 +690,7 @@ function renderRegistry() {
 
         <div class="readout-row">
           <span>STATUS</span>
+
           <strong class="online">
             ONLINE
           </strong>
@@ -1029,6 +698,7 @@ function renderRegistry() {
 
         <div class="readout-row">
           <span>MEMBERS</span>
+
           <strong data-registry="member-count">
             —
           </strong>
@@ -1130,6 +800,7 @@ function renderCommand() {
     <section class="system-panel">
 
       <div class="panel-label">
+
         <span>
           COMMAND MODULES
         </span>
@@ -1137,6 +808,7 @@ function renderCommand() {
         <span>
           ONLINE
         </span>
+
       </div>
 
       <div class="registry-grid">
@@ -1374,34 +1046,6 @@ function renderSocial() {
               </span>
 
             </a>
-
-            <button
-              class="social-channel"
-              type="button"
-              data-action="copy-invite"
-            >
-
-              <div class="channel-icon">
-                +
-              </div>
-
-              <div class="channel-info">
-
-                <strong>
-                  INVITE
-                </strong>
-
-                <small>
-                  COPY CLUB INVITE LINK
-                </small>
-
-              </div>
-
-              <span class="channel-arrow">
-                COPY
-              </span>
-
-            </button>
 
           </div>
 
@@ -1788,220 +1432,6 @@ function renderCalendarPage() {
 
 
 /* =========================
-   TOOLS
-   ========================= */
-
-function renderTools() {
-  return `
-    ${systemHeader(
-      "SHONEN NEXUS // 06",
-      "STUDENT TOOLS",
-      "Auxiliary controls for navigation, presentation and Nexus system effects."
-    )}
-
-    <section class="system-panel">
-
-      <div class="panel-label">
-
-        <span>
-          NEXUS // AUXILIARY CONTROLS
-        </span>
-
-        <span>
-          ONLINE
-        </span>
-
-      </div>
-
-      <div class="shonen-tools-grid">
-
-        <button
-          class="shonen-tool"
-          type="button"
-          data-action="top"
-        >
-          <span class="shonen-tool-icon">
-            ↑
-          </span>
-
-          <small>
-            TOP
-          </small>
-        </button>
-
-        <button
-          class="shonen-tool"
-          type="button"
-          data-action="bottom"
-        >
-          <span class="shonen-tool-icon">
-            ↓
-          </span>
-
-          <small>
-            BOTTOM
-          </small>
-        </button>
-
-        <button
-          class="shonen-tool"
-          type="button"
-          data-action="copy-invite"
-        >
-          <span class="shonen-tool-icon">
-            COPY
-          </span>
-
-          <small>
-            INVITE
-          </small>
-        </button>
-
-        <button
-          class="shonen-tool"
-          type="button"
-          data-action="background"
-        >
-          <span
-            class="shonen-tool-icon"
-            data-background-label
-          >
-            ON
-          </span>
-
-          <small>
-            BACKGROUND
-          </small>
-        </button>
-
-        <button
-          class="shonen-tool"
-          type="button"
-          data-action="scanline"
-        >
-          <span class="shonen-tool-icon">
-            SCAN
-          </span>
-
-          <small>
-            SYSTEM
-          </small>
-        </button>
-
-        <button
-          class="shonen-tool"
-          type="button"
-          data-action="focus"
-        >
-          <span class="shonen-tool-icon">
-            FOCUS
-          </span>
-
-          <small>
-            MODE
-          </small>
-        </button>
-
-        <button
-          class="shonen-tool"
-          type="button"
-          data-action="welcome"
-        >
-          <span class="shonen-tool-icon">
-            NEXUS
-          </span>
-
-          <small>
-            BOOT
-          </small>
-        </button>
-
-      </div>
-
-      <div class="shonen-tools-status">
-
-        <span>
-          &gt;
-        </span>
-
-        <span>
-          ALL AUXILIARY CONTROLS READY.
-        </span>
-
-      </div>
-
-    </section>
-
-    <section class="system-panel">
-
-      <div class="panel-label">
-
-        <span>
-          THEME SYSTEM
-        </span>
-
-        <span>
-          07 THEMES
-        </span>
-
-      </div>
-
-      <div class="theme-selector">
-
-        ${[
-          [
-            "default",
-            "DEFAULT"
-          ],
-          [
-            "windbreaker",
-            "WIND BREAKER"
-          ],
-          [
-            "cote",
-            "CLASSROOM OF THE ELITE"
-          ],
-          [
-            "bleach",
-            "BLEACH"
-          ],
-          [
-            "jjk",
-            "JUJUTSU KAISEN"
-          ],
-          [
-            "naruto",
-            "NARUTO"
-          ],
-          [
-            "onepiece",
-            "ONE PIECE"
-          ]
-        ]
-          .map(
-            ([theme, label]) => `
-              <button
-                class="theme-button"
-                type="button"
-                data-theme="${theme}"
-              >
-                ${escapeHtml(label)}
-              </button>
-            `
-          )
-          .join("")}
-
-      </div>
-
-    </section>
-    ${renderThemeSelector()}
-  `
-
-  ;
-}
-
-
-/* =========================
    PAGE MAP
    ========================= */
 
@@ -2010,8 +1440,7 @@ const pages = {
   registry: renderRegistry,
   command: renderCommand,
   social: renderSocial,
-  calendar: renderCalendarPage,
-  tools: renderTools
+  calendar: renderCalendarPage
 };
 
 
@@ -2040,8 +1469,6 @@ function startHomeBoot() {
     "Command module loaded.",
     "Calendar synchronization loaded.",
     "Nexus Radio subsystem standing by.",
-    "Theme engine initialized.",
-    "Auxiliary control system loaded.",
     "All primary systems operational."
   ];
 
@@ -2107,17 +1534,6 @@ function startHomeBoot() {
 
 function bindHomeEvents() {
   $$(
-    '[data-action="copy-invite"]'
-  ).forEach(button => {
-    button.addEventListener(
-      "click",
-      () => {
-        copyInviteLink(button);
-      }
-    );
-  });
-
-  $$(
     '[data-action="welcome"]'
   ).forEach(button => {
     button.addEventListener(
@@ -2125,106 +1541,6 @@ function bindHomeEvents() {
       showWelcome
     );
   });
-}
-
-function bindSocialEvents() {
-  $$(
-    '[data-action="copy-invite"]'
-  ).forEach(button => {
-    button.addEventListener(
-      "click",
-      () => {
-        copyInviteLink(button);
-      }
-    );
-  });
-}
-
-function bindToolsEvents() {
-  $$(
-    '[data-action="top"]'
-  ).forEach(button => {
-    button.addEventListener(
-      "click",
-      scrollToTop
-    );
-  });
-
-  $$(
-    '[data-action="bottom"]'
-  ).forEach(button => {
-    button.addEventListener(
-      "click",
-      scrollToBottom
-    );
-  });
-
-  $$(
-    '[data-action="copy-invite"]'
-  ).forEach(button => {
-    button.addEventListener(
-      "click",
-      () => {
-        copyInviteLink(button);
-      }
-    );
-  });
-
-  $$(
-    '[data-action="background"]'
-  ).forEach(button => {
-    button.addEventListener(
-      "click",
-      () => {
-        toggleBackground(button);
-      }
-    );
-  });
-
-  $$(
-    '[data-action="scanline"]'
-  ).forEach(button => {
-    button.addEventListener(
-      "click",
-      runScanline
-    );
-  });
-
-  $$(
-    '[data-action="focus"]'
-  ).forEach(button => {
-    button.addEventListener(
-      "click",
-      () => {
-        toggleFocusMode(button);
-      }
-    );
-  });
-
-  $$(
-    '[data-action="welcome"]'
-  ).forEach(button => {
-    button.addEventListener(
-      "click",
-      showWelcome
-    );
-  });
-
-  $$("[data-theme]").forEach(
-    button => {
-      button.addEventListener(
-        "click",
-        () => {
-          setTheme(
-            button.dataset.theme
-          );
-        }
-      );
-    }
-  );
-
-  updateThemeButtons();
-  bindThemeEvents();
 }
 
 function bindRegistryEvents() {
@@ -2351,23 +1667,22 @@ function render() {
 
     case "registry":
       bindRegistryEvents();
+
       window.ShonenRegistry
         ?.load?.();
+
       break;
 
     case "social":
-      bindSocialEvents();
       window.renderRadioPage?.();
       break;
 
     case "calendar":
       bindCalendarEvents();
+
       window.ShonenCalendar
         ?.refresh?.();
-      break;
 
-    case "tools":
-      bindToolsEvents();
       break;
   }
 
@@ -2378,66 +1693,16 @@ function render() {
 
 
 /* =========================
-   KEYBOARD
-   ========================= */
-
-function initKeyboardShortcuts() {
-  document.addEventListener(
-    "keydown",
-    event => {
-      const active =
-        document.activeElement;
-
-      const tag =
-        active?.tagName;
-
-      if (
-        tag === "INPUT" ||
-        tag === "TEXTAREA" ||
-        tag === "SELECT" ||
-        active?.isContentEditable
-      ) {
-        return;
-      }
-
-      if (
-        event.key === "Home"
-      ) {
-        event.preventDefault();
-
-        scrollToTop();
-      }
-
-      if (
-        event.key === "End"
-      ) {
-        event.preventDefault();
-
-        scrollToBottom();
-      }
-
-      if (
-        event.key.toLowerCase() ===
-        "g"
-      ) {
-        showWelcome();
-      }
-    }
-  );
-}
-
-
-/* =========================
    STARTUP
    ========================= */
 
 function init() {
   initNavigation();
-  initScrollState();
-  initTheme();
-  initKeyboardShortcuts();
 
-  window.addEventListener("hashchange", render);
+  window.addEventListener(
+    "hashchange",
+    render
+  );
 
   render();
 }
@@ -2487,81 +1752,4 @@ if (
   );
 } else {
   bootShonenNexus();
-}
-
-/* =========================
-   THEME BUTTONS
-   ========================= */
-
-function renderThemeSelector() {
-  return `
-    <section class="system-panel">
-
-      <div class="panel-label">
-        <span>THEME SYSTEM</span>
-        <span>07 THEMES</span>
-      </div>
-
-      <div class="theme-selector">
-
-        <button
-          class="theme-button"
-          type="button"
-          data-theme="default"
-        >
-          DEFAULT
-        </button>
-
-        <button
-          class="theme-button"
-          type="button"
-          data-theme="windbreaker"
-        >
-          WIND BREAKER
-        </button>
-
-        <button
-          class="theme-button"
-          type="button"
-          data-theme="cote"
-        >
-          CLASSROOM OF THE ELITE
-        </button>
-
-        <button
-          class="theme-button"
-          type="button"
-          data-theme="bleach"
-        >
-          BLEACH
-        </button>
-
-        <button
-          class="theme-button"
-          type="button"
-          data-theme="jjk"
-        >
-          JUJUTSU KAISEN
-        </button>
-
-        <button
-          class="theme-button"
-          type="button"
-          data-theme="naruto"
-        >
-          NARUTO
-        </button>
-
-        <button
-          class="theme-button"
-          type="button"
-          data-theme="onepiece"
-        >
-          ONE PIECE
-        </button>
-
-      </div>
-
-    </section>
-  `;
 }
