@@ -2000,3 +2000,246 @@ body.theme-onepiece {
   }
 
 }
+
+/* =========================================================
+   SIDEBAR ID COMPATIBILITY FIX
+   ========================================================= */
+
+#sideNav {
+  position: fixed;
+  inset: 0 auto 0 0;
+  z-index: 9000;
+
+  width: var(--sidebar-width);
+  height: 100vh;
+
+  padding: 24px 18px;
+
+  background:
+    linear-gradient(
+      180deg,
+      rgba(19, 10, 12, .98),
+      rgba(8, 8, 8, .99)
+    );
+
+  border-right: 1px solid var(--border-red);
+
+  display: flex;
+  flex-direction: column;
+
+  overflow-y: auto;
+  overflow-x: hidden;
+
+  transform: translateX(0);
+  opacity: 1;
+
+  transition:
+    transform .3s ease,
+    opacity .3s ease;
+}
+
+
+/* HAMBURGER */
+
+#menuToggle {
+  position: fixed;
+
+  top: 12px;
+  right: 12px;
+
+  z-index: 10000;
+
+  width: 46px;
+  height: 46px;
+
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+
+  gap: 5px;
+
+  padding: 0;
+
+  background: #0d0d0d;
+
+  border: 1px solid var(--border-red);
+
+  cursor: pointer;
+}
+
+#menuToggle span {
+  display: block;
+
+  width: 23px;
+  height: 2px;
+
+  flex: 0 0 auto;
+
+  background: #d0d0d0;
+
+  transition:
+    transform .25s ease,
+    opacity .25s ease;
+}
+
+
+/* HAMBURGER → X */
+
+#menuToggle.active span:nth-child(1) {
+  transform: translateY(7px) rotate(45deg);
+}
+
+#menuToggle.active span:nth-child(2) {
+  opacity: 0;
+}
+
+#menuToggle.active span:nth-child(3) {
+  transform: translateY(-7px) rotate(-45deg);
+}
+
+
+/* OVERLAY */
+
+#navOverlay {
+  position: fixed;
+  inset: 0;
+
+  z-index: 8999;
+
+  background: rgba(0, 0, 0, .65);
+
+  opacity: 0;
+  pointer-events: none;
+
+  transition: opacity .25s ease;
+}
+
+#navOverlay.active {
+  opacity: 1;
+  pointer-events: auto;
+}
+
+
+/* OPTIONAL CLOSE BUTTON INSIDE SIDEBAR */
+
+#navClose {
+  display: none;
+
+  position: absolute;
+
+  top: 12px;
+  right: 12px;
+
+  width: 34px;
+  height: 34px;
+
+  padding: 0;
+
+  background: #0d0d0d;
+
+  border: 1px solid var(--border-red);
+
+  color: var(--text-soft);
+
+  cursor: pointer;
+}
+
+
+/* =========================================================
+   DESKTOP
+   ========================================================= */
+
+@media (min-width: 900px) {
+
+  #menuToggle {
+    display: none;
+  }
+
+  #navOverlay {
+    display: none;
+  }
+
+  #sideNav {
+    transform: translateX(0);
+  }
+
+  #app {
+    margin-left: var(--sidebar-width);
+
+    width: calc(
+      100% - var(--sidebar-width)
+    );
+  }
+
+  .site-footer {
+    margin-left: var(--sidebar-width);
+
+    width: calc(
+      100% - var(--sidebar-width)
+    );
+  }
+
+}
+
+
+/* =========================================================
+   MOBILE
+   ========================================================= */
+
+@media (max-width: 899px) {
+
+  #sideNav {
+    transform: translateX(-105%);
+
+    box-shadow:
+      12px 0 30px rgba(0, 0, 0, .45);
+  }
+
+  #sideNav.open {
+    transform: translateX(0);
+  }
+
+  #menuToggle {
+    display: flex;
+  }
+
+  #navClose {
+    display: flex;
+
+    align-items: center;
+    justify-content: center;
+
+    font-size: 18px;
+  }
+
+  #app {
+    width: 100%;
+
+    margin-left: 0;
+
+    padding-top: 75px;
+  }
+
+}
+
+
+/* =========================================================
+   SMALL SCREEN
+   ========================================================= */
+
+@media (max-width: 480px) {
+
+  #menuToggle {
+    top: 10px;
+    right: 10px;
+
+    width: 42px;
+    height: 42px;
+  }
+
+  #menuToggle span {
+    width: 21px;
+  }
+
+}
