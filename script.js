@@ -1285,6 +1285,164 @@ function renderSocial() {
 
       </article>
 
+            <article class="panel youtube-panel">
+
+        <div class="panel-header">
+
+          <span>
+            YOUTUBE
+          </span>
+
+          <span class="panel-code">
+            MEDIA-08
+          </span>
+
+        </div>
+
+        <div class="youtube-interface">
+
+          <div class="youtube-terminal">
+
+            <div class="radio-system-label">
+
+              <span class="status-dot"></span>
+
+              YOUTUBE TRANSMISSION NODE
+
+            </div>
+
+            <h2>
+              SEARCH THE NETWORK
+            </h2>
+
+            <p>
+              Search for anime openings, OSTs,
+              AMVs, edits, fights, playlists,
+              or whatever is currently occupying
+              your brain at 2 A.M.
+            </p>
+
+          </div>
+
+
+          <form
+            class="youtube-search"
+            data-youtube-search
+          >
+
+            <div class="youtube-search-row">
+
+              <input
+                type="search"
+                id="youtubeSearch"
+                name="q"
+                placeholder="SEARCH YOUTUBE..."
+                autocomplete="off"
+                spellcheck="false"
+                aria-label="Search YouTube"
+              >
+
+              <button
+                class="system-button"
+                type="submit"
+              >
+                SEARCH ↗
+              </button>
+
+            </div>
+
+            <div class="youtube-search-presets">
+
+              <button
+                type="button"
+                class="youtube-preset"
+                data-youtube-query="anime openings"
+              >
+                ANIME OPENINGS
+              </button>
+
+              <button
+                type="button"
+                class="youtube-preset"
+                data-youtube-query="Jujutsu Kaisen opening"
+              >
+                JJK
+              </button>
+
+              <button
+                type="button"
+                class="youtube-preset"
+                data-youtube-query="WIND BREAKER opening"
+              >
+                WIND BREAKER
+              </button>
+
+              <button
+                type="button"
+                class="youtube-preset"
+                data-youtube-query="Bleach openings"
+              >
+                BLEACH
+              </button>
+
+              <button
+                type="button"
+                class="youtube-preset"
+                data-youtube-query="Naruto openings"
+              >
+                NARUTO
+              </button>
+
+            </div>
+
+          </form>
+
+        </div>
+
+
+        <div class="youtube-embed-wrap">
+
+          <div class="youtube-embed-header">
+
+            <span>
+              OPTIONAL VIDEO TRANSMISSION
+            </span>
+
+            <span>
+              YOUTUBE
+            </span>
+
+          </div>
+
+          <div class="youtube-placeholder">
+
+            <div class="youtube-placeholder-icon">
+              ▶
+            </div>
+
+            <strong>
+              NO VIDEO LOADED
+            </strong>
+
+            <small>
+              SEARCH YOUTUBE ABOVE TO OPEN A TRANSMISSION
+            </small>
+
+          </div>
+
+          <iframe
+            id="youtubePlayer"
+            class="youtube-player"
+            title="YouTube player"
+            src="about:blank"
+            allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture; web-share"
+            allowfullscreen
+          ></iframe>
+
+        </div>
+
+      </article>
+
       <div class="social-footer-readout">
 
         <span>
@@ -1619,6 +1777,63 @@ function bindCalendarEvents() {
   });
 }
 
+function bindYouTubeEvents() {
+  const searchForm =
+    $("[data-youtube-search]");
+
+  const searchInput =
+    $("#youtubeSearch");
+
+  const player =
+    $("#youtubePlayer");
+
+  const placeholder =
+    $(".youtube-placeholder");
+
+  if (searchForm && searchInput) {
+    searchForm.addEventListener(
+      "submit",
+      event => {
+        event.preventDefault();
+
+        const query =
+          searchInput.value.trim();
+
+        if (!query) {
+          searchInput.focus();
+          return;
+        }
+
+        const youtubeSearchURL =
+          `https://www.youtube.com/results?search_query=${encodeURIComponent(query)}`;
+
+        window.open(
+          youtubeSearchURL,
+          "_blank",
+          "noopener,noreferrer"
+        );
+      }
+    );
+  }
+
+  $$(".youtube-preset").forEach(button => {
+    button.addEventListener(
+      "click",
+      () => {
+        const query =
+          button.dataset.youtubeQuery || "";
+
+        if (!searchInput) {
+          return;
+        }
+
+        searchInput.value = query;
+
+        searchInput.focus();
+      }
+    );
+  });
+}
 
 /* =========================
    RENDER
@@ -1675,6 +1890,7 @@ function render() {
 
     case "social":
       window.renderRadioPage?.();
+      bindYouTubeEvents();
       break;
 
     case "calendar":
