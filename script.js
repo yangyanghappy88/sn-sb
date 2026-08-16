@@ -23,14 +23,15 @@ const SHONEN_NEXUS = {
     "registry",
     "command",
     "social",
-    "calendar"
+    "calendar",
+    "youtube"
   ]
 };
 
 
-/* =========================
+/* =========================================================
    DOM HELPERS
-   ========================= */
+   ========================================================= */
 
 const $ = (
   selector,
@@ -45,9 +46,9 @@ const $$ = (
   [...parent.querySelectorAll(selector)];
 
 
-/* =========================
+/* =========================================================
    STATE
-   ========================= */
+   ========================================================= */
 
 const SHONEN_STATE = {
   currentSection: "home",
@@ -56,9 +57,9 @@ const SHONEN_STATE = {
 };
 
 
-/* =========================
+/* =========================================================
    CORE ELEMENTS
-   ========================= */
+   ========================================================= */
 
 const app = $("#app");
 const sidebar = $("#sidebar");
@@ -66,9 +67,9 @@ const navToggle = $("#navToggle");
 const navOverlay = $("#navOverlay");
 
 
-/* =========================
+/* =========================================================
    UTILITIES
-   ========================= */
+   ========================================================= */
 
 function escapeHtml(value = "") {
   return String(value).replace(
@@ -84,6 +85,7 @@ function escapeHtml(value = "") {
   );
 }
 
+
 function systemHeader(
   kicker,
   title,
@@ -91,6 +93,7 @@ function systemHeader(
 ) {
   return `
     <header class="system-page-header">
+
       <div class="system-kicker">
         ${escapeHtml(kicker)}
       </div>
@@ -102,14 +105,15 @@ function systemHeader(
       <p>
         ${escapeHtml(description)}
       </p>
+
     </header>
   `;
 }
 
 
-/* =========================
+/* =========================================================
    NAVIGATION
-   ========================= */
+   ========================================================= */
 
 function openSidebar() {
   sidebar?.classList.add("open");
@@ -129,6 +133,7 @@ function openSidebar() {
   navOverlay?.classList.add("active");
 }
 
+
 function closeSidebar() {
   sidebar?.classList.remove("open");
   navToggle?.classList.remove("active");
@@ -147,6 +152,7 @@ function closeSidebar() {
   navOverlay?.classList.remove("active");
 }
 
+
 function toggleSidebar() {
   if (
     sidebar?.classList.contains("open")
@@ -157,11 +163,12 @@ function toggleSidebar() {
   }
 }
 
+
 function getRoute() {
   const requested = (
     location.hash || "#home"
   )
-    .replace("#", "")
+    .replace(/^#/, "")
     .trim()
     .toLowerCase();
 
@@ -172,6 +179,7 @@ function getRoute() {
     : "home";
 }
 
+
 function updateNavigation(section) {
   $$(".nav-item, .main-nav a").forEach(
     link => {
@@ -179,7 +187,7 @@ function updateNavigation(section) {
         link.getAttribute("href") || "";
 
       const target = href
-        .replace("#", "")
+        .replace(/^#/, "")
         .trim()
         .toLowerCase();
 
@@ -191,10 +199,11 @@ function updateNavigation(section) {
   );
 }
 
+
 function initNavigation() {
   if (!navToggle || !sidebar) {
     console.warn(
-      "Shonen Nexus navigation elements not found."
+      "Shonen Nexus: navigation elements not found."
     );
 
     return;
@@ -247,9 +256,9 @@ function initNavigation() {
 }
 
 
-/* =========================
+/* =========================================================
    WELCOME
-   ========================= */
+   ========================================================= */
 
 function createWelcomeScreen() {
   if ($("#welcomeScreen")) {
@@ -286,6 +295,7 @@ function createWelcomeScreen() {
   document.body.appendChild(screen);
 }
 
+
 function showWelcome() {
   createWelcomeScreen();
 
@@ -318,13 +328,14 @@ function showWelcome() {
     }, 2400);
 }
 
+
 window.showWelcome =
   showWelcome;
 
 
-/* =========================
+/* =========================================================
    HOME
-   ========================= */
+   ========================================================= */
 
 function renderHome() {
   return `
@@ -386,9 +397,11 @@ function renderHome() {
 
     </section>
 
+
     <section class="system-panel">
 
       <div class="panel-label">
+
         <span>
           NEXUS DIRECT LINK
         </span>
@@ -396,6 +409,7 @@ function renderHome() {
         <span>
           ACTIVE
         </span>
+
       </div>
 
       <div class="registry-grid">
@@ -412,6 +426,7 @@ function renderHome() {
           </div>
 
           <div>
+
             <div class="member-name">
               CHESS.COM CLUB
             </div>
@@ -419,6 +434,7 @@ function renderHome() {
             <div class="member-meta">
               SHONEN NEXUS MAIN HUB
             </div>
+
           </div>
 
           <div class="member-time">
@@ -426,6 +442,7 @@ function renderHome() {
           </div>
 
         </a>
+
 
         <button
           class="member-card"
@@ -438,6 +455,7 @@ function renderHome() {
           </div>
 
           <div>
+
             <div class="member-name">
               NEXUS BOOT
             </div>
@@ -445,6 +463,7 @@ function renderHome() {
             <div class="member-meta">
               RUN WELCOME SEQUENCE
             </div>
+
           </div>
 
           <div class="member-time">
@@ -457,16 +476,19 @@ function renderHome() {
 
     </section>
 
+
     <section class="system-panel">
 
       <div class="panel-label">
+
         <span>
           MODULE DIRECTORY
         </span>
 
         <span>
-          05 SYSTEMS
+          06 SYSTEMS
         </span>
+
       </div>
 
       <div class="registry-grid">
@@ -501,6 +523,12 @@ function renderHome() {
             "CALENDAR",
             "TIME & EVENTS",
             "#calendar"
+          ],
+          [
+            "06",
+            "YOUTUBE",
+            "WATCH & DISCOVER",
+            "#youtube"
           ]
         ]
           .map(
@@ -546,9 +574,11 @@ function renderHome() {
 
     </section>
 
+
     <section class="system-panel">
 
       <div class="panel-label">
+
         <span>
           NEXUS BOOT LOG
         </span>
@@ -556,6 +586,7 @@ function renderHome() {
         <span>
           LIVE
         </span>
+
       </div>
 
       <div
@@ -582,9 +613,9 @@ function renderHome() {
 }
 
 
-/* =========================
+/* =========================================================
    REGISTRY
-   ========================= */
+   ========================================================= */
 
 function renderRegistry() {
   return `
@@ -656,6 +687,7 @@ function renderRegistry() {
 
     </section>
 
+
     <section class="system-panel">
 
       <div class="panel-label">
@@ -708,6 +740,7 @@ function renderRegistry() {
 
     </section>
 
+
     <section class="system-panel">
 
       <div class="panel-label">
@@ -745,9 +778,7 @@ function renderRegistry() {
 
       </div>
 
-      <div
-        class="registry-actions registry-actions-left"
-      >
+      <div class="registry-actions registry-actions-left">
 
         <button
           class="system-button"
@@ -773,9 +804,9 @@ function renderRegistry() {
 }
 
 
-/* =========================
+/* =========================================================
    COMMAND
-   ========================= */
+   ========================================================= */
 
 function renderCommand() {
   const directives = [
@@ -842,6 +873,7 @@ function renderCommand() {
 
         </a>
 
+
         <a
           class="member-card"
           href="${SHONEN_NEXUS.clubUrl}/announcements"
@@ -870,6 +902,7 @@ function renderCommand() {
           </div>
 
         </a>
+
 
         <a
           class="member-card"
@@ -903,6 +936,7 @@ function renderCommand() {
       </div>
 
     </section>
+
 
     <section class="system-panel">
 
@@ -960,526 +994,553 @@ function renderCommand() {
 }
 
 
-/* =========================
+/* =========================================================
    SOCIAL
-   ========================= */
+   ========================================================= */
 
 function renderSocial() {
   return `
-    <section class="page social-page">
+    ${systemHeader(
+      "SHONEN NEXUS // 04",
+      "SOCIAL",
+      "Shonen Nexus media, radio and community communication systems."
+    )}
 
-      <div class="page-header">
+    <section class="system-panel">
 
-        <div>
+      <div class="panel-label">
 
-          <div class="eyebrow">
-            NEXUS NODE // SOCIAL
+        <span>
+          CHANNEL
+        </span>
+
+        <span>
+          COM-01
+        </span>
+
+      </div>
+
+      <div class="registry-grid">
+
+        <a
+          class="member-card"
+          href="${SHONEN_NEXUS.clubUrl}"
+          target="_blank"
+          rel="noopener noreferrer"
+        >
+
+          <div class="member-avatar module-number">
+            ♟
           </div>
 
-          <h1>
-            SOCIAL
-          </h1>
+          <div>
 
-          <p class="page-description">
-            Shonen Nexus media, radio and network systems.
+            <div class="member-name">
+              CHESS.COM
+            </div>
+
+            <div class="member-meta">
+              SHONEN NEXUS COMMUNITY HUB
+            </div>
+
+          </div>
+
+          <div class="member-time">
+            ↗
+          </div>
+
+        </a>
+
+      </div>
+
+    </section>
+
+
+    <section class="system-panel">
+
+      <div class="panel-label">
+
+        <span>
+          NEXUS STATUS
+        </span>
+
+        <span>
+          SYS-04
+        </span>
+
+      </div>
+
+      <div class="system-readout">
+
+        <div class="readout-row">
+          <span>
+            CONNECTION
+          </span>
+
+          <strong class="online">
+            ESTABLISHED
+          </strong>
+        </div>
+
+        <div class="readout-row">
+          <span>
+            CLUB NODE
+          </span>
+
+          <strong>
+            SHONEN-NEXUS
+          </strong>
+        </div>
+
+        <div class="readout-row">
+          <span>
+            ACCESS
+          </span>
+
+          <strong>
+            PUBLIC
+          </strong>
+        </div>
+
+        <div class="readout-row">
+          <span>
+            PROTOCOL
+          </span>
+
+          <strong>
+            ACTIVE
+          </strong>
+        </div>
+
+      </div>
+
+      <div class="terminal-note">
+
+        <span>
+          &gt;
+        </span>
+
+        <span>
+          NEXUS COMMUNICATION NODE OPERATIONAL.
+        </span>
+
+      </div>
+
+    </section>
+
+
+    <section class="system-panel">
+
+      <div class="panel-label">
+
+        <span>
+          NEXUS RADIO
+        </span>
+
+        <span>
+          MEDIA-07
+        </span>
+
+      </div>
+
+      <div class="radio-layout">
+
+        <div class="radio-cover-wrap">
+
+          <img
+            id="radioCover"
+            class="radio-cover"
+            src="${SHONEN_NEXUS.logoUrl}"
+            alt="Shonen Nexus Radio cover"
+          >
+
+        </div>
+
+        <div class="radio-player">
+
+          <div class="radio-system-label">
+
+            <span class="status-dot"></span>
+
+            AUDIO TRANSMISSION
+
+          </div>
+
+          <h2 id="radioTitle">
+            INITIALIZING...
+          </h2>
+
+          <p id="radioArtist">
+            Establishing Nexus Radio connection...
+          </p>
+
+          <div class="radio-progress">
+
+            <span id="elapsed">
+              0:00
+            </span>
+
+            <input
+              id="progress"
+              type="range"
+              min="0"
+              max="100"
+              value="0"
+              step="0.1"
+              aria-label="Track progress"
+            >
+
+            <span id="duration">
+              0:00
+            </span>
+
+          </div>
+
+          <div class="radio-controls">
+
+            <button
+              id="radioPrev"
+              type="button"
+            >
+              ◀◀
+            </button>
+
+            <button
+              id="radioPlay"
+              class="radio-play"
+              type="button"
+            >
+              ▶ PLAY
+            </button>
+
+            <button
+              id="radioNext"
+              type="button"
+            >
+              ▶▶
+            </button>
+
+          </div>
+
+          <div class="radio-volume">
+
+            <span>
+              VOL
+            </span>
+
+            <input
+              id="radioVolume"
+              type="range"
+              min="0"
+              max="1"
+              step="0.01"
+              value="0.75"
+              aria-label="Volume"
+            >
+
+          </div>
+
+        </div>
+
+      </div>
+
+
+      <div class="radio-playlist">
+
+        <div class="playlist-header">
+
+          <span>
+            TRANSMISSION QUEUE
+          </span>
+
+          <span>
+
+            <span class="status-dot"></span>
+
+            LIVE
+
+          </span>
+
+        </div>
+
+        <div
+          id="trackList"
+          class="track-list"
+        >
+
+          <div class="system-terminal">
+
+            <div class="terminal-line">
+
+              <span class="terminal-prompt">
+                &gt;
+              </span>
+
+              <span class="terminal-muted">
+                SCANNING NEXUS AUDIO DATABASE...
+              </span>
+
+            </div>
+
+          </div>
+
+        </div>
+
+      </div>
+
+    </section>
+
+
+    <div class="social-footer-readout">
+
+      <span>
+        SHONEN NEXUS
+      </span>
+
+      <span>
+        //
+      </span>
+
+      <span>
+        SOCIAL COMMUNICATION NODE
+      </span>
+
+      <span>
+        //
+      </span>
+
+      <span>
+        STATUS: ONLINE
+      </span>
+
+    </div>
+  `;
+}
+
+
+/* =========================================================
+   YOUTUBE
+   ========================================================= */
+
+function renderYouTube() {
+  return `
+    ${systemHeader(
+      "SHONEN NEXUS // 06",
+      "YOUTUBE",
+      "Watch and discover anime openings, OSTs, AMVs, edits, fights and more."
+    )}
+
+
+    <section class="system-panel">
+
+      <div class="panel-label">
+
+        <span>
+          YOUTUBE TRANSMISSION NODE
+        </span>
+
+        <span>
+          MEDIA-08
+        </span>
+
+      </div>
+
+
+      <div class="youtube-interface">
+
+        <div class="youtube-terminal">
+
+          <div class="radio-system-label">
+
+            <span class="status-dot"></span>
+
+            YOUTUBE TRANSMISSION NODE
+
+          </div>
+
+          <h2>
+            SEARCH THE NETWORK
+          </h2>
+
+          <p>
+            Search for anime openings, OSTs,
+            AMVs, edits, fights, playlists,
+            or whatever is currently occupying
+            your brain at 2 A.M.
           </p>
 
         </div>
 
-        <div class="system-status">
 
-          <span class="status-dot"></span>
-
-          <span>
-            NETWORK ONLINE
-          </span>
-
-        </div>
-
-      </div>
-
-      <div class="social-grid">
-
-        <article
-          class="panel social-channel-panel"
+        <form
+          class="youtube-search"
+          data-youtube-search
         >
 
-          <div class="panel-header">
+          <div class="youtube-search-row">
 
-            <span>
-              CHANNEL
-            </span>
-
-            <span class="panel-code">
-              COM-01
-            </span>
-
-          </div>
-
-          <div class="channel-list">
-
-            <a
-              class="social-channel"
-              href="${SHONEN_NEXUS.clubUrl}"
-              target="_blank"
-              rel="noopener noreferrer"
+            <input
+              type="search"
+              id="youtubeSearch"
+              name="q"
+              placeholder="SEARCH YOUTUBE..."
+              autocomplete="off"
+              spellcheck="false"
+              aria-label="Search YouTube"
             >
 
-              <div class="channel-icon">
-                ♟
-              </div>
-
-              <div class="channel-info">
-
-                <strong>
-                  CHESS.COM
-                </strong>
-
-                <small>
-                  SHONEN NEXUS
-                </small>
-
-              </div>
-
-              <span class="channel-arrow">
-                ↗
-              </span>
-
-            </a>
+            <button
+              class="system-button"
+              type="submit"
+            >
+              SEARCH ↗
+            </button>
 
           </div>
 
-        </article>
 
-        <article class="panel network-panel">
+          <div class="youtube-search-presets">
 
-          <div class="panel-header">
+            <button
+              type="button"
+              class="youtube-preset"
+              data-youtube-query="anime openings"
+            >
+              ANIME OPENINGS
+            </button>
 
-            <span>
-              NEXUS STATUS
-            </span>
+            <button
+              type="button"
+              class="youtube-preset"
+              data-youtube-query="Jujutsu Kaisen opening"
+            >
+              JJK
+            </button>
 
-            <span class="panel-code">
-              SYS-04
-            </span>
+            <button
+              type="button"
+              class="youtube-preset"
+              data-youtube-query="WIND BREAKER opening"
+            >
+              WIND BREAKER
+            </button>
 
-          </div>
+            <button
+              type="button"
+              class="youtube-preset"
+              data-youtube-query="Bleach openings"
+            >
+              BLEACH
+            </button>
 
-          <div class="system-readout">
-
-            <div class="readout-row">
-              <span>
-                CONNECTION
-              </span>
-
-              <strong class="online">
-                ESTABLISHED
-              </strong>
-            </div>
-
-            <div class="readout-row">
-              <span>
-                CLUB NODE
-              </span>
-
-              <strong>
-                SHONEN-NEXUS
-              </strong>
-            </div>
-
-            <div class="readout-row">
-              <span>
-                ACCESS
-              </span>
-
-              <strong>
-                PUBLIC
-              </strong>
-            </div>
-
-            <div class="readout-row">
-              <span>
-                PROTOCOL
-              </span>
-
-              <strong>
-                ACTIVE
-              </strong>
-            </div>
+            <button
+              type="button"
+              class="youtube-preset"
+              data-youtube-query="Naruto openings"
+            >
+              NARUTO
+            </button>
 
           </div>
 
-          <div class="terminal-note">
-
-            <span>
-              &gt;
-            </span>
-
-            <span>
-              NEXUS COMMUNICATION NODE OPERATIONAL.
-            </span>
-
-          </div>
-
-        </article>
+        </form>
 
       </div>
 
-      <article class="panel radio-panel">
+    </section>
 
-        <div class="panel-header">
+
+    <section class="system-panel">
+
+      <div class="panel-label">
+
+        <span>
+          OPTIONAL VIDEO TRANSMISSION
+        </span>
+
+        <span>
+          YOUTUBE
+        </span>
+
+      </div>
+
+
+      <div class="youtube-embed-wrap">
+
+        <div class="youtube-embed-header">
 
           <span>
-            NEXUS RADIO
+            VIDEO TRANSMISSION
           </span>
-
-          <span class="panel-code">
-            MEDIA-07
-          </span>
-
-        </div>
-
-        <div class="radio-layout">
-
-          <div class="radio-cover-wrap">
-
-            <img
-              id="radioCover"
-              class="radio-cover"
-              src="${SHONEN_NEXUS.logoUrl}"
-              alt="Shonen Nexus Radio cover"
-            >
-
-          </div>
-
-          <div class="radio-player">
-
-            <div class="radio-system-label">
-
-              <span class="status-dot"></span>
-
-              AUDIO TRANSMISSION
-
-            </div>
-
-            <h2 id="radioTitle">
-              INITIALIZING...
-            </h2>
-
-            <p id="radioArtist">
-              Establishing Nexus Radio connection...
-            </p>
-
-            <div class="radio-progress">
-
-              <span id="elapsed">
-                0:00
-              </span>
-
-              <input
-                id="progress"
-                type="range"
-                min="0"
-                max="100"
-                value="0"
-                step="0.1"
-                aria-label="Track progress"
-              >
-
-              <span id="duration">
-                0:00
-              </span>
-
-            </div>
-
-            <div class="radio-controls">
-
-              <button
-                id="radioPrev"
-                type="button"
-              >
-                ◀◀
-              </button>
-
-              <button
-                id="radioPlay"
-                class="radio-play"
-                type="button"
-              >
-                ▶ PLAY
-              </button>
-
-              <button
-                id="radioNext"
-                type="button"
-              >
-                ▶▶
-              </button>
-
-            </div>
-
-            <div class="radio-volume">
-
-              <span>
-                VOL
-              </span>
-
-              <input
-                id="radioVolume"
-                type="range"
-                min="0"
-                max="1"
-                step="0.01"
-                value="0.75"
-                aria-label="Volume"
-              >
-
-            </div>
-
-          </div>
-
-        </div>
-
-        <div class="radio-playlist">
-
-          <div class="playlist-header">
-
-            <span>
-              TRANSMISSION QUEUE
-            </span>
-
-            <span>
-
-              <span class="status-dot"></span>
-
-              LIVE
-
-            </span>
-
-          </div>
-
-          <div
-            id="trackList"
-            class="track-list"
-          >
-
-            <div class="system-terminal">
-
-              <div class="terminal-line">
-
-                <span class="terminal-prompt">
-                  &gt;
-                </span>
-
-                <span class="terminal-muted">
-                  SCANNING NEXUS AUDIO DATABASE...
-                </span>
-
-              </div>
-
-            </div>
-
-          </div>
-
-        </div>
-
-      </article>
-
-            <article class="panel youtube-panel">
-
-        <div class="panel-header">
 
           <span>
             YOUTUBE
           </span>
 
-          <span class="panel-code">
-            MEDIA-08
-          </span>
-
         </div>
 
-        <div class="youtube-interface">
 
-          <div class="youtube-terminal">
+        <div class="youtube-placeholder">
 
-            <div class="radio-system-label">
-
-              <span class="status-dot"></span>
-
-              YOUTUBE TRANSMISSION NODE
-
-            </div>
-
-            <h2>
-              SEARCH THE NETWORK
-            </h2>
-
-            <p>
-              Search for anime openings, OSTs,
-              AMVs, edits, fights, playlists,
-              or whatever is currently occupying
-              your brain at 2 A.M.
-            </p>
-
+          <div class="youtube-placeholder-icon">
+            ▶
           </div>
 
+          <strong>
+            NO VIDEO LOADED
+          </strong>
 
-          <form
-            class="youtube-search"
-            data-youtube-search
-          >
-
-            <div class="youtube-search-row">
-
-              <input
-                type="search"
-                id="youtubeSearch"
-                name="q"
-                placeholder="SEARCH YOUTUBE..."
-                autocomplete="off"
-                spellcheck="false"
-                aria-label="Search YouTube"
-              >
-
-              <button
-                class="system-button"
-                type="submit"
-              >
-                SEARCH ↗
-              </button>
-
-            </div>
-
-            <div class="youtube-search-presets">
-
-              <button
-                type="button"
-                class="youtube-preset"
-                data-youtube-query="anime openings"
-              >
-                ANIME OPENINGS
-              </button>
-
-              <button
-                type="button"
-                class="youtube-preset"
-                data-youtube-query="Jujutsu Kaisen opening"
-              >
-                JJK
-              </button>
-
-              <button
-                type="button"
-                class="youtube-preset"
-                data-youtube-query="WIND BREAKER opening"
-              >
-                WIND BREAKER
-              </button>
-
-              <button
-                type="button"
-                class="youtube-preset"
-                data-youtube-query="Bleach openings"
-              >
-                BLEACH
-              </button>
-
-              <button
-                type="button"
-                class="youtube-preset"
-                data-youtube-query="Naruto openings"
-              >
-                NARUTO
-              </button>
-
-            </div>
-
-          </form>
+          <small>
+            SEARCH YOUTUBE ABOVE TO OPEN A TRANSMISSION
+          </small>
 
         </div>
 
 
-        <div class="youtube-embed-wrap">
-
-          <div class="youtube-embed-header">
-
-            <span>
-              OPTIONAL VIDEO TRANSMISSION
-            </span>
-
-            <span>
-              YOUTUBE
-            </span>
-
-          </div>
-
-          <div class="youtube-placeholder">
-
-            <div class="youtube-placeholder-icon">
-              ▶
-            </div>
-
-            <strong>
-              NO VIDEO LOADED
-            </strong>
-
-            <small>
-              SEARCH YOUTUBE ABOVE TO OPEN A TRANSMISSION
-            </small>
-
-          </div>
-
-          <iframe
-            id="youtubePlayer"
-            class="youtube-player"
-            title="YouTube player"
-            src="about:blank"
-            allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture; web-share"
-            allowfullscreen
-          ></iframe>
-
-        </div>
-
-      </article>
-
-      <div class="social-footer-readout">
-
-        <span>
-          SHONEN NEXUS
-        </span>
-
-        <span>
-          //
-        </span>
-
-        <span>
-          SOCIAL COMMUNICATION NODE
-        </span>
-
-        <span>
-          //
-        </span>
-
-        <span>
-          STATUS: ONLINE
-        </span>
+        <iframe
+          id="youtubePlayer"
+          class="youtube-player"
+          title="YouTube player"
+          src="about:blank"
+          allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture; web-share"
+          allowfullscreen
+        ></iframe>
 
       </div>
 
-      <audio
-        id="audio"
-        preload="metadata"
-      ></audio>
-
     </section>
+
+
+    <div class="social-footer-readout">
+
+      <span>
+        SHONEN NEXUS
+      </span>
+
+      <span>
+        //
+      </span>
+
+      <span>
+        YOUTUBE TRANSMISSION NODE
+      </span>
+
+      <span>
+        //
+      </span>
+
+      <span>
+        STATUS: ONLINE
+      </span>
+
+    </div>
   `;
 }
 
 
-/* =========================
+/* =========================================================
    CALENDAR
-   ========================= */
+   ========================================================= */
 
 function renderCalendarPage() {
   return `
@@ -1505,6 +1566,7 @@ function renderCalendarPage() {
         </span>
 
       </div>
+
 
       <div class="shonen-calendar-header">
 
@@ -1532,6 +1594,7 @@ function renderCalendarPage() {
 
       </div>
 
+
       <div class="shonen-time-panel">
 
         <div class="shonen-timezone">
@@ -1547,6 +1610,7 @@ function renderCalendarPage() {
         </div>
 
       </div>
+
 
       <div class="shonen-calendar-weekdays">
 
@@ -1567,10 +1631,12 @@ function renderCalendarPage() {
 
       </div>
 
+
       <div
         class="shonen-calendar-grid"
         data-calendar="grid"
       ></div>
+
 
       <div class="shonen-calendar-footer">
 
@@ -1589,22 +1655,23 @@ function renderCalendarPage() {
 }
 
 
-/* =========================
+/* =========================================================
    PAGE MAP
-   ========================= */
+   ========================================================= */
 
 const pages = {
   home: renderHome,
   registry: renderRegistry,
   command: renderCommand,
   social: renderSocial,
-  calendar: renderCalendarPage
+  calendar: renderCalendarPage,
+  youtube: renderYouTube
 };
 
 
-/* =========================
+/* =========================================================
    HOME BOOT
-   ========================= */
+   ========================================================= */
 
 function startHomeBoot() {
   clearInterval(
@@ -1627,6 +1694,7 @@ function startHomeBoot() {
     "Command module loaded.",
     "Calendar synchronization loaded.",
     "Nexus Radio subsystem standing by.",
+    "YouTube transmission node loaded.",
     "All primary systems operational."
   ];
 
@@ -1686,9 +1754,9 @@ function startHomeBoot() {
 }
 
 
-/* =========================
+/* =========================================================
    PAGE EVENT BRIDGES
-   ========================= */
+   ========================================================= */
 
 function bindHomeEvents() {
   $$(
@@ -1700,6 +1768,7 @@ function bindHomeEvents() {
     );
   });
 }
+
 
 function bindRegistryEvents() {
   $$(
@@ -1727,6 +1796,7 @@ function bindRegistryEvents() {
   });
 }
 
+
 function bindCalendarEvents() {
   $$(
     '[data-calendar="previous"]'
@@ -1740,6 +1810,7 @@ function bindCalendarEvents() {
     );
   });
 
+
   $$(
     '[data-calendar="next"]'
   ).forEach(button => {
@@ -1752,6 +1823,7 @@ function bindCalendarEvents() {
     );
   });
 
+
   $$(
     '[data-calendar="today"]'
   ).forEach(button => {
@@ -1763,6 +1835,7 @@ function bindCalendarEvents() {
       }
     );
   });
+
 
   $$(
     '[data-action="timezone-toggle"]'
@@ -1777,6 +1850,11 @@ function bindCalendarEvents() {
   });
 }
 
+
+/* =========================================================
+   YOUTUBE EVENTS
+   ========================================================= */
+
 function bindYouTubeEvents() {
   const searchForm =
     $("[data-youtube-search]");
@@ -1790,7 +1868,11 @@ function bindYouTubeEvents() {
   const placeholder =
     $(".youtube-placeholder");
 
-  if (searchForm && searchInput) {
+
+  if (
+    searchForm &&
+    searchInput
+  ) {
     searchForm.addEventListener(
       "submit",
       event => {
@@ -1816,28 +1898,49 @@ function bindYouTubeEvents() {
     );
   }
 
-  $$(".youtube-preset").forEach(button => {
-    button.addEventListener(
-      "click",
-      () => {
-        const query =
-          button.dataset.youtubeQuery || "";
 
-        if (!searchInput) {
-          return;
+  $$(".youtube-preset").forEach(
+    button => {
+      button.addEventListener(
+        "click",
+        () => {
+          const query =
+            button.dataset.youtubeQuery || "";
+
+          if (!searchInput) {
+            return;
+          }
+
+          searchInput.value =
+            query;
+
+          searchInput.focus();
         }
+      );
+    }
+  );
 
-        searchInput.value = query;
 
-        searchInput.focus();
+  /*
+   * Keep the optional player available
+   * for future direct video loading.
+   */
+  if (player) {
+    player.addEventListener(
+      "load",
+      () => {
+        placeholder?.classList.add(
+          "hidden"
+        );
       }
     );
-  });
+  }
 }
 
-/* =========================
+
+/* =========================================================
    RENDER
-   ========================= */
+   ========================================================= */
 
 function render() {
   if (!app) {
@@ -1848,12 +1951,18 @@ function render() {
     return;
   }
 
+
   const route =
     getRoute();
+
 
   SHONEN_STATE.currentSection =
     route;
 
+
+  /*
+   * Stop radio when leaving Social.
+   */
   if (
     route !== "social" &&
     typeof window
@@ -1863,22 +1972,31 @@ function render() {
     window.stopRadioForNavigation();
   }
 
+
   const renderer =
     pages[route] ||
     pages.home;
 
+
   app.innerHTML =
     renderer();
 
-  updateNavigation(route);
+
+  updateNavigation(
+    route
+  );
+
 
   closeSidebar();
 
+
   switch (route) {
+
     case "home":
       bindHomeEvents();
       startHomeBoot();
       break;
+
 
     case "registry":
       bindRegistryEvents();
@@ -1888,10 +2006,13 @@ function render() {
 
       break;
 
+
     case "social":
-      window.renderRadioPage?.();
-      bindYouTubeEvents();
+      window.renderRadioPage
+        ?.();
+
       break;
+
 
     case "calendar":
       bindCalendarEvents();
@@ -1900,7 +2021,13 @@ function render() {
         ?.refresh?.();
 
       break;
+
+
+    case "youtube":
+      bindYouTubeEvents();
+      break;
   }
+
 
   app.focus?.({
     preventScroll: true
@@ -1908,25 +2035,27 @@ function render() {
 }
 
 
-/* =========================
+/* =========================================================
    STARTUP
-   ========================= */
+   ========================================================= */
 
 function init() {
   initNavigation();
+
 
   window.addEventListener(
     "hashchange",
     render
   );
 
+
   render();
 }
 
 
-/* =========================
+/* =========================================================
    BOOT
-   ========================= */
+   ========================================================= */
 
 function bootShonenNexus() {
   console.log(
@@ -1949,6 +2078,11 @@ function bootShonenNexus() {
     SHONEN_NEXUS.sections.join(
       " / "
     )
+  );
+
+  console.log(
+    "%c YouTube route loaded ",
+    "color:#ff4655;font-weight:800;"
   );
 
   init();
