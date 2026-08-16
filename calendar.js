@@ -31,44 +31,6 @@ const CalendarState = {
 };
 
 
-const CALENDAR_EVENTS = [
-
-    {
-        title:
-            "Shonen Nexus Arena",
-
-        date:
-            "2026-08-20T19:00:00Z",
-
-        type:
-            "arena"
-    },
-
-    {
-        title:
-            "Anime Chess Night",
-
-        date:
-            "2026-08-23T20:00:00Z",
-
-        type:
-            "community"
-    },
-
-    {
-        title:
-            "One Piece Theme Night",
-
-        date:
-            "2026-08-28T21:00:00Z",
-
-        type:
-            "theme"
-    }
-
-];
-
-
 /* detect */
 
 function detectLocalTimezone() {
