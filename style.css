@@ -4095,3 +4095,40 @@ body::after {
   color: #b11226;
   font-weight: 900;
 }
+
+.welcome-message {
+  max-width: 680px;
+  margin: 32px auto 0;
+  text-align: center;
+}
+
+.welcome-message p {
+  margin: 0 0 18px;
+  line-height: 1.8;
+}
+
+.welcome-exit {
+  margin-top: 28px;
+  padding: 12px 22px;
+  border: 1px solid currentColor;
+  background: transparent;
+  color: inherit;
+  font: inherit;
+  font-weight: 800;
+  letter-spacing: 0.08em;
+  cursor: pointer;
+  transition:
+    background 0.2s ease,
+    color 0.2s ease,
+    transform 0.2s ease;
+}
+
+.welcome-exit:hover {
+  background: currentColor;
+  color: #000;
+  transform: translateY(-2px);
+}
+
+.welcome-exit:active {
+  transform: translateY(0);
+}

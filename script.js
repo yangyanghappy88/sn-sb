@@ -277,7 +277,7 @@ function createWelcomeScreen() {
   screen.innerHTML = `
     <div class="welcome-content">
 
-      <p>
+      <p class="welcome-kicker">
         SHONEN NEXUS
       </p>
 
@@ -285,9 +285,43 @@ function createWelcomeScreen() {
         WELCOME TO THE NEXUS
       </h2>
 
-      <p>
+      <p class="welcome-subtitle">
         ANIME × CHESS × COMMUNITY
       </p>
+
+      <div class="welcome-message">
+
+        <p>
+          Welcome to Shonen Nexus.
+        </p>
+
+        <p>
+          A place where anime fans and chess
+          players can come together, compete,
+          discuss, discover and connect.
+        </p>
+
+        <p>
+          Whether you're here for classic shonen,
+          the newest generation, chess, or simply
+          the community — you're part of the Nexus.
+        </p>
+
+        <p>
+          Explore the modules, meet the members,
+          check the calendar, listen to Nexus Radio,
+          and discover something new.
+        </p>
+
+      </div>
+
+      <button
+        class="welcome-exit"
+        type="button"
+        data-action="welcome-exit"
+      >
+        EXIT NEXUS SEQUENCE
+      </button>
 
     </div>
   `;
@@ -306,6 +340,10 @@ function showWelcome() {
     return;
   }
 
+  clearTimeout(
+    SHONEN_STATE.welcomeTimer
+  );
+
   screen.classList.remove(
     "active"
   );
@@ -316,21 +354,50 @@ function showWelcome() {
     "active"
   );
 
+
+  const exitButton =
+    screen.querySelector(
+      '[data-action="welcome-exit"]'
+    );
+
+
+  if (exitButton) {
+    exitButton.onclick =
+      closeWelcome;
+  }
+}
+
+
+function closeWelcome() {
+  const screen =
+    $("#welcomeScreen");
+
+  if (!screen) {
+    return;
+  }
+
+  screen.classList.remove(
+    "active"
+  );
+
   clearTimeout(
     SHONEN_STATE.welcomeTimer
   );
 
   SHONEN_STATE.welcomeTimer =
     setTimeout(() => {
-      screen.classList.remove(
-        "active"
-      );
-    }, 2400);
+
+      screen.remove();
+
+    }, 500);
 }
 
 
 window.showWelcome =
   showWelcome;
+
+window.closeWelcome =
+  closeWelcome;
 
 
 /* =========================================================
