@@ -1,3 +1,9 @@
+const GAME_API = {
+  chessClub: "shonen-nexus",
+  chessBase: "https://api.chess.com/pub",
+  aniList: "https://graphql.anilist.co"
+};
+
 (() => {
   "use strict";
 
@@ -550,15 +556,17 @@
      INITIALIZE
      ========================================================= */
 
-  function init() {
-    root = document.querySelector("[data-game-app]");
+function init() {
+  root = document.querySelector("[data-game-app]");
 
-    if (!root) {
-      return;
-    }
-
-    render();
+  if (!root) {
+    return;
   }
+
+  render();
+
+  loadGameData();
+}
 
 
   /* meh */
@@ -576,3 +584,400 @@
   };
 
 })();
+
+async function fetchTrendingAnime() {
+  const query = `
+    query {
+      Page(page: 1, perPage: 3) {
+        media(
+          type: ANIME
+          sort: TRENDING_DESC
+          isAdult: false
+        ) {
+          id
+
+          title {
+            romaji
+            english
+            native
+          }
+
+          coverImage {
+            large
+          }
+
+          bannerImage
+
+          averageScore
+          popularity
+          trending
+
+          format
+          episodes
+
+          siteUrl
+        }
+      }
+    }
+  `;
+
+  const response = await fetch(GAME_API.aniList, {
+    method: "POST",
+
+    headers: {
+      "Content-Type": "application/json",
+      "Accept": "application/json"
+    },
+
+    body: JSON.stringify({
+      query
+    })
+  });
+
+  if (!response.ok) {
+    throw new Error(
+      `AniList request failed: ${response.status}`
+    );
+  }
+
+  const data = await response.json();
+
+  if (data.errors) {
+    throw new Error(
+      data.errors[0]?.message || "AniList API error"
+    );
+  }
+
+  return data.data.Page.media;
+}
+
+function renderTrendingAnime(anime) {
+  const container = document.querySelector("[data-game-anime]");
+
+  if (!container) {
+    return;
+  }
+
+  if (!anime || !anime.length) {
+    container.innerHTML = `
+      <div class="member-card">
+        <div class="member-name">
+          NO TRENDING DATA
+        </div>
+
+        <div class="member-meta">
+          ANILIST FEED UNAVAILABLE
+        </div>
+      </div>
+    `;
+
+    return;
+  }
+
+  container.innerHTML = anime
+    .map((item, index) => {
+
+      const title =
+        item.title.english ||
+        item.title.romaji ||
+        item.title.native ||
+        "UNKNOWN ANIME";
+
+      const format =
+        item.format ||
+        "UNKNOWN";
+
+      return `
+        <a
+          class="member-card game-anime-card"
+          href="${escapeHtml(item.siteUrl)}"
+          target="_blank"
+          rel="noopener noreferrer"
+        >
+
+          <div class="member-avatar module-number">
+            ${String(index + 1).padStart(2, "0")}
+          </div>
+
+
+          <div class="game-anime-info">
+
+            <div class="member-name">
+              ${escapeHtml(title)}
+            </div>
+
+            <div class="member-meta">
+              ${escapeHtml(format)}
+              ${item.episodes ? ` · ${item.episodes} EP` : ""}
+            </div>
+
+          </div>
+
+
+          <div class="game-anime-stats">
+
+            <span>
+              TREND ${Number(item.trending || 0).toLocaleString()}
+            </span>
+
+            <span>
+              POP ${Number(item.popularity || 0).toLocaleString()}
+            </span>
+
+          </div>
+
+        </a>
+      `;
+    })
+    .join("");
+}
+
+async function fetchChessMatches() {
+  const url =
+    `${GAME_API.chessBase}/club/${encodeURIComponent(
+      GAME_API.chessClub
+    )}/matches`;
+
+  const response = await fetch(url, {
+    headers: {
+      "Accept": "application/json"
+    }
+  });
+
+  if (!response.ok) {
+    throw new Error(
+      `Chess.com request failed: ${response.status}`
+    );
+  }
+
+  return response.json();
+}
+
+function getRecentChessMatches(data) {
+  const inProgress = Array.isArray(data.in_progress)
+    ? data.in_progress
+    : [];
+
+  const registered = Array.isArray(data.registered)
+    ? data.registered
+    : [];
+
+  const finished = Array.isArray(data.finished)
+    ? data.finished
+    : [];
+
+  return [
+    ...inProgress,
+    ...registered,
+    ...finished
+  ].slice(0, 3);
+}
+
+function renderChessMatches(matches) {
+  const container = document.querySelector(
+    "[data-game-matches]"
+  );
+
+  if (!container) {
+    return;
+  }
+
+  if (!matches.length) {
+    container.innerHTML = `
+      <div class="member-card">
+
+        <div class="member-avatar module-number">
+          ♟
+        </div>
+
+        <div>
+
+          <div class="member-name">
+            NO ACTIVE MATCHES
+          </div>
+
+          <div class="member-meta">
+            CHESS.COM MATCH FEED
+          </div>
+
+        </div>
+
+        <div class="member-time">
+          —
+        </div>
+
+      </div>
+    `;
+
+    return;
+  }
+
+  container.innerHTML = matches
+    .map((match, index) => {
+
+      const status =
+        match.result
+          ? String(match.result).toUpperCase()
+          : "ACTIVE";
+
+      const opponent =
+        match.opponent
+          ? match.opponent
+              .split("/")
+              .filter(Boolean)
+              .pop()
+          : "UNKNOWN OPPONENT";
+
+      const matchUrl =
+        match["@id"] ||
+        match.id ||
+        "#";
+
+      return `
+        <a
+          class="member-card game-match-card"
+          href="${escapeHtml(matchUrl)}"
+          target="_blank"
+          rel="noopener noreferrer"
+        >
+
+          <div class="member-avatar module-number">
+            ${String(index + 1).padStart(2, "0")}
+          </div>
+
+
+          <div>
+
+            <div class="member-name">
+              ${escapeHtml(
+                match.name || "NEXUS MATCH"
+              )}
+            </div>
+
+            <div class="member-meta">
+              VS ${escapeHtml(opponent)}
+            </div>
+
+          </div>
+
+
+          <div class="member-time">
+            ${escapeHtml(status)}
+          </div>
+
+        </a>
+      `;
+    })
+    .join("");
+}
+
+async function loadGameData() {
+  const animeContainer = document.querySelector(
+    "[data-game-anime]"
+  );
+
+  const matchContainer = document.querySelector(
+    "[data-game-matches]"
+  );
+
+
+  if (animeContainer) {
+    animeContainer.innerHTML = `
+      <div class="member-card">
+        <div class="member-name">
+          SYNCHRONIZING...
+        </div>
+
+        <div class="member-meta">
+          ANILIST NETWORK
+        </div>
+      </div>
+    `;
+  }
+
+
+  if (matchContainer) {
+    matchContainer.innerHTML = `
+      <div class="member-card">
+        <div class="member-name">
+          SYNCHRONIZING...
+        </div>
+
+        <div class="member-meta">
+          CHESS.COM NETWORK
+        </div>
+      </div>
+    `;
+  }
+
+
+  const [animeResult, chessResult] =
+    await Promise.allSettled([
+      fetchTrendingAnime(),
+      fetchChessMatches()
+    ]);
+
+
+  if (animeResult.status === "fulfilled") {
+
+    renderTrendingAnime(
+      animeResult.value
+    );
+
+  } else {
+
+    console.error(
+      "AniList error:",
+      animeResult.reason
+    );
+
+    if (animeContainer) {
+      animeContainer.innerHTML = `
+        <div class="member-card">
+
+          <div class="member-name">
+            ANILIST FEED OFFLINE
+          </div>
+
+          <div class="member-meta">
+            UNABLE TO SYNCHRONIZE
+          </div>
+
+        </div>
+      `;
+    }
+  }
+
+
+  if (chessResult.status === "fulfilled") {
+
+    renderChessMatches(
+      getRecentChessMatches(
+        chessResult.value
+      )
+    );
+
+  } else {
+
+    console.error(
+      "Chess.com error:",
+      chessResult.reason
+    );
+
+    if (matchContainer) {
+      matchContainer.innerHTML = `
+        <div class="member-card">
+
+          <div class="member-name">
+            CHESS FEED OFFLINE
+          </div>
+
+          <div class="member-meta">
+            UNABLE TO SYNCHRONIZE
+          </div>
+
+        </div>
+      `;
+    }
+  }
+}

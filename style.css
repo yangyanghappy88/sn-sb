@@ -4132,3 +4132,506 @@ body::after {
 .welcome-exit:active {
   transform: translateY(0);
 }
+
+/* =========================================================
+   SHONEN NEXUS // GAME DIVISION
+   ========================================================= */
+
+.nexus-game-container {
+  position: relative;
+  width: 100%;
+  overflow: hidden;
+}
+
+.nexus-game {
+  position: relative;
+  padding: 22px;
+  border: 1px solid var(--border);
+  background:
+    linear-gradient(
+      145deg,
+      color-mix(in srgb, var(--accent) 5%, var(--panel-2)),
+      color-mix(in srgb, var(--panel) 96%, transparent)
+    );
+  box-shadow:
+    inset 0 1px 0 color-mix(in srgb, var(--text-strong) 4%, transparent),
+    0 14px 40px rgba(0, 0, 0, 0.18);
+}
+
+.nexus-game::before {
+  content: "";
+  position: absolute;
+  inset: 0;
+  pointer-events: none;
+  opacity: 0.32;
+  background:
+    linear-gradient(
+      90deg,
+      transparent 0 49.8%,
+      color-mix(in srgb, var(--accent) 4%, transparent) 50%,
+      transparent 50.2%
+    );
+}
+
+.nexus-game-header {
+  position: relative;
+  z-index: 1;
+  display: flex;
+  justify-content: space-between;
+  align-items: flex-start;
+  gap: 24px;
+  padding-bottom: 22px;
+  border-bottom: 1px solid var(--border-soft);
+}
+
+.game-kicker {
+  color: var(--accent-soft);
+  font-family: var(--mono);
+  font-size: 9px;
+  font-weight: 800;
+  letter-spacing: 0.18em;
+  text-transform: uppercase;
+}
+
+.nexus-game h2 {
+  margin: 8px 0 7px;
+  color: var(--text-strong);
+  font-size: clamp(24px, 4vw, 36px);
+  line-height: 0.95;
+  font-weight: 900;
+  font-style: italic;
+  letter-spacing: 0.04em;
+}
+
+.nexus-game-header p {
+  max-width: 560px;
+  margin: 0;
+  color: var(--muted);
+  font-size: 11px;
+  line-height: 1.6;
+}
+
+.game-score-panel {
+  display: grid;
+  grid-template-columns: repeat(3, minmax(68px, 1fr));
+  min-width: 230px;
+  border: 1px solid var(--border);
+  background: color-mix(in srgb, var(--bg) 55%, transparent);
+}
+
+.game-score-panel > div {
+  padding: 11px 12px;
+  text-align: center;
+  border-right: 1px solid var(--border-soft);
+}
+
+.game-score-panel > div:last-child {
+  border-right: 0;
+}
+
+.game-score-panel span {
+  display: block;
+  margin-bottom: 6px;
+  color: var(--dim);
+  font-family: var(--mono);
+  font-size: 7px;
+  font-weight: 800;
+  letter-spacing: 0.13em;
+}
+
+.game-score-panel strong {
+  display: block;
+  color: var(--accent-soft);
+  font-family: var(--mono);
+  font-size: 18px;
+  line-height: 1;
+}
+
+.game-round-bar {
+  position: relative;
+  z-index: 1;
+  display: flex;
+  justify-content: space-between;
+  gap: 12px;
+  margin: 18px 0;
+  padding: 9px 11px;
+  border-left: 2px solid var(--accent);
+  background: color-mix(in srgb, var(--accent) 5%, transparent);
+  color: var(--soft);
+  font-family: var(--mono);
+  font-size: 8px;
+  font-weight: 800;
+  letter-spacing: 0.13em;
+}
+
+.game-round-bar span:first-child {
+  color: var(--accent-soft);
+}
+
+.game-question,
+.game-options {
+  position: relative;
+  z-index: 1;
+}
+
+.game-question-label {
+  margin-bottom: 9px;
+  color: var(--dim);
+  font-family: var(--mono);
+  font-size: 8px;
+  font-weight: 800;
+  letter-spacing: 0.15em;
+}
+
+.game-clues {
+  display: grid;
+  gap: 5px;
+}
+
+.game-clue {
+  display: grid;
+  grid-template-columns: 34px minmax(0, 1fr);
+  align-items: center;
+  gap: 10px;
+  min-height: 45px;
+  padding: 8px 11px;
+  border: 1px solid var(--border-soft);
+  background: color-mix(in srgb, var(--panel-3) 38%, transparent);
+  color: var(--text-soft);
+  font-size: 11px;
+  line-height: 1.45;
+  transition:
+    border-color var(--transition),
+    background var(--transition),
+    transform var(--transition);
+}
+
+.game-clue:hover {
+  border-color: color-mix(in srgb, var(--accent) 25%, transparent);
+  background: color-mix(in srgb, var(--accent) 4%, var(--panel-3));
+  transform: translateX(2px);
+}
+
+.game-clue-number {
+  color: var(--accent-soft);
+  font-family: var(--mono);
+  font-size: 9px;
+  font-weight: 800;
+}
+
+.game-options {
+  margin-top: 22px;
+}
+
+.game-option-grid {
+  display: grid;
+  grid-template-columns: repeat(2, minmax(0, 1fr));
+  gap: 6px;
+}
+
+.game-option {
+  position: relative;
+  display: grid;
+  grid-template-columns: 34px minmax(0, 1fr) 18px;
+  align-items: center;
+  gap: 10px;
+  min-height: 58px;
+  padding: 10px 12px;
+  border: 1px solid var(--border);
+  background: var(--card-bg);
+  color: var(--text-soft);
+  text-align: left;
+  transition:
+    border-color var(--transition),
+    background var(--transition),
+    color var(--transition),
+    transform var(--transition),
+    box-shadow var(--transition);
+}
+
+.game-option:hover:not(:disabled) {
+  border-color: color-mix(in srgb, var(--accent) 55%, transparent);
+  background: color-mix(in srgb, var(--accent) 8%, var(--panel-2));
+  color: var(--text-strong);
+  transform: translateY(-2px);
+  box-shadow:
+    0 7px 22px color-mix(in srgb, var(--accent) 7%, transparent);
+}
+
+.game-option:disabled {
+  cursor: default;
+}
+
+.game-option-index {
+  color: var(--dim);
+  font-family: var(--mono);
+  font-size: 9px;
+  font-weight: 800;
+}
+
+.game-option-arrow {
+  color: var(--faint);
+  font-size: 14px;
+  transition: color var(--transition), transform var(--transition);
+}
+
+.game-option:hover:not(:disabled) .game-option-arrow {
+  color: var(--accent-soft);
+  transform: translateX(3px);
+}
+
+.game-option.correct {
+  border-color: color-mix(in srgb, var(--accent-2) 70%, transparent);
+  background: color-mix(in srgb, var(--accent-2) 8%, var(--panel));
+  color: var(--accent-2-soft);
+  box-shadow: 0 0 18px color-mix(in srgb, var(--accent-2) 7%, transparent);
+}
+
+.game-option.correct .game-option-arrow {
+  color: var(--accent-2);
+}
+
+.game-option.incorrect {
+  border-color: color-mix(in srgb, var(--danger) 70%, transparent);
+  background: color-mix(in srgb, var(--danger) 7%, var(--panel));
+  color: var(--danger-soft);
+}
+
+.game-result {
+  position: relative;
+  z-index: 1;
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  gap: 15px;
+  min-height: 48px;
+  margin-top: 14px;
+  padding: 10px 12px;
+  border: 1px solid var(--border-soft);
+  background: var(--terminal-bg);
+  color: var(--dim);
+  font-family: var(--mono);
+  font-size: 8px;
+  letter-spacing: 0.1em;
+  text-transform: uppercase;
+}
+
+.game-result strong {
+  color: var(--text-soft);
+  font-size: 9px;
+}
+
+.game-result.success {
+  border-color: color-mix(in srgb, var(--accent-2) 28%, transparent);
+  color: var(--accent-2-soft);
+}
+
+.game-result.success strong {
+  color: var(--accent-2);
+}
+
+.game-result.failure {
+  border-color: color-mix(in srgb, var(--danger) 28%, transparent);
+  color: var(--danger-soft);
+}
+
+.game-result.failure strong {
+  color: var(--danger);
+}
+
+.game-footer {
+  position: relative;
+  z-index: 1;
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  gap: 14px;
+  margin-top: 15px;
+}
+
+.game-footer > span {
+  color: var(--dim);
+  font-family: var(--mono);
+  font-size: 8px;
+  font-weight: 800;
+  letter-spacing: 0.1em;
+}
+
+.game-next {
+  padding: 10px 14px;
+  border: 1px solid var(--border);
+  background: transparent;
+  color: var(--accent-soft);
+  font-family: var(--mono);
+  font-size: 8px;
+  font-weight: 800;
+  letter-spacing: 0.12em;
+  transition:
+    background var(--transition),
+    border-color var(--transition),
+    color var(--transition),
+    transform var(--transition);
+}
+
+.game-next:hover {
+  border-color: var(--accent);
+  background: var(--accent);
+  color: var(--text-strong);
+  transform: translateY(-2px);
+}
+
+
+/* =========================================================
+   GAME // ANILIST FEED
+   ========================================================= */
+
+.game-anime-card {
+  text-decoration: none;
+}
+
+.game-anime-info {
+  min-width: 0;
+}
+
+.game-anime-card .member-name {
+  overflow: hidden;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+}
+
+.game-anime-card .module-number {
+  border-color: color-mix(in srgb, var(--accent) 35%, transparent);
+  background:
+    linear-gradient(
+      145deg,
+      color-mix(in srgb, var(--accent) 10%, var(--panel)),
+      var(--panel)
+    );
+}
+
+.game-anime-stats {
+  display: flex;
+  flex-direction: column;
+  align-items: flex-end;
+  gap: 4px;
+  min-width: 82px;
+  color: var(--dim);
+  font-family: var(--mono);
+  font-size: 7px;
+  font-weight: 800;
+  letter-spacing: 0.07em;
+  text-align: right;
+}
+
+.game-anime-card:hover .game-anime-stats {
+  color: var(--accent-soft);
+}
+
+
+/* =========================================================
+   GAME // CHESS ACTIVITY
+   ========================================================= */
+
+.game-match-card {
+  text-decoration: none;
+}
+
+.game-match-card .module-number {
+  border-color: color-mix(in srgb, var(--accent-2) 32%, transparent);
+}
+
+.game-match-card .member-time {
+  max-width: 95px;
+  overflow: hidden;
+  text-overflow: ellipsis;
+}
+
+.game-match-card:hover .member-time {
+  color: var(--accent-2-soft);
+}
+
+
+/* =========================================================
+   GAME // MOBILE
+   ========================================================= */
+
+@media (max-width: 720px) {
+  .nexus-game {
+    padding: 15px;
+  }
+
+  .nexus-game-header {
+    flex-direction: column;
+    gap: 17px;
+  }
+
+  .game-score-panel {
+    width: 100%;
+    min-width: 0;
+  }
+
+  .game-option-grid {
+    grid-template-columns: 1fr;
+  }
+
+  .game-result {
+    align-items: flex-start;
+    flex-direction: column;
+    gap: 5px;
+  }
+
+  .game-footer {
+    align-items: flex-start;
+    flex-direction: column;
+  }
+
+  .game-next {
+    width: 100%;
+  }
+
+  .game-anime-stats {
+    min-width: 65px;
+    font-size: 6px;
+  }
+}
+
+
+@media (max-width: 480px) {
+  .game-round-bar {
+    flex-direction: column;
+    gap: 5px;
+  }
+
+  .game-clue {
+    grid-template-columns: 27px minmax(0, 1fr);
+    font-size: 10px;
+  }
+
+  .game-option {
+    min-height: 53px;
+  }
+
+  .game-score-panel strong {
+    font-size: 15px;
+  }
+
+  .game-score-panel span {
+    font-size: 6px;
+  }
+
+  .game-anime-card,
+  .game-match-card {
+    grid-template-columns: 42px minmax(0, 1fr);
+  }
+
+  .game-anime-card .member-avatar,
+  .game-match-card .member-avatar {
+    width: 42px;
+    height: 42px;
+  }
+
+  .game-anime-stats,
+  .game-match-card .member-time {
+    display: none;
+  }
+}
