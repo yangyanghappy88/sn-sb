@@ -24,7 +24,8 @@ const SHONEN_NEXUS = {
     "command",
     "social",
     "calendar",
-    "youtube"
+    "youtube",
+    "game"
   ]
 };
 
@@ -553,7 +554,7 @@ function renderHome() {
         </span>
 
         <span>
-          06 SYSTEMS
+          07 SYSTEMS
         </span>
 
       </div>
@@ -596,6 +597,12 @@ function renderHome() {
             "YOUTUBE",
             "WATCH & DISCOVER",
             "#youtube"
+          ]
+          [
+            "07",
+            "GAME",
+            "ANIME & INTERACTIVE",
+            "#game"
           ]
         ]
           .map(
@@ -1721,6 +1728,206 @@ function renderCalendarPage() {
   `;
 }
 
+/* =========================================================
+   GAME
+   ========================================================= */
+
+function renderGame() {
+  return `
+    ${systemHeader(
+      "SHONEN NEXUS // 07",
+      "GAME DIVISION",
+      "Interactive Nexus systems, anime discovery and recent chess activity."
+    )}
+
+    <section class="system-panel">
+
+      <div class="panel-label">
+
+        <span>
+          NEXUS GAME DIVISION
+        </span>
+
+        <span>
+          GAME-01
+        </span>
+
+      </div>
+
+
+      <div class="game-terminal">
+
+        <div class="radio-system-label">
+
+          <span class="status-dot"></span>
+
+          NEXUS INTERACTIVE SYSTEM
+
+        </div>
+
+        <h2>
+          SYSTEM READY
+        </h2>
+
+        <p>
+          The Nexus Game Division is currently awaiting
+          interactive module deployment.
+        </p>
+
+        <div class="terminal-note">
+
+          <span>
+            &gt;
+          </span>
+
+          <span>
+            GAME CORE ONLINE // AWAITING PLAYER INPUT
+          </span>
+
+        </div>
+
+      </div>
+
+    </section>
+
+
+    <section class="system-panel">
+
+      <div class="panel-label">
+
+        <span>
+          NEXUS ANIME TRENDING
+        </span>
+
+        <span>
+          ANILIST
+        </span>
+
+      </div>
+
+
+      <div
+        class="registry-grid"
+        data-game-anime
+      >
+
+        <div class="member-card">
+
+          <div class="member-avatar module-number">
+            01
+          </div>
+
+          <div>
+
+            <div class="member-name">
+              LOADING...
+            </div>
+
+            <div class="member-meta">
+              ANILIST TRENDING DATA
+            </div>
+
+          </div>
+
+        </div>
+
+
+        <div class="member-card">
+
+          <div class="member-avatar module-number">
+            02
+          </div>
+
+          <div>
+
+            <div class="member-name">
+              LOADING...
+            </div>
+
+            <div class="member-meta">
+              ANILIST TRENDING DATA
+            </div>
+
+          </div>
+
+        </div>
+
+
+        <div class="member-card">
+
+          <div class="member-avatar module-number">
+            03
+          </div>
+
+          <div>
+
+            <div class="member-name">
+              LOADING...
+            </div>
+
+            <div class="member-meta">
+              ANILIST TRENDING DATA
+            </div>
+
+          </div>
+
+        </div>
+
+      </div>
+
+    </section>
+
+
+    <section class="system-panel">
+
+      <div class="panel-label">
+
+        <span>
+          RECENT CHESS ACTIVITY
+        </span>
+
+        <span>
+          CHESS.COM PUBAPI
+        </span>
+
+      </div>
+
+
+      <div
+        class="registry-grid"
+        data-game-matches
+      >
+
+        <div class="member-card">
+
+          <div class="member-avatar module-number">
+            ♟
+          </div>
+
+          <div>
+
+            <div class="member-name">
+              AWAITING MATCH DATA
+            </div>
+
+            <div class="member-meta">
+              CHESS.COM MATCH FEED
+            </div>
+
+          </div>
+
+          <div class="member-time">
+            —
+          </div>
+
+        </div>
+
+      </div>
+
+    </section>
+  `;
+}
+
 
 /* =========================================================
    PAGE MAP
@@ -1732,7 +1939,8 @@ const pages = {
   command: renderCommand,
   social: renderSocial,
   calendar: renderCalendarPage,
-  youtube: renderYouTube
+  youtube: renderYouTube,
+  game: renderGame
 };
 
 
