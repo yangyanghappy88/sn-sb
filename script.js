@@ -1755,38 +1755,10 @@ function renderGame() {
       </div>
 
 
-      <div class="game-terminal">
-
-        <div class="radio-system-label">
-
-          <span class="status-dot"></span>
-
-          NEXUS INTERACTIVE SYSTEM
-
-        </div>
-
-        <h2>
-          SYSTEM READY
-        </h2>
-
-        <p>
-          The Nexus Game Division is currently awaiting
-          interactive module deployment.
-        </p>
-
-        <div class="terminal-note">
-
-          <span>
-            &gt;
-          </span>
-
-          <span>
-            GAME CORE ONLINE // AWAITING PLAYER INPUT
-          </span>
-
-        </div>
-
-      </div>
+<div
+  class="nexus-game-container"
+  data-game-app
+></div>
 
     </section>
 
