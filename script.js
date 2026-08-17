@@ -561,90 +561,90 @@ function renderHome() {
 
       <div class="registry-grid">
 
-        ${[
-          [
-            "01",
-            "HOME",
-            "NEXUS OVERVIEW",
-            "#home"
-          ],
-          [
-            "02",
-            "REGISTRY",
-            "MEMBERS & DICE",
-            "#registry"
-          ],
-          [
-            "03",
-            "COMMAND",
-            "CLUB DIRECTIVES",
-            "#command"
-          ],
-          [
-            "04",
-            "SOCIAL",
-            "RADIO & NETWORK",
-            "#social"
-          ],
-          [
-            "05",
-            "CALENDAR",
-            "TIME & EVENTS",
-            "#calendar"
-          ],
-          [
-            "06",
-            "YOUTUBE",
-            "WATCH & DISCOVER",
-            "#youtube"
-          ]
-          [
-            "07",
-            "GAME",
-            "ANIME & INTERACTIVE",
-            "#game"
-          ]
-        ]
-          .map(
-            ([
-              number,
-              title,
-              meta,
-              href
-            ]) => `
-              <a
-                href="${href}"
-                class="member-card"
-              >
+  ${[
+    [
+      "01",
+      "HOME",
+      "NEXUS OVERVIEW",
+      "#home"
+    ],
+    [
+      "02",
+      "REGISTRY",
+      "MEMBERS & DICE",
+      "#registry"
+    ],
+    [
+      "03",
+      "COMMAND",
+      "CLUB DIRECTIVES",
+      "#command"
+    ],
+    [
+      "04",
+      "SOCIAL",
+      "RADIO & NETWORK",
+      "#social"
+    ],
+    [
+      "05",
+      "CALENDAR",
+      "TIME & EVENTS",
+      "#calendar"
+    ],
+    [
+      "06",
+      "YOUTUBE",
+      "WATCH & DISCOVER",
+      "#youtube"
+    ],
+    [
+      "07",
+      "GAME",
+      "ANIME & INTERACTIVE",
+      "#game"
+    ]
+  ]
+    .map(
+      ([
+        number,
+        title,
+        meta,
+        href
+      ]) => `
+        <a
+          href="${href}"
+          class="member-card"
+        >
 
-                <div
-                  class="member-avatar module-number"
-                >
-                  ${number}
-                </div>
+          <div
+            class="member-avatar module-number"
+          >
+            ${number}
+          </div>
 
-                <div>
+          <div>
 
-                  <div class="member-name">
-                    ${title}
-                  </div>
+            <div class="member-name">
+              ${title}
+            </div>
 
-                  <div class="member-meta">
-                    ${meta}
-                  </div>
+            <div class="member-meta">
+              ${meta}
+            </div>
 
-                </div>
+          </div>
 
-                <div class="member-time">
-                  →
-                </div>
+          <div class="member-time">
+            →
+          </div>
 
-              </a>
-            `
-          )
-          .join("")}
+        </a>
+      `
+    )
+    .join("")}
 
-      </div>
+</div>
 
     </section>
 
@@ -2613,6 +2613,11 @@ function render() {
     case "youtube":
       bindYouTubeEvents();
       break;
+
+      case "game":
+  window.ShonenGame
+    ?.init?.();
+  break;
   }
 
 
