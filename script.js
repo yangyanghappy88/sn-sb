@@ -25,7 +25,8 @@ const SHONEN_NEXUS = {
     "social",
     "calendar",
     "youtube",
-    "game"
+    "game",
+    "aura"
   ]
 };
 
@@ -1912,7 +1913,8 @@ const pages = {
   social: renderSocial,
   calendar: renderCalendarPage,
   youtube: renderYouTube,
-  game: renderGame
+  game: renderGame,
+  aura: renderAura
 };
 
 
@@ -2618,8 +2620,15 @@ function render() {
   window.ShonenGame
     ?.init?.();
   break;
+  
+  case "aura":
+
+  if (window.ShonenAura) {
+    window.ShonenAura.init();
   }
 
+  break;
+  }
 
   app.focus?.({
     preventScroll: true
@@ -2694,4 +2703,218 @@ if (
   );
 } else {
   bootShonenNexus();
+}
+
+function renderAura() {
+  return `
+    ${systemHeader(
+      "SHONEN NEXUS // 08",
+      "AURA SYSTEM",
+      "Visual identity, atmosphere and Nexus personalization."
+    )}
+
+    <section class="system-panel aura-panel">
+
+      <div class="panel-label">
+
+        <span>
+          VISUAL PROTOCOL
+        </span>
+
+        <span>
+          AURA-08
+        </span>
+
+      </div>
+
+
+      <div
+        class="aura-grid"
+        data-aura-grid
+      >
+
+        <button
+          type="button"
+          class="aura-card aura-wind"
+          data-aura="wind"
+        >
+          <span class="aura-symbol">01</span>
+          <span class="aura-glow"></span>
+        </button>
+
+
+        <button
+          type="button"
+          class="aura-card aura-bleach"
+          data-aura="bleach"
+        >
+          <span class="aura-symbol">02</span>
+          <span class="aura-glow"></span>
+        </button>
+
+
+        <button
+          type="button"
+          class="aura-card aura-jjk"
+          data-aura="jjk"
+        >
+          <span class="aura-symbol">03</span>
+          <span class="aura-glow"></span>
+        </button>
+
+
+        <button
+          type="button"
+          class="aura-card aura-onepiece"
+          data-aura="onepiece"
+        >
+          <span class="aura-symbol">04</span>
+          <span class="aura-glow"></span>
+        </button>
+
+
+        <button
+          type="button"
+          class="aura-card aura-naruto"
+          data-aura="naruto"
+        >
+          <span class="aura-symbol">05</span>
+          <span class="aura-glow"></span>
+        </button>
+
+
+        <button
+          type="button"
+          class="aura-card aura-spy"
+          data-aura="spy"
+        >
+          <span class="aura-symbol">06</span>
+          <span class="aura-glow"></span>
+        </button>
+
+
+        <button
+          type="button"
+          class="aura-card aura-fire"
+          data-aura="fire"
+        >
+          <span class="aura-symbol">07</span>
+          <span class="aura-glow"></span>
+        </button>
+
+
+        <button
+          type="button"
+          class="aura-card aura-samurai"
+          data-aura="samurai"
+        >
+          <span class="aura-symbol">08</span>
+          <span class="aura-glow"></span>
+        </button>
+
+      </div>
+
+    </section>
+
+
+    <section class="system-panel birthday-panel">
+
+      <div class="panel-label">
+
+        <span>
+          NEXUS BIRTHDAY REGISTRY
+        </span>
+
+        <span>
+          FIREBASE
+        </span>
+
+      </div>
+
+
+      <div class="birthday-system">
+
+        <div class="birthday-intro">
+
+          <div class="birthday-orb"></div>
+
+          <div>
+            <strong>
+              PERSONAL DATE REGISTRATION
+            </strong>
+
+            <p>
+              Register your birthday with the Nexus.
+            </p>
+          </div>
+
+        </div>
+
+
+        <form
+          class="birthday-form"
+          data-birthday-form
+        >
+
+          <div class="birthday-fields">
+
+            <input
+              type="number"
+              min="1"
+              max="12"
+              placeholder="MM"
+              inputmode="numeric"
+              data-birthday-month
+              required
+            >
+
+            <span>/</span>
+
+            <input
+              type="number"
+              min="1"
+              max="31"
+              placeholder="DD"
+              inputmode="numeric"
+              data-birthday-day
+              required
+            >
+
+            <span>/</span>
+
+            <input
+              type="number"
+              min="1900"
+              max="2100"
+              placeholder="YYYY"
+              inputmode="numeric"
+              data-birthday-year
+              required
+            >
+
+          </div>
+
+
+          <button
+            type="submit"
+            class="system-button birthday-submit"
+          >
+            REGISTER BIRTHDAY
+          </button>
+
+        </form>
+
+
+        <div
+          class="birthday-status"
+          data-birthday-status
+          aria-live="polite"
+        >
+          AWAITING REGISTRATION
+        </div>
+
+      </div>
+
+    </section>
+  `;
 }
