@@ -604,7 +604,7 @@ function renderHome() {
       "GAME",
       "ANIME & INTERACTIVE",
       "#game"
-    ]
+    ],
     [
       "08",
       "AURA",
