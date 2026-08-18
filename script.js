@@ -605,6 +605,12 @@ function renderHome() {
       "ANIME & INTERACTIVE",
       "#game"
     ]
+    [
+      "08",
+      "AURA",
+      "THEME & BIRTHDAY",
+      "#aura"
+    ]
   ]
     .map(
       ([
@@ -2620,7 +2626,7 @@ function render() {
   window.ShonenGame
     ?.init?.();
   break;
-  
+
   case "aura":
 
   if (window.ShonenAura) {
