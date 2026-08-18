@@ -10,12 +10,15 @@ html {
 }
 
 body {
+  position: relative;
+  isolation: isolate;
   margin: 0;
   min-height: 100vh;
   overflow-x: hidden;
   color: var(--text);
   background: var(--page-bg);
   font-family: Arial, Helvetica, sans-serif;
+  transition: background 500ms ease, color 350ms ease;
 }
 
 a {
@@ -44,15 +47,10 @@ img {
   background: var(--accent);
 }
 
-
-/* =========================================================
-   02. GLOBAL THEME TOKENS
-   ========================================================= */
-
 :root {
-  /* ---- Core colors ---- */
   --bg: #03060b;
   --bg-2: #08121b;
+
   --panel: #080c11;
   --panel-2: #0b0f14;
   --panel-3: #111820;
@@ -61,14 +59,14 @@ img {
   --border-soft: #202a31;
 
   --text: #f5f7f8;
-  --text-strong: #ffffff;
+  --text-strong: #fff;
   --text-soft: #b9c0c4;
+
   --muted: #8998a1;
   --soft: #74818a;
   --dim: #59656d;
   --faint: #3d484d;
 
-  /* ---- Theme colors ---- */
   --accent: #7b68ff;
   --accent-soft: #b9b0ff;
   --accent-dark: #352b73;
@@ -84,7 +82,6 @@ img {
 
   --orange: #ff8a45;
 
-  /* ---- Theme effects ---- */
   --page-bg:
     radial-gradient(
       circle at 12% 8%,
@@ -106,7 +103,7 @@ img {
       color-mix(in srgb, var(--accent-2) 7%, transparent),
       transparent 28%
     ),
-    linear-gradient(145deg, #03060b, #08121b 48%, #04070c);
+    linear-gradient(145deg, var(--bg), var(--bg-2) 48%, var(--bg));
 
   --sidebar-bg:
     radial-gradient(
@@ -119,32 +116,34 @@ img {
       color-mix(in srgb, var(--accent-2) 4%, transparent),
       transparent 32%
     ),
-    linear-gradient(180deg, rgba(5, 9, 14, 0.99), rgba(3, 6, 10, 0.99));
+    linear-gradient(
+      180deg,
+      color-mix(in srgb, var(--panel) 99%, transparent),
+      color-mix(in srgb, var(--bg) 99%, transparent)
+    );
 
   --panel-bg:
     linear-gradient(
       145deg,
       color-mix(in srgb, var(--panel) 94%, transparent),
-      color-mix(in srgb, #04080d 94%, transparent)
+      color-mix(in srgb, var(--bg) 94%, transparent)
     );
 
   --card-bg:
     linear-gradient(
       145deg,
       color-mix(in srgb, var(--panel-2) 95%, transparent),
-      color-mix(in srgb, #05090e 95%, transparent)
+      color-mix(in srgb, var(--bg) 95%, transparent)
     );
 
-  --terminal-bg: rgba(3, 6, 10, 0.72);
+  --terminal-bg: color-mix(in srgb, var(--bg) 72%, transparent);
 
   --glow:
-    0 0 20px color-mix(in srgb, var(--accent) 14%, transparent);
+    0 0 20px color-mix(in srgb, var(--accent) 18%, transparent);
 
-  --shadow:
-    0 16px 50px rgba(0, 0, 0, 0.35);
+  --shadow: 0 16px 50px rgba(0, 0, 0, .35);
 
   --transition: 200ms ease;
-
   --sidebar-width: 290px;
 
   --mono:
@@ -153,296 +152,407 @@ img {
     "Liberation Mono",
     monospace;
 
-  --selection-text: #ffffff;
+  --selection-text: #fff;
 }
 
-
-/* =========================================================
-   03. ANIME THEMES
-   =========================================================
-
-   JS only needs to change:
-
-   document.documentElement.dataset.theme = "naruto";
-
-   Add/remove themes here without touching component styles.
-   ========================================================= */
-
-
-/* ---- DEFAULT / NEXUS ---- */
-
-:root[data-theme="default"],
-:root[data-theme="nexus"],
-:root:not([data-theme]) {
+body[data-aura-theme="default"],
+body[data-aura-theme="nexus"],
+body:not([data-aura-theme]) {
   --bg: #03060b;
   --bg-2: #08121b;
   --panel: #080c11;
   --panel-2: #0b0f14;
   --panel-3: #111820;
-
   --border: #263943;
   --border-soft: #202a31;
-
   --text: #f5f7f8;
-  --text-strong: #ffffff;
+  --text-strong: #fff;
   --text-soft: #b9c0c4;
   --muted: #8998a1;
   --soft: #74818a;
   --dim: #59656d;
   --faint: #3d484d;
-
   --accent: #7b68ff;
   --accent-soft: #b9b0ff;
   --accent-dark: #352b73;
-
   --accent-2: #63e6c1;
   --accent-2-soft: #79e8ce;
-
   --danger: #ff5260;
   --danger-soft: #ff8991;
-
   --warning: #ffca28;
   --warning-soft: #ffe07a;
-
   --orange: #ff8a45;
 }
 
-
-/* ---- NARUTO ---- */
-
-:root[data-theme="naruto"] {
-  --bg: #0d0805;
-  --bg-2: #1b1008;
-  --panel: #140d08;
-  --panel-2: #1c1109;
-  --panel-3: #28170c;
-
-  --border: #57351d;
-  --border-soft: #3d2617;
-
-  --text: #fff5e8;
-  --text-strong: #ffffff;
-  --text-soft: #e8c9a5;
-  --muted: #b99672;
-  --soft: #967658;
-  --dim: #71553e;
-  --faint: #4b392b;
-
-  --accent: #ff7a00;
-  --accent-soft: #ffb45c;
-  --accent-dark: #733700;
-
-  --accent-2: #ffcf33;
-  --accent-2-soft: #ffe58a;
-
-  --danger: #e53935;
-  --danger-soft: #ff7772;
-
-  --warning: #ffc107;
-  --warning-soft: #ffe082;
-
-  --orange: #ff5722;
-}
-
-
-/* ---- ONE PIECE ---- */
-
-:root[data-theme="one-piece"] {
-  --bg: #031017;
-  --bg-2: #061b25;
-  --panel: #07151d;
-  --panel-2: #0a1c25;
-  --panel-3: #0e2832;
-
-  --border: #174d5e;
-  --border-soft: #123845;
-
+body[data-aura-theme="windbreaker"] {
+  --bg: #030b11;
+  --bg-2: #071a25;
+  --panel: #071219;
+  --panel-2: #0a1820;
+  --panel-3: #102631;
+  --border: #164457;
+  --border-soft: #102f3d;
   --text: #effcff;
-  --text-strong: #ffffff;
-  --text-soft: #b8dce6;
-  --muted: #82aeb9;
-  --soft: #638b96;
-  --dim: #496d77;
-  --faint: #31505a;
+  --text-strong: #fff;
+  --text-soft: #b8dce7;
+  --muted: #789aa8;
+  --soft: #5f7f8d;
+  --dim: #496672;
+  --faint: #304a55;
+  --accent: #22d3ee;
+  --accent-soft: #8be9f7;
+  --accent-dark: #07566a;
+  --accent-2: #38bdf8;
+  --accent-2-soft: #9bdcff;
+  --danger: #ef4444;
+  --danger-soft: #fb7185;
+  --warning: #facc15;
+  --warning-soft: #fde68a;
+  --orange: #fb923c;
 
-  --accent: #19b7ff;
-  --accent-soft: #82dcff;
-  --accent-dark: #075477;
+  --page-bg:
+    radial-gradient(circle at 78% 10%, rgba(34, 211, 238, .14), transparent 25%),
+    radial-gradient(circle at 15% 80%, rgba(14, 165, 233, .08), transparent 28%),
+    linear-gradient(135deg, #02070b, #071822 50%, #02080d);
 
-  --accent-2: #ffca28;
-  --accent-2-soft: #ffe27a;
+  --sidebar-bg:
+    linear-gradient(180deg, #03090e, #06141c 50%, #03080d);
 
-  --danger: #ef5350;
-  --danger-soft: #ff8582;
+  --panel-bg:
+    linear-gradient(145deg, rgba(7, 18, 25, .96), rgba(3, 10, 15, .98));
 
-  --warning: #ffc107;
-  --warning-soft: #ffe082;
-
-  --orange: #ff8a3d;
+  --card-bg:
+    linear-gradient(145deg, rgba(10, 24, 32, .96), rgba(4, 12, 17, .98));
 }
 
-
-/* ---- BLEACH ---- */
-
-:root[data-theme="bleach"] {
-  --bg: #050609;
+body[data-aura-theme="bleach"] {
+  --bg: #050509;
   --bg-2: #101116;
   --panel: #090a0e;
   --panel-2: #101218;
   --panel-3: #191b22;
-
   --border: #383c48;
   --border-soft: #292c35;
-
   --text: #f5f6fa;
-  --text-strong: #ffffff;
+  --text-strong: #fff;
   --text-soft: #d1d4dd;
   --muted: #9a9eaa;
   --soft: #747985;
   --dim: #5a5e69;
   --faint: #3d4049;
-
   --accent: #e7e9ee;
-  --accent-soft: #ffffff;
+  --accent-soft: #fff;
   --accent-dark: #555b68;
-
   --accent-2: #7a8cff;
   --accent-2-soft: #aeb9ff;
-
   --danger: #d83b50;
   --danger-soft: #ff7d8e;
-
   --warning: #d9c76b;
   --warning-soft: #f0e59d;
-
   --orange: #b96f4d;
+
+  --page-bg:
+    radial-gradient(circle at 80% 12%, rgba(122, 140, 255, .10), transparent 26%),
+    linear-gradient(145deg, #030406, #101116 52%, #050609);
+
+  --sidebar-bg:
+    linear-gradient(180deg, #040509, #0c0d12 55%, #050609);
+
+  --panel-bg:
+    linear-gradient(145deg, rgba(10, 11, 16, .98), rgba(5, 6, 10, .98));
+
+  --card-bg:
+    linear-gradient(145deg, rgba(16, 18, 24, .98), rgba(7, 8, 12, .98));
 }
 
-
-/* ---- JUJUTSU KAISEN ---- */
-
-:root[data-theme="jjk"],
-:root[data-theme="jujutsu-kaisen"] {
+body[data-aura-theme="jjk"] {
   --bg: #090711;
   --bg-2: #151023;
   --panel: #0d0a16;
   --panel-2: #141020;
   --panel-3: #201936;
-
   --border: #493c70;
   --border-soft: #302749;
-
   --text: #f7f3ff;
-  --text-strong: #ffffff;
+  --text-strong: #fff;
   --text-soft: #d3c8ea;
   --muted: #9e91b8;
   --soft: #796c91;
   --dim: #5e526f;
   --faint: #42384f;
-
-  --accent: #9b6cff;
-  --accent-soft: #cbb4ff;
+  --accent: #a855f7;
+  --accent-soft: #d8b4fe;
   --accent-dark: #4a287d;
-
-  --accent-2: #4dd0e1;
-  --accent-2-soft: #8ce6f0;
-
+  --accent-2: #c084fc;
+  --accent-2-soft: #e9d5ff;
   --danger: #ff5370;
   --danger-soft: #ff8fa3;
-
   --warning: #d9c45b;
   --warning-soft: #f1df83;
-
   --orange: #d97945;
+
+  --page-bg:
+    radial-gradient(circle at 82% 8%, rgba(168, 85, 247, .17), transparent 27%),
+    radial-gradient(circle at 15% 82%, rgba(126, 34, 206, .10), transparent 30%),
+    linear-gradient(145deg, #05030a, #10081a 50%, #06030b);
+
+  --sidebar-bg:
+    linear-gradient(180deg, #05030a, #0d0715 55%, #05030a);
+
+  --panel-bg:
+    linear-gradient(145deg, rgba(14, 10, 22, .97), rgba(7, 4, 12, .99));
+
+  --card-bg:
+    linear-gradient(145deg, rgba(20, 16, 32, .98), rgba(9, 6, 15, .98));
+
+  --glow: 0 0 28px rgba(168, 85, 247, .18);
 }
 
+body[data-aura-theme="onepiece"] {
+  --bg: #031017;
+  --bg-2: #061b25;
+  --panel: #07151d;
+  --panel-2: #0a1c25;
+  --panel-3: #0e2832;
+  --border: #174d5e;
+  --border-soft: #123845;
+  --text: #effcff;
+  --text-strong: #fff;
+  --text-soft: #b8dce6;
+  --muted: #82aeb9;
+  --soft: #638b96;
+  --dim: #496d77;
+  --faint: #31505a;
+  --accent: #19b7ff;
+  --accent-soft: #82dcff;
+  --accent-dark: #075477;
+  --accent-2: #ffca28;
+  --accent-2-soft: #ffe27a;
+  --danger: #ef5350;
+  --danger-soft: #ff8582;
+  --warning: #ffc107;
+  --warning-soft: #ffe082;
+  --orange: #ff8a3d;
 
-/* ---- DEMON SLAYER ---- */
+  --page-bg:
+    radial-gradient(circle at 80% 8%, rgba(25, 183, 255, .16), transparent 28%),
+    radial-gradient(circle at 12% 82%, rgba(255, 202, 40, .07), transparent 25%),
+    linear-gradient(145deg, #020b11, #06202c 50%, #07100f);
 
-:root[data-theme="demon-slayer"] {
-  --bg: #070d0b;
-  --bg-2: #0d1b16;
-  --panel: #0a120f;
-  --panel-2: #101b16;
-  --panel-3: #17251e;
+  --sidebar-bg:
+    linear-gradient(180deg, #021018, #05202b 55%, #021017);
 
-  --border: #315c4a;
-  --border-soft: #234237;
+  --panel-bg:
+    linear-gradient(145deg, rgba(7, 21, 29, .97), rgba(3, 12, 18, .98));
 
-  --text: #f2fff9;
-  --text-strong: #ffffff;
-  --text-soft: #c3ded2;
-  --muted: #91afa2;
-  --soft: #69867b;
-  --dim: #506b60;
-  --faint: #384d44;
+  --card-bg:
+    linear-gradient(145deg, rgba(10, 28, 37, .98), rgba(3, 14, 20, .98));
+}
 
-  --accent: #35c98a;
-  --accent-soft: #8be7bf;
-  --accent-dark: #176847;
+body[data-aura-theme="naruto"] {
+  --bg: #0d0805;
+  --bg-2: #1b1008;
+  --panel: #140d08;
+  --panel-2: #1c1109;
+  --panel-3: #28170c;
+  --border: #57351d;
+  --border-soft: #3d2617;
+  --text: #fff5e8;
+  --text-strong: #fff;
+  --text-soft: #e8c9a5;
+  --muted: #b99672;
+  --soft: #967658;
+  --dim: #71553e;
+  --faint: #4b392b;
+  --accent: #ff7a00;
+  --accent-soft: #ffb45c;
+  --accent-dark: #733700;
+  --accent-2: #ffcf33;
+  --accent-2-soft: #ffe58a;
+  --danger: #e53935;
+  --danger-soft: #ff7772;
+  --warning: #ffc107;
+  --warning-soft: #ffe082;
+  --orange: #ff5722;
 
-  --accent-2: #5ec8ff;
-  --accent-2-soft: #a3e2ff;
+  --page-bg:
+    radial-gradient(circle at 78% 12%, rgba(255, 122, 0, .17), transparent 28%),
+    radial-gradient(circle at 15% 85%, rgba(229, 57, 53, .09), transparent 27%),
+    linear-gradient(145deg, #080403, #1c0e06 52%, #090504);
 
-  --danger: #e95b64;
-  --danger-soft: #ff9097;
+  --sidebar-bg:
+    linear-gradient(180deg, #0a0503, #170b06 55%, #090403);
 
+  --panel-bg:
+    linear-gradient(145deg, rgba(20, 13, 8, .97), rgba(10, 6, 4, .99));
+
+  --card-bg:
+    linear-gradient(145deg, rgba(28, 17, 9, .98), rgba(12, 7, 4, .98));
+}
+
+body[data-aura-theme="spy"] {
+  --bg: #10070c;
+  --bg-2: #1d0c14;
+  --panel: #160a10;
+  --panel-2: #21101a;
+  --panel-3: #2c1521;
+  --border: #5f293d;
+  --border-soft: #421c2c;
+  --text: #fff1f2;
+  --text-strong: #fff;
+  --text-soft: #e6bdc8;
+  --muted: #ae7d8d;
+  --soft: #8c5f6d;
+  --dim: #684451;
+  --faint: #4a3039;
+  --accent: #e11d48;
+  --accent-soft: #fb7185;
+  --accent-dark: #7f1230;
+  --accent-2: #f9a8d4;
+  --accent-2-soft: #fbcfe8;
+  --danger: #be123c;
+  --danger-soft: #fb7185;
+  --warning: #facc15;
+  --warning-soft: #fde68a;
+  --orange: #fb923c;
+
+  --page-bg:
+    radial-gradient(circle at 82% 10%, rgba(251, 113, 133, .14), transparent 27%),
+    radial-gradient(circle at 12% 85%, rgba(225, 29, 72, .08), transparent 28%),
+    linear-gradient(145deg, #090306, #1c0b13 52%, #0b0407);
+
+  --sidebar-bg:
+    linear-gradient(180deg, #0a0407, #180912 55%, #090306);
+
+  --panel-bg:
+    linear-gradient(145deg, rgba(22, 10, 16, .97), rgba(10, 4, 8, .99));
+
+  --card-bg:
+    linear-gradient(145deg, rgba(33, 16, 26, .98), rgba(12, 5, 9, .98));
+}
+
+body[data-aura-theme="fire"] {
+  --bg: #0d0503;
+  --bg-2: #1c0805;
+  --panel: #180806;
+  --panel-2: #220b07;
+  --panel-3: #301109;
+  --border: #642719;
+  --border-soft: #431b12;
+  --text: #fff7ed;
+  --text-strong: #fff;
+  --text-soft: #e9c0a9;
+  --muted: #ad7964;
+  --soft: #8d5c4a;
+  --dim: #684337;
+  --faint: #4b3028;
+  --accent: #ef2b1f;
+  --accent-soft: #ff8068;
+  --accent-dark: #7f1710;
+  --accent-2: #ff9f1c;
+  --accent-2-soft: #ffd08a;
+  --danger: #dc2626;
+  --danger-soft: #ff7777;
+  --warning: #facc15;
+  --warning-soft: #fde68a;
+  --orange: #ff4d1c;
+
+  --page-bg:
+    radial-gradient(circle at 80% 12%, rgba(255, 77, 28, .18), transparent 27%),
+    radial-gradient(circle at 18% 80%, rgba(220, 38, 38, .09), transparent 28%),
+    linear-gradient(145deg, #070201, #1b0704 52%, #090302);
+
+  --sidebar-bg:
+    linear-gradient(180deg, #090302, #170605 55%, #080202);
+
+  --panel-bg:
+    linear-gradient(145deg, rgba(24, 8, 6, .97), rgba(10, 3, 2, .99));
+
+  --card-bg:
+    linear-gradient(145deg, rgba(34, 11, 7, .98), rgba(13, 4, 3, .98));
+
+  --glow: 0 0 25px rgba(255, 77, 28, .16);
+}
+
+body[data-aura-theme="samurai"] {
+  --bg: #09090a;
+  --bg-2: #151312;
+  --panel: #111112;
+  --panel-2: #191817;
+  --panel-3: #252321;
+  --border: #514840;
+  --border-soft: #39322d;
+  --text: #f5f0e9;
+  --text-strong: #fff;
+  --text-soft: #d4c7bb;
+  --muted: #a4978c;
+  --soft: #81766d;
+  --dim: #625951;
+  --faint: #47413b;
+  --accent: #c47a35;
+  --accent-soft: #e1b27c;
+  --accent-dark: #704019;
+  --accent-2: #d6b28c;
+  --accent-2-soft: #edd7bd;
+  --danger: #b91c1c;
+  --danger-soft: #ef7777;
+  --warning: #d6b84d;
+  --warning-soft: #ead889;
+  --orange: #c65f36;
+
+  --page-bg:
+    radial-gradient(circle at 80% 10%, rgba(214, 178, 140, .09), transparent 26%),
+    linear-gradient(145deg, #060606, #151210 50%, #080707);
+
+  --sidebar-bg:
+    linear-gradient(180deg, #070707, #12100f 55%, #070707);
+
+  --panel-bg:
+    linear-gradient(145deg, rgba(17, 17, 18, .98), rgba(7, 7, 7, .99));
+
+  --card-bg:
+    linear-gradient(145deg, rgba(25, 24, 23, .98), rgba(10, 9, 8, .98));
+}
+
+body[data-aura-theme="demonslayer"] {
+  --bg: #031013;
+  --bg-2: #092126;
+  --panel: #06171a;
+  --panel-2: #0a2226;
+  --panel-3: #103037;
+  --border: #245860;
+  --border-soft: #194047;
+  --text: #ecfeff;
+  --text-strong: #fff;
+  --text-soft: #b9d9dc;
+  --muted: #7da1a5;
+  --soft: #5d8185;
+  --dim: #47676b;
+  --faint: #304b4f;
+  --accent: #14b8a6;
+  --accent-soft: #5eead4;
+  --accent-dark: #0f5c55;
+  --accent-2: #38bdf8;
+  --accent-2-soft: #9bdcff;
+  --danger: #e11d48;
+  --danger-soft: #fb7185;
   --warning: #d5bd58;
   --warning-soft: #eddb83;
-
   --orange: #dc7a4d;
-}
 
+  --page-bg:
+    radial-gradient(circle at 80% 8%, rgba(20, 184, 166, .14), transparent 27%),
+    radial-gradient(circle at 15% 85%, rgba(225, 29, 72, .07), transparent 28%),
+    linear-gradient(145deg, #02090b, #072126 52%, #03090b);
 
-/* ---- ATTACK ON TITAN ---- */
+  --sidebar-bg:
+    linear-gradient(180deg, #02090b, #06191d 55%, #02090b);
 
-:root[data-theme="aot"],
-:root[data-theme="attack-on-titan"] {
-  --bg: #0b0c08;
-  --bg-2: #18170f;
-  --panel: #11120d;
-  --panel-2: #191a13;
-  --panel-3: #24251b;
+  --panel-bg:
+    linear-gradient(145deg, rgba(6, 23, 26, .97), rgba(2, 10, 12, .99));
 
-  --border: #555640;
-  --border-soft: #3b3c2d;
-
-  --text: #f1f1df;
-  --text-strong: #ffffff;
-  --text-soft: #d1d0ad;
-  --muted: #aaa98b;
-  --soft: #85846c;
-  --dim: #65644f;
-  --faint: #49483a;
-
-  --accent: #b7a84b;
-  --accent-soft: #e1d47a;
-  --accent-dark: #62591f;
-
-  --accent-2: #78966a;
-  --accent-2-soft: #a9c398;
-
-  --danger: #c95345;
-  --danger-soft: #ed8175;
-
-  --warning: #d8b84c;
-  --warning-soft: #edd37b;
-
-  --orange: #bb7045;
-}
-
-
-/* =========================================================
-   04. PAGE BACKGROUND
-   ========================================================= */
-
-body {
-  position: relative;
-  isolation: isolate;
-  background: var(--page-bg);
-  transition:
-    background 400ms ease,
-    color 300ms ease;
+  --card-bg:
+    linear-gradient(145deg, rgba(10, 34, 38, .98), rgba(3, 14, 17, .98));
 }
 
 body::before {
@@ -451,22 +561,21 @@ body::before {
   inset: 0;
   z-index: -2;
   pointer-events: none;
-
   background:
     linear-gradient(
       90deg,
       transparent,
-      color-mix(in srgb, var(--accent) 3%, transparent),
+      color-mix(in srgb, var(--accent) 4%, transparent),
       transparent
     ),
     linear-gradient(
       120deg,
       transparent 0 48%,
-      color-mix(in srgb, var(--accent-2) 2%, transparent) 50%,
+      color-mix(in srgb, var(--accent-2) 3%, transparent) 50%,
       transparent 52%
     );
-
-  opacity: 0.9;
+  opacity: .9;
+  transition: background 500ms ease, opacity 500ms ease;
 }
 
 body::after {
@@ -478,23 +587,16 @@ body::after {
   height: 100%;
   z-index: -1;
   pointer-events: none;
-
-  background:
-    linear-gradient(
-      transparent,
-      var(--accent),
-      var(--accent-2),
-      transparent
-    );
-
-  opacity: 0.12;
+  background: linear-gradient(
+    transparent,
+    var(--accent),
+    var(--accent-2),
+    transparent
+  );
+  opacity: .12;
   transform: rotate(12deg);
+  transition: background 500ms ease, opacity 500ms ease;
 }
-
-
-/* =========================================================
-   05. AMBIENT BACKGROUND
-   ========================================================= */
 
 .ambient {
   position: fixed;
@@ -507,9 +609,7 @@ body::after {
 .grid {
   position: absolute;
   inset: 0;
-
-  opacity: 0.035;
-
+  opacity: .035;
   background-image:
     linear-gradient(
       color-mix(in srgb, var(--accent) 35%, transparent) 1px,
@@ -520,15 +620,9 @@ body::after {
       color-mix(in srgb, var(--accent) 35%, transparent) 1px,
       transparent 1px
     );
-
   background-size: 48px 48px;
-
-  mask-image:
-    linear-gradient(
-      to bottom,
-      #000,
-      transparent 82%
-    );
+  mask-image: linear-gradient(to bottom, #000, transparent 82%);
+  transition: opacity 500ms ease;
 }
 
 .scanline {
@@ -536,10 +630,7 @@ body::after {
   left: 0;
   right: 0;
   height: 1px;
-
-  background:
-    color-mix(in srgb, var(--accent) 9%, transparent);
-
+  background: color-mix(in srgb, var(--accent) 9%, transparent);
   animation: scan 9s linear infinite;
 }
 
@@ -547,10 +638,10 @@ body::after {
   position: absolute;
   width: 420px;
   height: 420px;
-
   border-radius: 50%;
   filter: blur(100px);
-  opacity: 0.035;
+  opacity: .045;
+  transition: background 500ms ease;
 }
 
 .orb-one {
@@ -565,11 +656,6 @@ body::after {
   background: var(--accent-2);
 }
 
-
-/* =========================================================
-   06. ANIMATIONS
-   ========================================================= */
-
 @keyframes scan {
   from {
     top: -2%;
@@ -583,8 +669,8 @@ body::after {
 @keyframes pulse {
   0%,
   100% {
-    opacity: 0.2;
-    transform: scale(0.85);
+    opacity: .2;
+    transform: scale(.85);
   }
 
   50% {
@@ -593,107 +679,80 @@ body::after {
   }
 }
 
-
-/* =========================================================
-   07. SIDEBAR
-   ========================================================= */
-
 .sidebar {
   position: fixed;
   inset: 0 auto 0 0;
-
   width: min(var(--sidebar-width), 88vw);
-
   padding: 24px 18px;
-
   display: flex;
   flex-direction: column;
-
   background: var(--sidebar-bg);
-
   border-right: 1px solid var(--border);
-
   z-index: 100;
-
   overflow-y: auto;
-
   scrollbar-width: thin;
   scrollbar-color:
     color-mix(in srgb, var(--accent) 40%, transparent)
     transparent;
-
   transition:
-    background 350ms ease,
-    border-color 300ms ease;
+    background 500ms ease,
+    border-color 400ms ease,
+    box-shadow 400ms ease;
 }
 
 .sidebar::before {
   content: "";
-
   position: absolute;
   inset: 0 0 0 auto;
-
   width: 1px;
-
-  background:
-    linear-gradient(
-      to bottom,
-      transparent,
-      var(--accent),
-      var(--accent-2),
-      transparent
-    );
-
-  opacity: 0.55;
+  background: linear-gradient(
+    to bottom,
+    transparent,
+    var(--accent),
+    var(--accent-2),
+    transparent
+  );
+  opacity: .65;
   pointer-events: none;
+  transition: background 500ms ease;
 }
 
 .sidebar-brand {
   display: flex;
   align-items: center;
   gap: 13px;
-
   padding: 3px 4px 22px;
-
   border-bottom: 1px solid var(--border-soft);
-
-  transition:
-    opacity var(--transition),
-    transform var(--transition);
+  transition: opacity var(--transition), transform var(--transition);
 }
 
 .sidebar-brand:hover {
-  opacity: 0.94;
+  opacity: .94;
   transform: translateX(2px);
 }
 
 .sidebar-logo-wrap {
   position: relative;
-
   width: 60px;
   height: 60px;
   flex: 0 0 60px;
-
   display: grid;
   place-items: center;
-
-  border: 1px solid
-    color-mix(in srgb, var(--accent) 55%, transparent);
-
+  border: 1px solid color-mix(in srgb, var(--accent) 55%, transparent);
   border-radius: 6px;
-
   background:
     radial-gradient(
       circle,
       color-mix(in srgb, var(--accent) 13%, transparent),
       transparent 68%
     );
-
   box-shadow:
-    0 0 20px
-    color-mix(in srgb, var(--accent) 8%, transparent);
-
+    0 0 20px color-mix(in srgb, var(--accent) 10%, transparent);
   overflow: hidden;
+  transition:
+    border-color 500ms ease,
+    background 500ms ease,
+    box-shadow 500ms ease;
 }
 
 .sidebar-logo-wrap::before,
@@ -701,7 +760,8 @@ body::after {
   content: "";
   position: absolute;
   background: var(--accent);
-  opacity: 0.8;
+  opacity: .8;
+  transition: background 500ms ease;
 }
 
 .sidebar-logo-wrap::before {
@@ -721,9 +781,7 @@ body::after {
 .sidebar-logo {
   width: 48px;
   height: 48px;
-
   object-fit: contain;
-
   border-radius: 4px;
 }
 
@@ -733,65 +791,45 @@ body::after {
 
 .sidebar-brand-text strong {
   display: block;
-
   color: var(--text-strong);
-
   font-size: 16px;
   line-height: 1.05;
   font-weight: 900;
   font-style: italic;
-
-  letter-spacing: 0.07em;
+  letter-spacing: .07em;
 }
 
 .sidebar-brand-text small {
   display: block;
-
   margin-top: 7px;
-
   color: var(--accent-soft);
-
   font-size: 8px;
   line-height: 1.3;
   font-weight: 700;
-
-  letter-spacing: 0.13em;
+  letter-spacing: .13em;
 }
-
-
-/* =========================================================
-   08. SIDEBAR STATUS
-   ========================================================= */
 
 .sidebar-status {
   display: flex;
   align-items: center;
   gap: 10px;
-
   margin: 18px 3px 22px;
   padding: 10px 11px;
-
-  border: 1px solid
-    color-mix(in srgb, var(--accent-2) 14%, transparent);
-
-  background:
-    color-mix(in srgb, var(--accent-2) 3.5%, transparent);
+  border: 1px solid color-mix(in srgb, var(--accent-2) 18%, transparent);
+  background: color-mix(in srgb, var(--accent-2) 4%, transparent);
+  transition: background 500ms ease, border-color 500ms ease;
 }
 
 .status-indicator,
 .status-dot {
   border-radius: 50%;
-
   background: var(--accent-2);
-
   box-shadow:
-    0 0 8px
-    color-mix(in srgb, var(--accent-2) 80%, transparent);
+    0 0 8px color-mix(in srgb, var(--accent-2) 80%, transparent);
 }
 
 .status-indicator {
   position: relative;
-
   width: 7px;
   height: 7px;
   flex: 0 0 7px;
@@ -799,43 +837,27 @@ body::after {
 
 .status-indicator::after {
   content: "";
-
   position: absolute;
   inset: -4px;
-
-  border: 1px solid
-    color-mix(in srgb, var(--accent-2) 25%, transparent);
-
+  border: 1px solid color-mix(in srgb, var(--accent-2) 25%, transparent);
   border-radius: 50%;
-
   animation: pulse 2s infinite;
 }
 
 .sidebar-status strong {
   display: block;
-
-  color:
-    color-mix(in srgb, var(--accent-2) 75%, white);
-
+  color: color-mix(in srgb, var(--accent-2) 75%, white);
   font-size: 10px;
-  letter-spacing: 0.12em;
+  letter-spacing: .12em;
 }
 
 .sidebar-status small {
   display: block;
-
   margin-top: 3px;
-
   color: var(--dim);
-
   font-size: 8px;
-  letter-spacing: 0.12em;
+  letter-spacing: .12em;
 }
-
-
-/* =========================================================
-   09. NAVIGATION
-   ========================================================= */
 
 .sidebar-nav {
   display: flex;
@@ -847,47 +869,33 @@ body::after {
 .system-heading {
   display: flex;
   justify-content: space-between;
-
   margin: 0 4px 7px;
-
   color: var(--dim);
-
   font-size: 9px;
   font-weight: 800;
-  letter-spacing: 0.17em;
+  letter-spacing: .17em;
 }
 
 .nav-item {
   position: relative;
-
   min-height: 62px;
-
   display: grid;
   grid-template-columns: 32px 1fr 18px;
-
   align-items: center;
-
   gap: 5px;
-
   padding: 9px 10px;
-
   border: 1px solid transparent;
-
   background: transparent;
-
   transition:
     background var(--transition),
     border-color var(--transition),
-    transform var(--transition);
+    transform var(--transition),
+    box-shadow var(--transition);
 }
 
 .nav-item:hover {
-  background:
-    color-mix(in srgb, var(--accent) 6%, transparent);
-
-  border-color:
-    color-mix(in srgb, var(--accent) 18%, transparent);
-
+  background: color-mix(in srgb, var(--accent) 7%, transparent);
+  border-color: color-mix(in srgb, var(--accent) 22%, transparent);
   transform: translateX(2px);
 }
 
@@ -895,38 +903,30 @@ body::after {
   background:
     linear-gradient(
       90deg,
-      color-mix(in srgb, var(--accent) 13%, transparent),
+      color-mix(in srgb, var(--accent) 15%, transparent),
       color-mix(in srgb, var(--accent) 2.5%, transparent)
     );
-
-  border-color:
-    color-mix(in srgb, var(--accent) 30%, transparent);
+  border-color: color-mix(in srgb, var(--accent) 35%, transparent);
+  box-shadow:
+    inset 0 0 25px color-mix(in srgb, var(--accent) 3%, transparent);
 }
 
 .nav-item.active::before {
   content: "";
-
   position: absolute;
-
   left: -1px;
   top: 9px;
   bottom: 9px;
-
   width: 2px;
-
   background: var(--accent);
-
   box-shadow:
-    0 0 10px
-    color-mix(in srgb, var(--accent) 70%, transparent);
+    0 0 10px color-mix(in srgb, var(--accent) 70%, transparent);
 }
 
 .nav-index {
   align-self: start;
   padding-top: 3px;
-
   color: var(--faint);
-
   font-size: 10px;
   font-weight: 800;
 }
@@ -939,13 +939,11 @@ body::after {
 
 .nav-copy strong {
   display: block;
-
   color: var(--text-soft);
-
   font-size: 12px;
   font-weight: 900;
-
-  letter-spacing: 0.12em;
+  letter-spacing: .12em;
+  transition: color var(--transition);
 }
 
 .nav-item.active .nav-copy strong {
@@ -954,11 +952,8 @@ body::after {
 
 .nav-copy small {
   display: block;
-
   margin-top: 5px;
-
   color: var(--dim);
-
   font-size: 9px;
 }
 
@@ -969,20 +964,12 @@ body::after {
 .nav-arrow {
   color: var(--faint);
   font-size: 16px;
-
-  transition:
-    color var(--transition),
-    transform var(--transition);
+  transition: color var(--transition), transform var(--transition);
 }
 
 .nav-item:hover .nav-arrow {
   transform: translateX(3px);
 }
-
-
-/* =========================================================
-   10. SIDEBAR SYSTEM / FOOTER
-   ========================================================= */
 
 .sidebar-system {
   margin-top: auto;
@@ -1002,11 +989,9 @@ body::after {
 
 .system-row {
   padding: 7px 4px;
-
   color: var(--dim);
-
   font-size: 8px;
-  letter-spacing: 0.1em;
+  letter-spacing: .1em;
 }
 
 .system-row strong {
@@ -1021,37 +1006,29 @@ body::after {
 .sidebar-footer {
   margin-top: 15px;
   padding: 14px 4px 0;
-
   border-top: 1px solid var(--border-soft);
 }
 
 .boot-label {
   display: inline-block;
-
   color: var(--accent-soft);
-
   font-size: 9px;
   font-weight: 900;
-  letter-spacing: 0.18em;
+  letter-spacing: .18em;
 }
 
 .boot-version {
   display: inline-block;
-
   margin-left: 7px;
-
   color: var(--faint);
-
   font-size: 8px;
 }
 
 .boot-line {
   margin-top: 7px;
-
   color: var(--dim);
-
   font-size: 8px;
-  letter-spacing: 0.1em;
+  letter-spacing: .1em;
 }
 
 .boot-line strong {
@@ -1059,106 +1036,64 @@ body::after {
   font-size: 8px;
 }
 
-
-/* =========================================================
-   11. MOBILE NAV TOGGLE
-   ========================================================= */
-
 .nav-toggle {
   display: none;
-
   position: fixed;
-
   top: 14px;
   right: 14px;
-
   width: 44px;
   height: 44px;
-
   padding: 10px;
-
   flex-direction: column;
   justify-content: center;
-
   gap: 5px;
-
-  border: 1px solid
-    color-mix(in srgb, var(--accent) 40%, transparent);
-
+  border: 1px solid color-mix(in srgb, var(--accent) 40%, transparent);
   border-radius: 4px;
-
-  background:
-    color-mix(in srgb, var(--panel) 94%, transparent);
-
+  background: color-mix(in srgb, var(--panel) 94%, transparent);
   color: var(--text);
-
   z-index: 200;
-
   backdrop-filter: blur(14px);
+  transition:
+    border-color 400ms ease,
+    background 400ms ease;
 }
 
 .nav-toggle span {
   width: 100%;
   height: 2px;
-
   background: var(--accent-soft);
 }
-
-
-/* =========================================================
-   12. MAIN APP
-   ========================================================= */
 
 .app-shell {
   position: relative;
   z-index: 1;
-
   min-height: 100vh;
-
   margin-left: var(--sidebar-width);
-
   padding: 40px 44px 72px;
-
   outline: none;
 }
-
-
-/* =========================================================
-   13. PAGE HEADER
-   ========================================================= */
 
 .system-page-header,
 .social-page .page-header {
   position: relative;
-
   margin-bottom: 30px;
   padding-bottom: 20px;
-
   border-bottom: 1px solid var(--border-soft);
+  transition: border-color 400ms ease;
 }
 
 .system-page-header::after,
 .social-page .page-header::after {
   content: "";
-
   position: absolute;
-
   left: 0;
   bottom: -1px;
-
-  width: 100px;
+  width: 110px;
   height: 1px;
-
-  background:
-    linear-gradient(
-      90deg,
-      var(--accent),
-      var(--accent-2)
-    );
-
+  background: linear-gradient(90deg, var(--accent), var(--accent-2));
   box-shadow:
-    0 0 12px
-    color-mix(in srgb, var(--accent) 45%, transparent);
+    0 0 12px color-mix(in srgb, var(--accent) 45%, transparent);
+  transition: background 500ms ease;
 }
 
 .system-kicker,
@@ -1166,10 +1101,9 @@ body::after {
 .personnel-id,
 .radio-system-label {
   color: var(--accent-soft);
-
   font-size: 9px;
   font-weight: 900;
-  letter-spacing: 0.2em;
+  letter-spacing: .2em;
 }
 
 .system-kicker {
@@ -1179,87 +1113,51 @@ body::after {
 .system-page-header h1,
 .social-page .page-header h1 {
   margin: 0;
-
   color: var(--text-strong);
-
   font-size: clamp(28px, 4vw, 48px);
   line-height: 1.05;
   font-weight: 1000;
   font-style: italic;
-
-  letter-spacing: 0.01em;
-
+  letter-spacing: .01em;
   text-transform: uppercase;
-
   text-shadow:
-    3px 3px 0
-      color-mix(in srgb, var(--accent-dark) 70%, transparent),
-    6px 6px 0 rgba(0, 0, 0, 0.35);
+    3px 3px 0 color-mix(in srgb, var(--accent-dark) 70%, transparent),
+    6px 6px 0 rgba(0, 0, 0, .35);
+  transition: color 400ms ease, text-shadow 500ms ease;
 }
 
 .system-page-header p,
 .social-page .page-description {
   max-width: 650px;
-
   margin: 11px 0 0;
-
   color: var(--muted);
-
   font-size: 13px;
   line-height: 1.7;
 }
 
 
-/* =========================================================
-   14. PANELS
-   ========================================================= */
-
 .system-panel,
 .social-page .panel {
   position: relative;
-
   padding: 22px;
-
   border: 1px solid var(--border);
   border-radius: 2px;
-
   background: var(--panel-bg);
-
-  box-shadow:
-    var(--shadow),
-    inset 0 0 50px
-      color-mix(in srgb, var(--accent-2) 2.5%, transparent);
-
-  transition:
-    background 350ms ease,
-    border-color 300ms ease,
-    box-shadow 300ms ease;
+  box-shadow: var(--shadow), inset 0 0 50px color-mix(in srgb, var(--accent-2) 2.5%, transparent);
+  transition: background 500ms ease, border-color 400ms ease, box-shadow 400ms ease;
 }
 
 .system-panel::before,
 .social-page .panel::before {
   content: "";
-
   position: absolute;
-
   top: -1px;
   left: 18px;
-
-  width: 42px;
+  width: 46px;
   height: 1px;
-
-  background:
-    linear-gradient(
-      90deg,
-      var(--accent),
-      var(--danger),
-      var(--warning),
-      var(--accent-2)
-    );
-
-  box-shadow:
-    0 0 10px
-      color-mix(in srgb, var(--accent) 45%, transparent);
+  background: linear-gradient(90deg, var(--accent), var(--danger), var(--warning), var(--accent-2));
+  box-shadow: 0 0 10px color-mix(in srgb, var(--accent) 45%, transparent);
+  transition: background 500ms ease;
 }
 
 .panel-label,
@@ -1267,16 +1165,12 @@ body::after {
   display: flex;
   justify-content: space-between;
   align-items: center;
-
   gap: 14px;
-
   margin-bottom: 18px;
-
   color: var(--dim);
-
   font-size: 9px;
   font-weight: 900;
-  letter-spacing: 0.16em;
+  letter-spacing: .16em;
 }
 
 .panel-label span:first-child::first-letter {
@@ -1288,20 +1182,12 @@ body::after {
   color: var(--faint);
 }
 
-
-/* =========================================================
-   15. TERMINAL
-   ========================================================= */
-
 .system-terminal {
   padding: 18px;
-
-  border: 1px solid
-    color-mix(in srgb, var(--accent) 13%, transparent);
-
+  border: 1px solid color-mix(in srgb, var(--accent) 13%, transparent);
   background: var(--terminal-bg);
-
   font: 11px/1.9 var(--mono);
+  transition: background 500ms ease, border-color 400ms ease;
 }
 
 .terminal-line {
@@ -1325,121 +1211,54 @@ body::after {
   color: var(--warning-soft);
 }
 
-
-/* =========================================================
-   16. SYSTEM BUTTONS
-   ========================================================= */
-
 .system-button {
   display: inline-flex;
   align-items: center;
   justify-content: center;
-
   min-height: 42px;
-
   padding: 0 18px;
-
-  border: 1px solid
-    color-mix(in srgb, var(--accent) 45%, transparent);
-
+  border: 1px solid color-mix(in srgb, var(--accent) 45%, transparent);
   border-radius: 0;
-
-  background:
-    linear-gradient(
-      135deg,
-      color-mix(in srgb, var(--accent) 14%, transparent),
-      color-mix(in srgb, var(--accent) 2.5%, transparent)
-    );
-
+  background: linear-gradient(135deg, color-mix(in srgb, var(--accent) 14%, transparent), color-mix(in srgb, var(--accent) 2.5%, transparent));
   color: var(--accent-soft);
-
   font-size: 10px;
   font-weight: 1000;
-  letter-spacing: 0.1em;
-
-  transition:
-    background var(--transition),
-    border-color var(--transition),
-    color var(--transition),
-    transform var(--transition),
-    box-shadow var(--transition);
+  letter-spacing: .1em;
+  transition: background var(--transition), border-color var(--transition), color var(--transition), transform var(--transition), box-shadow var(--transition);
 }
 
 .system-button:hover {
   background: var(--text-strong);
-
   border-color: var(--text-strong);
-
   color: var(--panel);
-
   transform: translateY(-2px);
-
-  box-shadow:
-    5px 5px 0 var(--accent-dark);
+  box-shadow: 5px 5px 0 var(--accent-dark);
 }
-
-
-/* =========================================================
-   17. MEMBER REGISTRY
-   ========================================================= */
 
 .registry-grid {
   display: grid;
-
-  grid-template-columns:
-    repeat(
-      auto-fit,
-      minmax(min(100%, 260px), 1fr)
-    );
-
+  grid-template-columns: repeat(auto-fit, minmax(min(100%, 260px), 1fr));
   gap: 6px;
 }
 
 .member-card {
   position: relative;
-
   display: grid;
-
-  grid-template-columns:
-    54px
-    minmax(0, 1fr)
-    auto;
-
+  grid-template-columns: 54px minmax(0, 1fr) auto;
   align-items: center;
-
   gap: 13px;
-
   min-height: 84px;
-
   padding: 14px 15px;
-
   border: 1px solid var(--border);
-
   background: var(--card-bg);
-
-  transition:
-    border-color var(--transition),
-    transform var(--transition),
-    background var(--transition),
-    box-shadow var(--transition);
+  transition: border-color var(--transition), transform var(--transition), background var(--transition), box-shadow var(--transition);
 }
 
 .member-card:hover {
-  border-color:
-    color-mix(in srgb, var(--accent) 55%, transparent);
-
+  border-color: color-mix(in srgb, var(--accent) 55%, transparent);
   transform: translateY(-3px);
-
-  background:
-    linear-gradient(
-      145deg,
-      color-mix(in srgb, var(--accent) 13%, transparent),
-      color-mix(in srgb, #05090e 95%, transparent)
-    );
-
-  box-shadow:
-    0 6px 20px
-      color-mix(in srgb, var(--accent) 8%, transparent);
+  background: linear-gradient(145deg, color-mix(in srgb, var(--accent) 13%, transparent), color-mix(in srgb, var(--bg) 95%, transparent));
+  box-shadow: 0 6px 20px color-mix(in srgb, var(--accent) 8%, transparent);
 }
 
 .member-avatar,
@@ -1450,12 +1269,8 @@ body::after {
 
 .member-avatar {
   border-radius: 6px;
-
   object-fit: cover;
-
-  border: 1px solid
-    color-mix(in srgb, var(--accent) 42%, transparent);
-
+  border: 1px solid color-mix(in srgb, var(--accent) 42%, transparent);
   background: var(--panel);
 }
 
@@ -1466,9 +1281,7 @@ body::after {
 .module-number {
   display: grid;
   place-items: center;
-
   color: var(--soft);
-
   font-family: var(--mono);
   font-size: 15px;
   font-weight: 700;
@@ -1480,7 +1293,6 @@ body::after {
 
 .member-name {
   color: var(--text);
-
   font-size: 14px;
   font-weight: 900;
   font-style: italic;
@@ -1488,81 +1300,50 @@ body::after {
 
 .member-meta {
   margin-top: 5px;
-
   color: var(--dim);
-
   font-size: 9px;
-  letter-spacing: 0.08em;
+  letter-spacing: .08em;
 }
 
 .member-time {
   color: var(--accent-soft);
-
   font-size: 10px;
   font-weight: 700;
-
   white-space: nowrap;
 }
 
 .member-online-dot {
   position: absolute;
-
   right: -2px;
   bottom: -2px;
-
   width: 8px;
   height: 8px;
-
   border-radius: 50%;
-
   background: #30383d;
-
   border: 2px solid var(--panel);
 }
 
 .member-online-dot.online {
   background: var(--accent-2);
-
-  box-shadow:
-    0 0 9px
-      color-mix(in srgb, var(--accent-2) 80%, transparent);
+  box-shadow: 0 0 9px color-mix(in srgb, var(--accent-2) 80%, transparent);
 }
-
-
-/* =========================================================
-   18. PERSONNEL
-   ========================================================= */
 
 .personnel-selection {
   display: grid;
-
   grid-template-columns: 180px minmax(0, 1fr);
-
   gap: 28px;
-
   align-items: center;
-
   padding: 4px;
 }
 
 .personnel-avatar {
   width: 150px;
   height: 150px;
-
   margin: auto;
-
   border-radius: 8px;
-
   object-fit: cover;
-
-  border: 1px solid
-    color-mix(in srgb, var(--accent) 55%, transparent);
-
-  box-shadow:
-    0 0 0 7px
-      color-mix(in srgb, var(--accent) 3.5%, transparent),
-    0 0 30px
-      color-mix(in srgb, var(--accent) 12%, transparent);
+  border: 1px solid color-mix(in srgb, var(--accent) 55%, transparent);
+  box-shadow: 0 0 0 7px color-mix(in srgb, var(--accent) 3.5%, transparent), 0 0 30px color-mix(in srgb, var(--accent) 12%, transparent);
 }
 
 .personnel-id {
@@ -1571,9 +1352,7 @@ body::after {
 
 .personnel-name {
   margin: 0;
-
   color: var(--text);
-
   font-size: 25px;
   font-weight: 900;
   font-style: italic;
@@ -1581,100 +1360,60 @@ body::after {
 
 .personnel-status {
   margin-top: 8px;
-
   color: var(--accent-2);
-
   font-size: 9px;
   font-weight: 700;
-  letter-spacing: 0.1em;
+  letter-spacing: .1em;
 }
 
 .registry-actions {
   display: flex;
   align-items: center;
   justify-content: space-between;
-
   gap: 12px;
-
   margin-top: 14px;
-
   color: var(--dim);
-
   font: 8px var(--mono);
-
-  letter-spacing: 0.08em;
+  letter-spacing: .08em;
 }
 
 .registry-actions-left {
   justify-content: flex-start;
 }
 
-
-/* =========================================================
-   19. HOME IDENTITY
-   ========================================================= */
-
 .home-identity {
   display: grid;
-
   grid-template-columns: 150px minmax(0, 1fr);
-
   gap: 26px;
-
   align-items: center;
 }
 
 .home-logo-wrap {
   position: relative;
-
   width: 150px;
   height: 150px;
-
   display: grid;
   place-items: center;
-
   padding: 10px;
-
-  border: 1px solid
-    color-mix(in srgb, var(--accent) 55%, transparent);
-
+  border: 1px solid color-mix(in srgb, var(--accent) 55%, transparent);
   border-radius: 8px;
-
-  background:
-    linear-gradient(
-      145deg,
-      color-mix(in srgb, var(--accent) 10%, transparent),
-      rgba(5, 10, 15, 0.9)
-    );
-
-  box-shadow:
-    0 0 0 5px
-      color-mix(in srgb, var(--accent) 2.5%, transparent),
-    0 12px 30px rgba(0, 0, 0, 0.35);
-
+  background: linear-gradient(145deg, color-mix(in srgb, var(--accent) 10%, transparent), color-mix(in srgb, var(--bg) 90%, transparent));
+  box-shadow: 0 0 0 5px color-mix(in srgb, var(--accent) 2.5%, transparent), 0 12px 30px rgba(0, 0, 0, .35);
   overflow: hidden;
+  transition: background 500ms ease, border-color 500ms ease, box-shadow 500ms ease;
 }
 
 .home-logo-wrap::before,
 .home-logo-wrap::after {
   content: "";
-
   position: absolute;
-
-  background:
-    linear-gradient(
-      90deg,
-      var(--accent),
-      var(--accent-2)
-    );
-
+  background: linear-gradient(90deg, var(--accent), var(--accent-2));
   pointer-events: none;
 }
 
 .home-logo-wrap::before {
   top: 7px;
   left: 7px;
-
   width: 32px;
   height: 1px;
 }
@@ -1682,7 +1421,6 @@ body::after {
 .home-logo-wrap::after {
   right: 7px;
   bottom: 7px;
-
   width: 1px;
   height: 32px;
 }
@@ -1690,45 +1428,30 @@ body::after {
 .home-logo {
   width: 100%;
   height: 100%;
-
   object-fit: contain;
-
   border: 1px solid var(--border);
-
   border-radius: 6px;
-
   background: var(--panel);
-
   padding: 6px;
 }
 
 .home-identity h2 {
   margin: 6px 0 0;
-
   color: var(--text-strong);
-
   font-size: clamp(22px, 3vw, 34px);
   font-weight: 1000;
   font-style: italic;
-
   text-transform: uppercase;
+  text-shadow: 2px 2px 0 color-mix(in srgb, var(--accent-dark) 50%, transparent);
 }
 
 .home-identity p {
   max-width: 620px;
-
   margin: 12px 0 0;
-
   color: var(--muted);
-
   line-height: 1.8;
   font-size: 13px;
 }
-
-
-/* =========================================================
-   20. DIRECTIVES
-   ========================================================= */
 
 .directive-card {
   grid-template-columns: 44px minmax(0, 1fr);
@@ -1737,70 +1460,43 @@ body::after {
 .directive-number {
   display: grid;
   place-items: center;
-
   width: 38px;
   height: 38px;
-
-  border: 1px solid
-    color-mix(in srgb, var(--warning) 25%, transparent);
-
+  border: 1px solid color-mix(in srgb, var(--warning) 25%, transparent);
   color: var(--warning);
-
   font: 9px var(--mono);
 }
-
-
-/* =========================================================
-   21. SITE FOOTER
-   ========================================================= */
 
 .site-footer {
   position: relative;
   z-index: 2;
-
   margin-left: var(--sidebar-width);
-
   padding: 0 44px 22px;
 }
 
 .footer-system {
   display: flex;
   justify-content: space-between;
-
   gap: 10px;
-
   padding-top: 15px;
-
   border-top: 1px solid var(--border-soft);
-
   color: var(--faint);
-
   font-size: 8px;
   font-weight: 700;
-
-  letter-spacing: 0.13em;
-
+  letter-spacing: .13em;
   flex-wrap: wrap;
 }
-
-
-/* =========================================================
-   22. SOCIAL PAGE
-   ========================================================= */
 
 .social-page {
   width: 100%;
   max-width: 1500px;
-
   margin: 0 auto;
 }
 
 .social-page .page-header {
   display: flex;
-
   align-items: flex-end;
   justify-content: space-between;
-
   gap: 24px;
 }
 
@@ -1811,112 +1507,66 @@ body::after {
 .system-status {
   display: flex;
   align-items: center;
-
   gap: 9px;
-
   padding: 8px 12px;
-
-  border: 1px solid
-    color-mix(in srgb, var(--accent-2) 16%, transparent);
-
-  background:
-    color-mix(in srgb, var(--accent-2) 3.5%, transparent);
-
-  color:
-    color-mix(in srgb, var(--accent-2) 75%, white);
-
+  border: 1px solid color-mix(in srgb, var(--accent-2) 16%, transparent);
+  background: color-mix(in srgb, var(--accent-2) 3.5%, transparent);
+  color: color-mix(in srgb, var(--accent-2) 75%, white);
   font-size: 9px;
   font-weight: 800;
-  letter-spacing: 0.13em;
-
+  letter-spacing: .13em;
   white-space: nowrap;
 }
 
 .status-dot {
   display: inline-block;
-
   width: 6px;
   height: 6px;
-
   flex: 0 0 6px;
 }
 
-
-/* =========================================================
-   23. SOCIAL GRID
-   ========================================================= */
-
 .social-grid {
   display: grid;
-
-  grid-template-columns:
-    minmax(0, 1.45fr)
-    minmax(260px, 0.75fr);
-
+  grid-template-columns: minmax(0, 1.45fr) minmax(260px, .75fr);
   gap: 6px;
-
   margin-bottom: 6px;
 }
 
 .channel-list {
   display: flex;
   flex-direction: column;
-
   gap: 1px;
 }
 
 .social-channel {
   display: grid;
-
-  grid-template-columns:
-    42px
-    minmax(0, 1fr)
-    24px;
-
+  grid-template-columns: 42px minmax(0, 1fr) 24px;
   align-items: center;
-
   gap: 12px;
-
   min-height: 60px;
-
   padding: 9px 11px;
-
   border: 1px solid transparent;
-
-  background: rgba(6, 9, 14, 0.7);
-
-  transition:
-    background var(--transition),
-    border-color var(--transition),
-    transform var(--transition);
+  background: color-mix(in srgb, var(--bg) 70%, transparent);
+  transition: background var(--transition), border-color var(--transition), transform var(--transition), box-shadow var(--transition);
 }
 
 .social-channel:hover {
-  border-color:
-    color-mix(in srgb, var(--accent) 30%, transparent);
-
-  background:
-    color-mix(in srgb, var(--accent) 5.5%, transparent);
-
+  border-color: color-mix(in srgb, var(--accent) 30%, transparent);
+  background: color-mix(in srgb, var(--accent) 6%, transparent);
   transform: translateX(3px);
+  box-shadow: inset 3px 0 0 color-mix(in srgb, var(--accent) 45%, transparent);
 }
 
 .channel-icon {
   display: grid;
   place-items: center;
-
   width: 40px;
   height: 40px;
-
-  border: 1px solid
-    color-mix(in srgb, var(--accent) 30%, transparent);
-
-  background:
-    color-mix(in srgb, var(--accent) 5%, transparent);
-
+  border: 1px solid color-mix(in srgb, var(--accent) 30%, transparent);
+  background: color-mix(in srgb, var(--accent) 5%, transparent);
   color: var(--accent-soft);
-
   font-size: 17px;
+  transition: background 400ms ease, border-color 400ms ease, color 400ms ease;
 }
 
 .channel-info {
@@ -1925,28 +1575,19 @@ body::after {
 
 .channel-info strong {
   display: block;
-
   color: var(--text);
-
   font-size: 11px;
   font-weight: 900;
-
-  letter-spacing: 0.12em;
+  letter-spacing: .12em;
 }
 
 .channel-info small {
   display: block;
-
   margin-top: 5px;
-
   overflow: hidden;
-
   color: var(--soft);
-
   font-size: 8px;
-
-  letter-spacing: 0.08em;
-
+  letter-spacing: .08em;
   text-overflow: ellipsis;
   white-space: nowrap;
 }
@@ -1960,10 +1601,306 @@ body::after {
   color: var(--accent-soft);
 }
 
+:root[data-theme="default"],
+:root[data-theme="nexus"],
+:root:not([data-theme]) {
+  --bg: #03060b;
+  --bg-2: #08121b;
+  --panel: #080c11;
+  --panel-2: #0b0f14;
+  --panel-3: #111820;
+  --border: #263943;
+  --border-soft: #202a31;
+  --text: #f5f7f8;
+  --text-strong: #ffffff;
+  --text-soft: #b9c0c4;
+  --muted: #8998a1;
+  --soft: #74818a;
+  --dim: #59656d;
+  --faint: #3d484d;
+  --accent: #7b68ff;
+  --accent-soft: #b9b0ff;
+  --accent-dark: #352b73;
+  --accent-2: #63e6c1;
+  --accent-2-soft: #79e8ce;
+  --danger: #ff5260;
+  --danger-soft: #ff8991;
+  --warning: #ffca28;
+  --warning-soft: #ffe07a;
+  --orange: #ff8a45;
+}
 
-/* =========================================================
-   24. SOCIAL READOUT
-   ========================================================= */
+:root[data-theme="wind-breaker"],
+:root[data-theme="wind"] {
+  --bg: #050a0e;
+  --bg-2: #09151d;
+  --panel: #081016;
+  --panel-2: #0d1820;
+  --panel-3: #13242e;
+  --border: #285064;
+  --border-soft: #1b3747;
+  --text: #eefaff;
+  --text-strong: #ffffff;
+  --text-soft: #c2dce7;
+  --muted: #87a9b8;
+  --soft: #638694;
+  --dim: #496a78;
+  --faint: #304b57;
+  --accent: #42b9ff;
+  --accent-soft: #91dcff;
+  --accent-dark: #07547a;
+  --accent-2: #53e0c0;
+  --accent-2-soft: #9af2df;
+  --danger: #ff5266;
+  --danger-soft: #ff8997;
+  --warning: #ffd166;
+  --warning-soft: #ffe39a;
+  --orange: #ff7043;
+}
+
+:root[data-theme="jjk"],
+:root[data-theme="jujutsu-kaisen"] {
+  --bg: #090611;
+  --bg-2: #140d20;
+  --panel: #0d0915;
+  --panel-2: #140f20;
+  --panel-3: #201735;
+  --border: #493b6c;
+  --border-soft: #302647;
+  --text: #f8f3ff;
+  --text-strong: #ffffff;
+  --text-soft: #d5c9ea;
+  --muted: #a091ba;
+  --soft: #786a91;
+  --dim: #5b4e70;
+  --faint: #40364e;
+  --accent: #a855f7;
+  --accent-soft: #d0a5ff;
+  --accent-dark: #54228a;
+  --accent-2: #4dd0e1;
+  --accent-2-soft: #9cebf2;
+  --danger: #ff5370;
+  --danger-soft: #ff8fa3;
+  --warning: #d8c35a;
+  --warning-soft: #f0df85;
+  --orange: #d97845;
+}
+
+:root[data-theme="bleach"] {
+  --bg: #050609;
+  --bg-2: #101116;
+  --panel: #090a0e;
+  --panel-2: #101218;
+  --panel-3: #191b22;
+  --border: #383c48;
+  --border-soft: #292c35;
+  --text: #f5f6fa;
+  --text-strong: #ffffff;
+  --text-soft: #d1d4dd;
+  --muted: #9a9eaa;
+  --soft: #747985;
+  --dim: #5a5e69;
+  --faint: #3d4049;
+  --accent: #e7e9ee;
+  --accent-soft: #ffffff;
+  --accent-dark: #555b68;
+  --accent-2: #7a8cff;
+  --accent-2-soft: #aeb9ff;
+  --danger: #d83b50;
+  --danger-soft: #ff7d8e;
+  --warning: #d9c76b;
+  --warning-soft: #f0e59d;
+  --orange: #b96f4d;
+}
+
+:root[data-theme="one-piece"],
+:root[data-theme="onepiece"] {
+  --bg: #031017;
+  --bg-2: #061b25;
+  --panel: #07151d;
+  --panel-2: #0a1c25;
+  --panel-3: #0e2832;
+  --border: #174d5e;
+  --border-soft: #123845;
+  --text: #effcff;
+  --text-strong: #ffffff;
+  --text-soft: #b8dce6;
+  --muted: #82aeb9;
+  --soft: #638b96;
+  --dim: #496d77;
+  --faint: #31505a;
+  --accent: #19b7ff;
+  --accent-soft: #82dcff;
+  --accent-dark: #075477;
+  --accent-2: #ffca28;
+  --accent-2-soft: #ffe27a;
+  --danger: #ef5350;
+  --danger-soft: #ff8582;
+  --warning: #ffc107;
+  --warning-soft: #ffe082;
+  --orange: #ff8a3d;
+}
+
+:root[data-theme="naruto"] {
+  --bg: #0d0805;
+  --bg-2: #1b1008;
+  --panel: #140d08;
+  --panel-2: #1c1109;
+  --panel-3: #28170c;
+  --border: #57351d;
+  --border-soft: #3d2617;
+  --text: #fff5e8;
+  --text-strong: #ffffff;
+  --text-soft: #e8c9a5;
+  --muted: #b99672;
+  --soft: #967658;
+  --dim: #71553e;
+  --faint: #4b392b;
+  --accent: #ff7a00;
+  --accent-soft: #ffb45c;
+  --accent-dark: #733700;
+  --accent-2: #ffcf33;
+  --accent-2-soft: #ffe58a;
+  --danger: #e53935;
+  --danger-soft: #ff7772;
+  --warning: #ffc107;
+  --warning-soft: #ffe082;
+  --orange: #ff5722;
+}
+
+:root[data-theme="spy-x-family"],
+:root[data-theme="spy"] {
+  --bg: #10080c;
+  --bg-2: #1d0d15;
+  --panel: #160b11;
+  --panel-2: #211019;
+  --panel-3: #2d1722;
+  --border: #673047;
+  --border-soft: #472132;
+  --text: #fff5f8;
+  --text-strong: #ffffff;
+  --text-soft: #e7c5d1;
+  --muted: #b991a0;
+  --soft: #966f7d;
+  --dim: #714f5d;
+  --faint: #503642;
+  --accent: #e84d78;
+  --accent-soft: #ff91b0;
+  --accent-dark: #7e183c;
+  --accent-2: #79d6b5;
+  --accent-2-soft: #a8efd5;
+  --danger: #ff475d;
+  --danger-soft: #ff8997;
+  --warning: #f3c969;
+  --warning-soft: #ffe29a;
+  --orange: #ff8b52;
+}
+
+:root[data-theme="demon-slayer"] {
+  --bg: #050b09;
+  --bg-2: #0b1814;
+  --panel: #08110e;
+  --panel-2: #0f1b16;
+  --panel-3: #17251e;
+  --border: #315c4a;
+  --border-soft: #234237;
+  --text: #f2fff9;
+  --text-strong: #ffffff;
+  --text-soft: #c3ded2;
+  --muted: #91afa2;
+  --soft: #69867b;
+  --dim: #506b60;
+  --faint: #384d44;
+  --accent: #35c98a;
+  --accent-soft: #8be7bf;
+  --accent-dark: #176847;
+  --accent-2: #5ec8ff;
+  --accent-2-soft: #a3e2ff;
+  --danger: #e95b64;
+  --danger-soft: #ff9097;
+  --warning: #d5bd58;
+  --warning-soft: #eddb83;
+  --orange: #dc7a4d;
+}
+
+:root[data-theme="attack-on-titan"],
+:root[data-theme="aot"] {
+  --bg: #0a0c08;
+  --bg-2: #17180f;
+  --panel: #10120d;
+  --panel-2: #191a13;
+  --panel-3: #24251b;
+  --border: #555640;
+  --border-soft: #3b3c2d;
+  --text: #f1f1df;
+  --text-strong: #ffffff;
+  --text-soft: #d1d0ad;
+  --muted: #aaa98b;
+  --soft: #85846c;
+  --dim: #65644f;
+  --faint: #49483a;
+  --accent: #b7a84b;
+  --accent-soft: #e1d47a;
+  --accent-dark: #62591f;
+  --accent-2: #78966a;
+  --accent-2-soft: #a9c398;
+  --danger: #c95345;
+  --danger-soft: #ed8175;
+  --warning: #d8b84c;
+  --warning-soft: #edd37b;
+  --orange: #bb7045;
+}
+
+:root[data-theme="fire-force"],
+:root[data-theme="fire"] {
+  --bg: #100604;
+  --bg-2: #210b06;
+  --panel: #160805;
+  --panel-2: #220d08;
+  --panel-3: #32150c;
+  --border: #6b2d18;
+  --border-soft: #492012;
+  --text: #fff5ed;
+  --text-strong: #ffffff;
+  --text-soft: #f0c6ad;
+  --muted: #b88970;
+  --soft: #956a55;
+  --dim: #704b3b;
+  --faint: #503429;
+  --accent: #ff4d1c;
+  --accent-soft: #ff9a70;
+  --accent-dark: #8c2108;
+  --accent-2: #ffca28;
+  --accent-2-soft: #ffe38a;
+  --danger: #ff3045;
+  --danger-soft: #ff7b88;
+  --warning: #ffc107;
+  --warning-soft: #ffe082;
+  --orange: #ff7a18;
+}
+
+
+body,
+.sidebar,
+.system-panel,
+.social-page .panel,
+.member-card,
+.social-channel,
+.home-logo-wrap,
+.sidebar-logo-wrap,
+.channel-icon,
+.system-button,
+.nav-item,
+.system-page-header,
+.system-page-header h1 {
+  transition:
+    background 500ms ease,
+    background-color 500ms ease,
+    border-color 400ms ease,
+    color 400ms ease,
+    box-shadow 500ms ease,
+    text-shadow 500ms ease;
+}
 
 .system-readout {
   border-top: 1px solid rgba(255, 255, 255, 0.06);
@@ -1973,17 +1910,11 @@ body::after {
 .readout-row {
   display: flex;
   justify-content: space-between;
-
   gap: 20px;
-
   padding: 11px 3px;
-
   border-bottom: 1px solid rgba(255, 255, 255, 0.045);
-
   color: var(--soft);
-
   font: 8px var(--mono);
-
   letter-spacing: 0.1em;
 }
 
@@ -1998,23 +1929,15 @@ body::after {
 
 .readout-row strong.online {
   color: var(--accent-2);
-
-  text-shadow:
-    0 0 8px
-      color-mix(in srgb, var(--accent-2) 18%, transparent);
+  text-shadow: 0 0 8px color-mix(in srgb, var(--accent-2) 18%, transparent);
 }
 
 .terminal-note {
   display: flex;
-
   gap: 9px;
-
   margin-top: 17px;
-
   color: var(--soft);
-
   font: 8px/1.6 var(--mono);
-
   letter-spacing: 0.06em;
 }
 
@@ -2022,71 +1945,46 @@ body::after {
   color: var(--accent-2);
 }
 
-
-/* =========================================================
-   25. RADIO
-   ========================================================= */
-
 .radio-panel {
   margin-top: 6px;
 }
 
 .radio-layout {
   display: grid;
-
-  grid-template-columns:
-    minmax(170px, 250px)
-    minmax(0, 1fr);
-
+  grid-template-columns: minmax(170px, 250px) minmax(0, 1fr);
   gap: 26px;
-
   align-items: center;
-
   padding: 4px 0 24px;
-
   border-bottom: 1px solid var(--border-soft);
 }
 
 .radio-cover-wrap {
   position: relative;
-
   display: grid;
   place-items: center;
-
   aspect-ratio: 1;
-
   max-width: 250px;
-
   padding: 14px;
-
-  border: 1px solid
-    color-mix(in srgb, var(--accent) 25%, transparent);
-
+  border: 1px solid color-mix(in srgb, var(--accent) 25%, transparent);
   border-radius: 6px;
-
-  background:
-    radial-gradient(
-      circle,
-      color-mix(in srgb, var(--accent) 9%, transparent),
-      rgba(3, 6, 10, 0.86) 68%
-    );
+  background: radial-gradient(
+    circle,
+    color-mix(in srgb, var(--accent) 9%, transparent),
+    rgba(3, 6, 10, 0.86) 68%
+  );
 }
 
 .radio-cover-wrap::before,
 .radio-cover-wrap::after {
   content: "";
-
   position: absolute;
-
   background: var(--accent);
-
   pointer-events: none;
 }
 
 .radio-cover-wrap::before {
   top: 7px;
   left: 7px;
-
   width: 25px;
   height: 1px;
 }
@@ -2094,7 +1992,6 @@ body::after {
 .radio-cover-wrap::after {
   right: 7px;
   bottom: 7px;
-
   width: 1px;
   height: 25px;
 }
@@ -2102,16 +1999,10 @@ body::after {
 .radio-cover {
   width: 100%;
   height: 100%;
-
   object-fit: contain;
-
-  border: 1px solid
-    color-mix(in srgb, var(--accent) 30%, transparent);
-
+  border: 1px solid color-mix(in srgb, var(--accent) 30%, transparent);
   border-radius: 5px;
-
   opacity: 0.9;
-
   transition:
     opacity var(--transition),
     filter var(--transition);
@@ -2119,12 +2010,9 @@ body::after {
 
 .radio-cover.playing {
   opacity: 1;
-
-  filter:
-    drop-shadow(
-      0 0 16px
-      color-mix(in srgb, var(--accent) 22%, transparent)
-    );
+  filter: drop-shadow(
+    0 0 16px color-mix(in srgb, var(--accent) 22%, transparent)
+  );
 }
 
 .radio-player {
@@ -2134,66 +2022,40 @@ body::after {
 .radio-system-label {
   display: flex;
   align-items: center;
-
   gap: 9px;
-
   margin-bottom: 11px;
-
   font-family: var(--mono);
 }
 
 .radio-player h2 {
   margin: 0;
-
   overflow: hidden;
-
   color: var(--text);
-
   font-size: clamp(20px, 3vw, 31px);
   line-height: 1.15;
   font-weight: 900;
   font-style: italic;
-
   text-overflow: ellipsis;
   white-space: nowrap;
 }
 
 .radio-player > p {
   margin: 8px 0 22px;
-
   overflow: hidden;
-
   color: var(--muted);
-
   font-size: 10px;
-
   letter-spacing: 0.07em;
-
   text-overflow: ellipsis;
   white-space: nowrap;
 }
 
-
-/* =========================================================
-   26. RADIO PROGRESS
-   ========================================================= */
-
 .radio-progress {
   display: grid;
-
-  grid-template-columns:
-    38px
-    minmax(0, 1fr)
-    38px;
-
+  grid-template-columns: 38px minmax(0, 1fr) 38px;
   align-items: center;
-
   gap: 10px;
-
   margin-bottom: 16px;
-
   color: var(--soft);
-
   font: 8px var(--mono);
 }
 
@@ -2201,12 +2063,9 @@ body::after {
 .radio-volume input {
   width: 100%;
   height: 3px;
-
   appearance: none;
-
   border: 0;
   outline: none;
-
   background: var(--border);
 }
 
@@ -2214,62 +2073,37 @@ body::after {
 .radio-volume input::-webkit-slider-thumb {
   width: 10px;
   height: 10px;
-
   appearance: none;
-
   border: 1px solid var(--accent);
-
   border-radius: 50%;
-
   background: var(--panel);
-
-  box-shadow:
-    0 0 8px
-      color-mix(in srgb, var(--accent) 35%, transparent);
+  box-shadow: 0 0 8px color-mix(in srgb, var(--accent) 35%, transparent);
 }
 
 .radio-progress input::-moz-range-thumb,
 .radio-volume input::-moz-range-thumb {
   width: 10px;
   height: 10px;
-
   border: 1px solid var(--accent);
-
   border-radius: 50%;
-
   background: var(--panel);
 }
-
-
-/* =========================================================
-   27. RADIO CONTROLS
-   ========================================================= */
 
 .radio-controls {
   display: flex;
   align-items: center;
-
   gap: 8px;
 }
 
 .radio-controls button {
   min-height: 38px;
-
   padding: 0 13px;
-
-  border: 1px solid
-    color-mix(in srgb, var(--accent) 25%, transparent);
-
-  background:
-    color-mix(in srgb, var(--accent) 3.5%, transparent);
-
+  border: 1px solid color-mix(in srgb, var(--accent) 25%, transparent);
+  background: color-mix(in srgb, var(--accent) 3.5%, transparent);
   color: var(--text-soft);
-
   font: 9px var(--mono);
   font-weight: 800;
-
   letter-spacing: 0.08em;
-
   transition:
     background var(--transition),
     border-color var(--transition),
@@ -2278,57 +2112,33 @@ body::after {
 }
 
 .radio-controls button:hover {
-  border-color:
-    color-mix(in srgb, var(--accent) 55%, transparent);
-
-  background:
-    color-mix(in srgb, var(--accent) 9%, transparent);
-
+  border-color: color-mix(in srgb, var(--accent) 55%, transparent);
+  background: color-mix(in srgb, var(--accent) 9%, transparent);
   color: var(--accent-soft);
-
   transform: translateY(-1px);
 }
 
 .radio-controls .radio-play {
   min-width: 115px;
-
-  border-color:
-    color-mix(in srgb, var(--accent) 45%, transparent);
-
-  background:
-    linear-gradient(
-      135deg,
-      color-mix(in srgb, var(--accent) 14%, transparent),
-      color-mix(in srgb, var(--accent) 3.5%, transparent)
-    );
-
+  border-color: color-mix(in srgb, var(--accent) 45%, transparent);
+  background: linear-gradient(
+    135deg,
+    color-mix(in srgb, var(--accent) 14%, transparent),
+    color-mix(in srgb, var(--accent) 3.5%, transparent)
+  );
   color: var(--accent-soft);
 }
 
 .radio-volume {
   display: grid;
-
-  grid-template-columns:
-    30px
-    minmax(100px, 180px);
-
+  grid-template-columns: 30px minmax(100px, 180px);
   align-items: center;
-
   gap: 10px;
-
   margin-top: 17px;
-
   color: var(--soft);
-
   font: 8px var(--mono);
-
   letter-spacing: 0.08em;
 }
-
-
-/* =========================================================
-   28. PLAYLIST
-   ========================================================= */
 
 .radio-playlist {
   padding-top: 20px;
@@ -2336,68 +2146,43 @@ body::after {
 
 .playlist-header {
   display: flex;
-
   align-items: center;
   justify-content: space-between;
-
   margin-bottom: 11px;
-
   color: var(--soft);
-
   font: 8px var(--mono);
   font-weight: 800;
-
   letter-spacing: 0.14em;
 }
 
 .playlist-header > span:last-child {
   display: flex;
   align-items: center;
-
   gap: 7px;
-
   color: var(--accent-2);
 }
 
 .track-list {
   display: flex;
   flex-direction: column;
-
   gap: 4px;
-
   max-height: 360px;
-
   overflow-y: auto;
-
   padding-right: 4px;
 }
 
 .track {
   width: 100%;
-
   display: grid;
-
-  grid-template-columns:
-    42px
-    minmax(0, 1fr)
-    24px;
-
+  grid-template-columns: 42px minmax(0, 1fr) 24px;
   align-items: center;
-
   gap: 11px;
-
   min-height: 56px;
-
   padding: 7px 10px;
-
   border: 1px solid transparent;
-
   background: rgba(4, 7, 11, 0.7);
-
   color: inherit;
-
   text-align: left;
-
   transition:
     background var(--transition),
     border-color var(--transition),
@@ -2405,109 +2190,73 @@ body::after {
 }
 
 .track:hover {
-  border-color:
-    color-mix(in srgb, var(--accent) 22%, transparent);
-
-  background:
-    color-mix(in srgb, var(--accent) 4%, transparent);
-
+  border-color: color-mix(in srgb, var(--accent) 22%, transparent);
+  background: color-mix(in srgb, var(--accent) 4%, transparent);
   transform: translateX(2px);
 }
 
 .track.active {
-  border-color:
-    color-mix(in srgb, var(--accent) 30%, transparent);
-
-  background:
-    linear-gradient(
-      90deg,
-      color-mix(in srgb, var(--accent) 9%, transparent),
-      color-mix(in srgb, var(--accent) 2.5%, transparent)
-    );
+  border-color: color-mix(in srgb, var(--accent) 30%, transparent);
+  background: linear-gradient(
+    90deg,
+    color-mix(in srgb, var(--accent) 9%, transparent),
+    color-mix(in srgb, var(--accent) 2.5%, transparent)
+  );
 }
 
 .track img {
   width: 42px;
   height: 42px;
-
   object-fit: cover;
-
-  border: 1px solid
-    color-mix(in srgb, var(--accent) 25%, transparent);
-
+  border: 1px solid color-mix(in srgb, var(--accent) 25%, transparent);
   border-radius: 4px;
 }
 
 .track strong {
   display: block;
-
   overflow: hidden;
-
   color: var(--text);
-
   font-size: 10px;
   font-weight: 800;
-
   letter-spacing: 0.06em;
-
   text-overflow: ellipsis;
   white-space: nowrap;
 }
 
 .track small {
   color: var(--soft);
-
   font-size: 8px;
   letter-spacing: 0.04em;
 }
 
 .track > span:last-child {
   color: var(--dim);
-
   font-size: 10px;
   text-align: center;
 }
 
 .track.active > span:last-child {
   color: var(--accent-soft);
-
-  text-shadow:
-    0 0 8px
-      color-mix(in srgb, var(--accent) 50%, transparent);
+  text-shadow: 0 0 8px color-mix(in srgb, var(--accent) 50%, transparent);
 }
 
 .track-list .system-terminal {
   margin: 0;
-
   padding: 16px;
-
-  border-color:
-    color-mix(in srgb, var(--accent) 15%, transparent);
+  border-color: color-mix(in srgb, var(--accent) 15%, transparent);
 }
-
-
-/* =========================================================
-   29. SOCIAL FOOTER
-   ========================================================= */
 
 .social-footer-readout {
   display: flex;
   align-items: center;
-
   flex-wrap: wrap;
-
   gap: 9px;
-
   margin-top: 14px;
   padding-top: 14px;
-
   border-top: 1px solid var(--border-soft);
-
   color: var(--faint);
-
   font: 8px var(--mono);
   font-weight: 700;
-
   letter-spacing: 0.12em;
 }
 
@@ -2515,28 +2264,16 @@ body::after {
   color: var(--accent-2);
 }
 
-
-/* =========================================================
-   30. WELCOME SCREEN
-   ========================================================= */
-
 #welcomeScreen {
   position: fixed;
   inset: 0;
-
   z-index: 500;
-
   display: grid;
   place-items: center;
-
   background: rgba(3, 6, 11, 0.86);
-
   backdrop-filter: blur(10px);
-
   opacity: 0;
-
   pointer-events: none;
-
   transition: opacity 220ms ease;
 }
 
@@ -2547,56 +2284,32 @@ body::after {
 
 .welcome-content {
   width: min(560px, calc(100% - 32px));
-
   padding: 28px;
-
   text-align: center;
-
   border: 1px solid var(--border);
-
-  background:
-    linear-gradient(
-      145deg,
-      var(--panel),
-      var(--panel-2)
-    );
-
+  background: linear-gradient(145deg, var(--panel), var(--panel-2));
   box-shadow:
     0 20px 70px rgba(0, 0, 0, 0.7),
-    0 0 40px
-      color-mix(in srgb, var(--accent) 6%, transparent);
+    0 0 40px color-mix(in srgb, var(--accent) 6%, transparent);
 }
 
 .welcome-content p {
   margin: 0 0 9px;
-
   color: var(--accent-soft);
-
   font: 8px var(--mono);
   font-weight: 900;
-
   letter-spacing: 4px;
 }
 
 .welcome-content h2 {
   margin: 4px 0 12px;
-
   color: var(--text-strong);
-
   font-size: 28px;
   font-weight: 1000;
   font-style: italic;
-
   letter-spacing: 1px;
-
-  text-shadow:
-    3px 3px 0 var(--accent-dark);
+  text-shadow: 3px 3px 0 var(--accent-dark);
 }
-
-
-/* =========================================================
-   31. CALENDAR
-   ========================================================= */
 
 .shonen-calendar-panel {
   position: relative;
@@ -2605,28 +2318,19 @@ body::after {
 
 .shonen-calendar-header {
   display: grid;
-
   grid-template-columns: 44px 1fr 44px;
-
   align-items: center;
-
   gap: 14px;
-
   margin-bottom: 22px;
 }
 
 .shonen-calendar-header h2 {
   margin: 0;
-
   text-align: center;
-
   font-size: clamp(1.3rem, 3vw, 2rem);
   font-weight: 700;
-
   letter-spacing: 0.08em;
-
   text-transform: uppercase;
-
   color: var(--text);
 }
 
@@ -2634,198 +2338,117 @@ body::after {
   width: 44px;
   min-width: 44px;
   height: 44px;
-
   padding: 0;
-
   display: grid;
   place-items: center;
 }
 
-
-/* =========================================================
-   32. CLOCK
-   ========================================================= */
-
 .shonen-time-panel {
   display: flex;
   flex-direction: column;
-
   align-items: center;
   justify-content: center;
-
   padding: 26px 20px;
-
   margin-bottom: 24px;
-
-  border: 1px solid
-    color-mix(in srgb, var(--accent-2) 35%, transparent);
-
-  background:
-    color-mix(in srgb, var(--panel) 70%, transparent);
-
+  border: 1px solid color-mix(in srgb, var(--accent-2) 35%, transparent);
+  background: color-mix(in srgb, var(--panel) 70%, transparent);
   text-align: center;
 }
 
 .shonen-clock {
   font-size: clamp(2rem, 7vw, 4.5rem);
   line-height: 1;
-
   font-weight: 700;
-
   letter-spacing: 0.12em;
-
   color: var(--accent-2);
-
-  text-shadow:
-    0 0 18px
-      color-mix(in srgb, var(--accent-2) 30%, transparent);
-
+  text-shadow: 0 0 18px color-mix(in srgb, var(--accent-2) 30%, transparent);
   font-variant-numeric: tabular-nums;
 }
 
 .shonen-timezone {
   margin-top: 12px;
-
   font-size: 0.75rem;
   font-weight: 700;
-
   letter-spacing: 0.16em;
-
   text-transform: uppercase;
-
   color: var(--text-soft);
 }
 
 .shonen-location {
   margin-top: 6px;
-
   font-size: 0.65rem;
-
   letter-spacing: 0.14em;
-
   text-transform: uppercase;
-
   color: var(--dim);
 }
 
-
-/* =========================================================
-   33. CALENDAR WEEKDAYS
-   ========================================================= */
-
 .shonen-calendar-weekdays {
   display: grid;
-
-  grid-template-columns:
-    repeat(7, minmax(0, 1fr));
-
+  grid-template-columns: repeat(7, minmax(0, 1fr));
   gap: 6px;
-
   margin-bottom: 6px;
 }
 
 .shonen-calendar-weekdays span {
   padding: 10px 4px;
-
   text-align: center;
-
   font-size: 0.65rem;
   font-weight: 700;
-
   letter-spacing: 0.12em;
-
   color: var(--soft);
-
-  border-bottom: 1px solid
-    color-mix(in srgb, var(--accent) 25%, transparent);
+  border-bottom: 1px solid color-mix(in srgb, var(--accent) 25%, transparent);
 }
-
-
-/* =========================================================
-   34. CALENDAR DAYS
-   ========================================================= */
 
 .shonen-calendar-grid {
   display: grid;
-
-  grid-template-columns:
-    repeat(7, minmax(0, 1fr));
-
+  grid-template-columns: repeat(7, minmax(0, 1fr));
   gap: 6px;
 }
 
 .calendar-day {
   position: relative;
-
   min-height: 72px;
-
   padding: 12px 10px;
-
-  border: 1px solid
-    rgba(255, 255, 255, 0.07);
-
+  border: 1px solid rgba(255, 255, 255, 0.07);
   border-radius: 2px;
-
-  background:
-    rgba(255, 255, 255, 0.025);
-
+  background: rgba(255, 255, 255, 0.025);
   color: var(--text);
-
   cursor: pointer;
-
   transition:
     border-color 0.2s ease,
     background 0.2s ease,
     transform 0.2s ease;
-
   font: inherit;
-
   text-align: left;
 }
 
 .calendar-day:hover {
-  border-color:
-    color-mix(in srgb, var(--accent) 65%, transparent);
-
-  background:
-    color-mix(in srgb, var(--accent) 9%, transparent);
-
+  border-color: color-mix(in srgb, var(--accent) 65%, transparent);
+  background: color-mix(in srgb, var(--accent) 9%, transparent);
   transform: translateY(-1px);
 }
 
 .calendar-day.empty {
   min-height: 72px;
-
   border-color: transparent;
-
   background: transparent;
-
   cursor: default;
-
   pointer-events: none;
 }
 
 .calendar-number {
   display: block;
-
   font-size: 0.85rem;
   font-weight: 600;
-
   letter-spacing: 0.04em;
 }
 
 .calendar-day.today {
-  border-color:
-    color-mix(in srgb, var(--accent-2) 85%, transparent);
-
-  background:
-    color-mix(in srgb, var(--accent-2) 10%, transparent);
-
+  border-color: color-mix(in srgb, var(--accent-2) 85%, transparent);
+  background: color-mix(in srgb, var(--accent-2) 10%, transparent);
   box-shadow:
-    inset 0 0 0 1px
-      color-mix(in srgb, var(--accent-2) 15%, transparent),
-    0 0 18px
-      color-mix(in srgb, var(--accent-2) 8%, transparent);
+    inset 0 0 0 1px color-mix(in srgb, var(--accent-2) 15%, transparent),
+    0 0 18px color-mix(in srgb, var(--accent-2) 8%, transparent);
 }
 
 .calendar-day.today .calendar-number {
@@ -2833,8 +2456,7 @@ body::after {
 }
 
 .calendar-day.has-event {
-  border-color:
-    color-mix(in srgb, var(--accent) 40%, transparent);
+  border-color: color-mix(in srgb, var(--accent) 40%, transparent);
 }
 
 .calendar-day.has-event:hover {
@@ -2843,175 +2465,112 @@ body::after {
 
 .calendar-event-dot {
   position: absolute;
-
   right: 10px;
   bottom: 10px;
-
   width: 6px;
   height: 6px;
-
   border-radius: 50%;
-
   background: var(--accent);
-
-  box-shadow:
-    0 0 8px
-      color-mix(in srgb, var(--accent) 70%, transparent);
+  box-shadow: 0 0 8px color-mix(in srgb, var(--accent) 70%, transparent);
 }
-
-
-/* =========================================================
-   35. CALENDAR EVENTS
-   ========================================================= */
 
 .calendar-events {
   display: grid;
   gap: 8px;
-
   margin-top: 24px;
 }
 
 .calendar-event {
   display: grid;
-
   grid-template-columns: 100px 1fr;
-
   gap: 16px;
-
   align-items: center;
-
   padding: 14px 16px;
-
   border-left: 2px solid var(--accent);
-
-  background:
-    rgba(255, 255, 255, 0.025);
-
+  background: rgba(255, 255, 255, 0.025);
   transition:
     background 0.2s ease,
     border-color 0.2s ease;
 }
 
 .calendar-event:hover {
-  background:
-    color-mix(in srgb, var(--accent) 7%, transparent);
-
+  background: color-mix(in srgb, var(--accent) 7%, transparent);
   border-color: var(--accent-2);
 }
 
 .calendar-event-date {
   display: flex;
   flex-direction: column;
-
   gap: 3px;
 }
 
 .calendar-event-date strong {
   font-size: 0.8rem;
   letter-spacing: 0.08em;
-
   text-transform: uppercase;
-
   color: var(--text);
 }
 
 .calendar-event-date small {
   font-size: 0.65rem;
-
   letter-spacing: 0.06em;
-
   color: var(--dim);
 }
 
 .calendar-event-info {
   display: flex;
   flex-direction: column;
-
   gap: 4px;
 }
 
 .calendar-event-info strong {
   font-size: 0.85rem;
   font-weight: 700;
-
   letter-spacing: 0.06em;
-
   color: var(--text);
 }
 
 .calendar-event-info small {
   font-size: 0.6rem;
   font-weight: 700;
-
   letter-spacing: 0.14em;
-
   color: var(--accent);
 }
-
-
-/* =========================================================
-   36. SELECTED CALENDAR EVENT
-   ========================================================= */
 
 .selected-calendar-event {
   display: grid;
   gap: 5px;
-
   margin-top: 14px;
-
   padding: 16px;
-
-  border: 1px solid
-    color-mix(in srgb, var(--accent) 35%, transparent);
-
-  background:
-    color-mix(in srgb, var(--accent) 6%, transparent);
+  border: 1px solid color-mix(in srgb, var(--accent) 35%, transparent);
+  background: color-mix(in srgb, var(--accent) 6%, transparent);
 }
 
 .selected-calendar-event strong {
   font-size: 0.85rem;
-
   letter-spacing: 0.06em;
-
   color: var(--text);
 }
 
 .selected-calendar-event small {
   font-size: 0.68rem;
-
   letter-spacing: 0.08em;
-
   color: var(--text-soft);
 }
 
-
-/* =========================================================
-   37. CALENDAR FOOTER
-   ========================================================= */
-
 .shonen-calendar-footer {
   display: flex;
-
   justify-content: space-between;
   align-items: center;
-
   gap: 12px;
-
   margin-top: 24px;
   padding-top: 18px;
-
-  border-top: 1px solid
-    rgba(255, 255, 255, 0.07);
+  border-top: 1px solid rgba(255, 255, 255, 0.07);
 }
 
 .shonen-calendar-footer .system-button {
   min-width: 130px;
 }
-
-
-/* =========================================================
-   38. TIMEZONE CONTROLS
-   ========================================================= */
 
 [data-calendar-timezone] {
   transition:
@@ -3022,10 +2581,7 @@ body::after {
 
 [data-calendar-timezone].active {
   border-color: var(--accent);
-
-  background:
-    color-mix(in srgb, var(--accent) 12%, transparent);
-
+  background: color-mix(in srgb, var(--accent) 12%, transparent);
   color: var(--text-strong);
 }
 
@@ -3049,8 +2605,7 @@ body::after {
 }
 
 ::-webkit-scrollbar-thumb:hover {
-  background:
-    color-mix(in srgb, var(--accent) 45%, var(--border));
+  background: color-mix(in srgb, var(--accent) 45%, var(--border));
 }
 
 
@@ -3065,12 +2620,8 @@ body::after {
 
   .sidebar {
     transform: translateX(-100%);
-
-    transition:
-      transform 240ms ease;
-
-    box-shadow:
-      15px 0 50px rgba(0, 0, 0, 0.55);
+    transition: transform 240ms ease;
+    box-shadow: 15px 0 50px rgba(0, 0, 0, 0.55);
   }
 
   .sidebar.open {
@@ -3100,7 +2651,6 @@ body::after {
     gap: 20px;
   }
 }
-
 
 @media (max-width: 700px) {
   .shonen-calendar-header {
@@ -3135,7 +2685,6 @@ body::after {
   .calendar-event-dot {
     right: 7px;
     bottom: 7px;
-
     width: 5px;
     height: 5px;
   }
@@ -3155,7 +2704,6 @@ body::after {
     width: 100%;
   }
 }
-
 
 @media (max-width: 650px) {
   .app-shell {
@@ -3209,10 +2757,7 @@ body::after {
   }
 
   .member-card {
-    grid-template-columns:
-      46px
-      minmax(0, 1fr);
-
+    grid-template-columns: 46px minmax(0, 1fr);
     gap: 11px;
   }
 
@@ -3255,10 +2800,7 @@ body::after {
   }
 
   .track {
-    grid-template-columns:
-      38px
-      minmax(0, 1fr)
-      20px;
+    grid-template-columns: 38px minmax(0, 1fr) 20px;
   }
 
   .track img {
@@ -3274,7 +2816,6 @@ body::after {
     padding: 22px 14px;
   }
 }
-
 
 @media (max-width: 450px) {
   .shonen-calendar-weekdays span {
@@ -3307,7 +2848,6 @@ body::after {
   }
 }
 
-
 @media (max-width: 420px) {
   .app-shell {
     padding-inline: 12px;
@@ -3319,16 +2859,11 @@ body::after {
   }
 
   .radio-progress {
-    grid-template-columns:
-      32px
-      minmax(0, 1fr)
-      32px;
+    grid-template-columns: 32px minmax(0, 1fr) 32px;
   }
 
   .radio-volume {
-    grid-template-columns:
-      30px
-      minmax(0, 1fr);
+    grid-template-columns: 30px minmax(0, 1fr);
   }
 
   .radio-controls button {
@@ -3359,17 +2894,17 @@ body::after {
   }
 }
 
+
+/* =========================================================
+   YOUTUBE INTERFACE
+   ========================================================= */
+
 .youtube-interface {
   display: grid;
   grid-template-columns: minmax(0, 1fr);
   gap: 24px;
   padding: 4px 0 0;
 }
-
-
-/* ---------------------------------------------------------
-   YOUTUBE TERMINAL
-   --------------------------------------------------------- */
 
 .youtube-terminal {
   position: relative;
@@ -3382,25 +2917,16 @@ body::after {
       rgba(0, 0, 0, 0.15)
     ),
     rgba(10, 10, 12, 0.75);
-
   overflow: hidden;
 }
-
-
-/*
- * Decorative red system line.
- */
 
 .youtube-terminal::before {
   content: "";
   position: absolute;
-
   top: 0;
   left: 0;
-
   width: 100%;
   height: 2px;
-
   background:
     linear-gradient(
       90deg,
@@ -3410,23 +2936,14 @@ body::after {
       #b11226,
       transparent
     );
-
   opacity: 0.9;
 }
 
-
-/*
- * Subtle scanline effect.
- */
-
 .youtube-terminal::after {
   content: "";
-
   position: absolute;
   inset: 0;
-
   pointer-events: none;
-
   background:
     repeating-linear-gradient(
       0deg,
@@ -3434,76 +2951,45 @@ body::after {
       transparent 3px,
       rgba(255, 255, 255, 0.012) 4px
     );
-
   opacity: 0.5;
 }
-
 
 .youtube-terminal .radio-system-label {
   position: relative;
   z-index: 1;
-
   display: flex;
   align-items: center;
   gap: 9px;
-
   margin-bottom: 14px;
-
   color: #4bdd91;
-
-  font-family:
-    "Courier New",
-    monospace;
-
+  font-family: "Courier New", monospace;
   font-size: 11px;
   font-weight: 800;
   letter-spacing: 0.18em;
 }
 
-
 .youtube-terminal h2 {
   position: relative;
   z-index: 1;
-
   margin: 0 0 10px;
-
   color: #f2f2f2;
-
-  font-family:
-    "Arial Black",
-    "Helvetica Neue",
-    sans-serif;
-
+  font-family: "Arial Black", "Helvetica Neue", sans-serif;
   font-size: clamp(25px, 4vw, 42px);
   font-weight: 900;
-
   letter-spacing: -0.04em;
   line-height: 1;
 }
 
-
 .youtube-terminal p {
   position: relative;
   z-index: 1;
-
   max-width: 720px;
-
   margin: 0;
-
   color: rgba(255, 255, 255, 0.56);
-
-  font-family:
-    "Courier New",
-    monospace;
-
+  font-family: "Courier New", monospace;
   font-size: 13px;
   line-height: 1.7;
 }
-
-
-/* ---------------------------------------------------------
-   YOUTUBE SEARCH
-   --------------------------------------------------------- */
 
 .youtube-search {
   display: flex;
@@ -3511,89 +2997,51 @@ body::after {
   gap: 16px;
 }
 
-
 .youtube-search-row {
   display: grid;
-
-  grid-template-columns:
-    minmax(0, 1fr)
-    auto;
-
+  grid-template-columns: minmax(0, 1fr) auto;
   gap: 10px;
 }
-
 
 #youtubeSearch {
   width: 100%;
   min-width: 0;
-
   box-sizing: border-box;
-
   padding: 15px 17px;
-
-  border: 1px solid
-    rgba(255, 255, 255, 0.13);
-
+  border: 1px solid rgba(255, 255, 255, 0.13);
   border-radius: 0;
-
   outline: none;
-
-  background:
-    rgba(5, 5, 7, 0.9);
-
+  background: rgba(5, 5, 7, 0.9);
   color: #f5f5f5;
-
-  font-family:
-    "Courier New",
-    monospace;
-
+  font-family: "Courier New", monospace;
   font-size: 13px;
   font-weight: 700;
-
   letter-spacing: 0.08em;
-
   transition:
     border-color 160ms ease,
     box-shadow 160ms ease,
     background 160ms ease;
 }
 
-
 #youtubeSearch::placeholder {
   color: rgba(255, 255, 255, 0.28);
 }
 
-
 #youtubeSearch:hover {
-  border-color:
-    rgba(177, 18, 38, 0.55);
+  border-color: rgba(177, 18, 38, 0.55);
 }
-
 
 #youtubeSearch:focus {
   border-color: #b11226;
-
-  background:
-    rgba(177, 18, 38, 0.055);
-
+  background: rgba(177, 18, 38, 0.055);
   box-shadow:
     0 0 0 1px rgba(177, 18, 38, 0.18),
     0 0 24px rgba(177, 18, 38, 0.08);
 }
 
-
-/* ---------------------------------------------------------
-   SEARCH BUTTON
-   --------------------------------------------------------- */
-
 .youtube-search-row .system-button {
   min-width: 130px;
 }
-
-
-/* ---------------------------------------------------------
-   SEARCH PRESETS
-   --------------------------------------------------------- */
 
 .youtube-search-presets {
   display: flex;
@@ -3601,34 +3049,18 @@ body::after {
   gap: 8px;
 }
 
-
 .youtube-preset {
   position: relative;
-
   padding: 9px 13px;
-
-  border: 1px solid
-    rgba(255, 255, 255, 0.12);
-
+  border: 1px solid rgba(255, 255, 255, 0.12);
   border-radius: 0;
-
-  background:
-    rgba(255, 255, 255, 0.025);
-
-  color:
-    rgba(255, 255, 255, 0.62);
-
+  background: rgba(255, 255, 255, 0.025);
+  color: rgba(255, 255, 255, 0.62);
   cursor: pointer;
-
-  font-family:
-    "Courier New",
-    monospace;
-
+  font-family: "Courier New", monospace;
   font-size: 10px;
   font-weight: 800;
-
   letter-spacing: 0.12em;
-
   transition:
     color 150ms ease,
     border-color 150ms ease,
@@ -3636,113 +3068,62 @@ body::after {
     transform 150ms ease;
 }
 
-
 .youtube-preset:hover {
   color: #fff;
-
-  border-color:
-    rgba(177, 18, 38, 0.75);
-
-  background:
-    rgba(177, 18, 38, 0.1);
-
+  border-color: rgba(177, 18, 38, 0.75);
+  background: rgba(177, 18, 38, 0.1);
   transform: translateY(-1px);
 }
-
 
 .youtube-preset:active {
   transform: translateY(0);
 }
-
 
 .youtube-preset:focus-visible {
   outline: 2px solid #ff4655;
   outline-offset: 2px;
 }
 
-
-/* ---------------------------------------------------------
-   OPTIONAL VIDEO TRANSMISSION
-   --------------------------------------------------------- */
-
 .youtube-embed-wrap {
   position: relative;
-
   width: 100%;
-
-  border: 1px solid
-    rgba(255, 255, 255, 0.1);
-
-  background:
-    #050507;
-
+  border: 1px solid rgba(255, 255, 255, 0.1);
+  background: #050507;
   overflow: hidden;
 }
-
-
-/* ---------------------------------------------------------
-   VIDEO HEADER
-   --------------------------------------------------------- */
 
 .youtube-embed-header {
   display: flex;
   align-items: center;
   justify-content: space-between;
-
   min-height: 42px;
-
   padding: 0 15px;
-
-  border-bottom: 1px solid
-    rgba(255, 255, 255, 0.08);
-
-  background:
-    rgba(255, 255, 255, 0.025);
-
-  color:
-    rgba(255, 255, 255, 0.5);
-
-  font-family:
-    "Courier New",
-    monospace;
-
+  border-bottom: 1px solid rgba(255, 255, 255, 0.08);
+  background: rgba(255, 255, 255, 0.025);
+  color: rgba(255, 255, 255, 0.5);
+  font-family: "Courier New", monospace;
   font-size: 10px;
   font-weight: 800;
-
   letter-spacing: 0.15em;
 }
-
 
 .youtube-embed-header span:last-child {
   color: #ff4655;
 }
 
-
-/* ---------------------------------------------------------
-   VIDEO PLACEHOLDER
-   --------------------------------------------------------- */
-
 .youtube-placeholder {
   position: absolute;
-
   z-index: 2;
-
   top: 43px;
   right: 0;
   bottom: 0;
   left: 0;
-
   display: flex;
-
   flex-direction: column;
-
   align-items: center;
   justify-content: center;
-
   gap: 9px;
-
   min-height: 420px;
-
   background:
     radial-gradient(
       circle at center,
@@ -3750,14 +3131,11 @@ body::after {
       transparent 55%
     ),
     #050507;
-
   text-align: center;
-
   transition:
     opacity 200ms ease,
     visibility 200ms ease;
 }
-
 
 .youtube-placeholder.hidden {
   opacity: 0;
@@ -3765,281 +3143,85 @@ body::after {
   pointer-events: none;
 }
 
-
 .youtube-placeholder-icon {
   display: grid;
-
   width: 68px;
   height: 68px;
-
   place-items: center;
-
   margin-bottom: 8px;
-
-  border: 1px solid
-    rgba(255, 70, 85, 0.45);
-
+  border: 1px solid rgba(255, 70, 85, 0.45);
   color: #ff4655;
-
   font-size: 24px;
-
-  background:
-    rgba(177, 18, 38, 0.08);
-
-  box-shadow:
-    0 0 35px
-    rgba(177, 18, 38, 0.12);
+  background: rgba(177, 18, 38, 0.08);
+  box-shadow: 0 0 35px rgba(177, 18, 38, 0.12);
 }
-
 
 .youtube-placeholder strong {
   color: rgba(255, 255, 255, 0.8);
-
-  font-family:
-    "Courier New",
-    monospace;
-
+  font-family: "Courier New", monospace;
   font-size: 12px;
-
   letter-spacing: 0.16em;
 }
-
 
 .youtube-placeholder small {
   color: rgba(255, 255, 255, 0.32);
-
-  font-family:
-    "Courier New",
-    monospace;
-
+  font-family: "Courier New", monospace;
   font-size: 9px;
-
   letter-spacing: 0.1em;
 }
 
-
-/* ---------------------------------------------------------
-   YOUTUBE IFRAME
-   --------------------------------------------------------- */
-
 .youtube-player {
   display: block;
-
   width: 100%;
-
   aspect-ratio: 16 / 9;
-
   min-height: 420px;
-
   border: 0;
-
   background: #000;
 }
 
-
-/* ---------------------------------------------------------
-   FOOTER READOUT
-   --------------------------------------------------------- */
-
 .social-footer-readout {
   display: flex;
-
   flex-wrap: wrap;
-
   align-items: center;
-
   justify-content: center;
-
   gap: 10px;
-
   padding: 22px 10px 35px;
-
-  color:
-    rgba(255, 255, 255, 0.28);
-
-  font-family:
-    "Courier New",
-    monospace;
-
+  color: rgba(255, 255, 255, 0.28);
+  font-family: "Courier New", monospace;
   font-size: 9px;
   font-weight: 800;
-
   letter-spacing: 0.16em;
-
   text-align: center;
 }
-
 
 .social-footer-readout span:last-child {
   color: #4bdd91;
 }
 
-
-/* ---------------------------------------------------------
-   STATUS DOT
-   --------------------------------------------------------- */
-
 .youtube-interface .status-dot,
 .youtube-terminal .status-dot {
   display: inline-block;
-
   width: 7px;
   height: 7px;
-
   flex: 0 0 7px;
-
   border-radius: 50%;
-
   background: #4bdd91;
-
-  box-shadow:
-    0 0 8px
-    rgba(75, 221, 145, 0.8);
-
-  animation:
-    youtubePulse 1.8s ease-in-out infinite;
+  box-shadow: 0 0 8px rgba(75, 221, 145, 0.8);
+  animation: youtubePulse 1.8s ease-in-out infinite;
 }
-
 
 @keyframes youtubePulse {
   0%,
   100% {
     opacity: 1;
-    box-shadow:
-      0 0 7px
-      rgba(75, 221, 145, 0.75);
+    box-shadow: 0 0 7px rgba(75, 221, 145, 0.75);
   }
 
   50% {
     opacity: 0.45;
-    box-shadow:
-      0 0 14px
-      rgba(75, 221, 145, 0.25);
+    box-shadow: 0 0 14px rgba(75, 221, 145, 0.25);
   }
 }
-
-
-/* =========================================================
-   RESPONSIVE
-   ========================================================= */
-
-@media (max-width: 700px) {
-
-  .youtube-terminal {
-    padding: 22px 18px;
-  }
-
-
-  .youtube-terminal h2 {
-    font-size: 27px;
-  }
-
-
-  .youtube-search-row {
-    grid-template-columns: 1fr;
-  }
-
-
-  .youtube-search-row .system-button {
-    width: 100%;
-  }
-
-
-  .youtube-preset {
-    flex: 1 1 auto;
-
-    text-align: center;
-  }
-
-
-  .youtube-player {
-    min-height: 240px;
-  }
-
-
-  .youtube-placeholder {
-    min-height: 240px;
-  }
-
-
-  .youtube-placeholder-icon {
-    width: 52px;
-    height: 52px;
-
-    font-size: 19px;
-  }
-
-
-  .youtube-footer-readout {
-    font-size: 8px;
-  }
-}
-
-
-@media (max-width: 450px) {
-
-  .youtube-terminal {
-    padding: 20px 15px;
-  }
-
-
-  .youtube-terminal h2 {
-    font-size: 23px;
-  }
-
-
-  .youtube-terminal p {
-    font-size: 11px;
-  }
-
-
-  .youtube-search-presets {
-    display: grid;
-
-    grid-template-columns: 1fr 1fr;
-  }
-
-
-  .youtube-preset {
-    width: 100%;
-  }
-
-
-  .youtube-embed-header {
-    padding: 0 10px;
-
-    font-size: 8px;
-  }
-
-
-  .youtube-player {
-    min-height: 200px;
-  }
-
-
-  .youtube-placeholder {
-    min-height: 200px;
-  }
-
-
-  .youtube-placeholder small {
-    max-width: 240px;
-
-    line-height: 1.5;
-  }
-
-
-  .social-footer-readout {
-    gap: 6px;
-
-    font-size: 7px;
-  }
-}
-
-
-/* =========================================================
-   RED SELECTION / SYSTEM DETAILS
-   ========================================================= */
 
 .youtube-interface ::selection,
 .youtube-embed-wrap ::selection {
@@ -4047,49 +3229,30 @@ body::after {
   color: #fff;
 }
 
-/* =========================================================
-   YOUTUBE TERMINAL STATUS
-   ========================================================= */
-
 .youtube-terminal-status {
   position: relative;
   z-index: 2;
-
   display: flex;
   align-items: center;
   gap: 9px;
-
   margin-top: 20px;
   padding-top: 13px;
-
-  border-top: 1px solid
-    rgba(255, 255, 255, 0.07);
-
-  color:
-    rgba(255, 255, 255, 0.38);
-
-  font-family:
-    "Courier New",
-    monospace;
-
+  border-top: 1px solid rgba(255, 255, 255, 0.07);
+  color: rgba(255, 255, 255, 0.38);
+  font-family: "Courier New", monospace;
   font-size: 10px;
   font-weight: 700;
-
   letter-spacing: 0.1em;
-
   text-transform: uppercase;
 }
-
 
 .youtube-terminal-status[data-status="success"] {
   color: #4bdd91;
 }
 
-
 .youtube-terminal-status[data-status="search"] {
   color: #ff4655;
 }
-
 
 .youtube-terminal-status .terminal-prompt {
   color: #b11226;
@@ -4132,6 +3295,7 @@ body::after {
 .welcome-exit:active {
   transform: translateY(0);
 }
+
 
 /* =========================================================
    SHONEN NEXUS // GAME DIVISION
@@ -4372,7 +3536,9 @@ body::after {
 .game-option-arrow {
   color: var(--faint);
   font-size: 14px;
-  transition: color var(--transition), transform var(--transition);
+  transition:
+    color var(--transition),
+    transform var(--transition);
 }
 
 .game-option:hover:not(:disabled) .game-option-arrow {
@@ -4384,7 +3550,8 @@ body::after {
   border-color: color-mix(in srgb, var(--accent-2) 70%, transparent);
   background: color-mix(in srgb, var(--accent-2) 8%, var(--panel));
   color: var(--accent-2-soft);
-  box-shadow: 0 0 18px color-mix(in srgb, var(--accent-2) 7%, transparent);
+  box-shadow:
+    0 0 18px color-mix(in srgb, var(--accent-2) 7%, transparent);
 }
 
 .game-option.correct .game-option-arrow {
@@ -4482,10 +3649,11 @@ body::after {
 
 
 /* =========================================================
-   GAME // ANILIST FEED
+   GAME // ANILIST + CHESS
    ========================================================= */
 
-.game-anime-card {
+.game-anime-card,
+.game-match-card {
   text-decoration: none;
 }
 
@@ -4525,15 +3693,6 @@ body::after {
 
 .game-anime-card:hover .game-anime-stats {
   color: var(--accent-soft);
-}
-
-
-/* =========================================================
-   GAME // CHESS ACTIVITY
-   ========================================================= */
-
-.game-match-card {
-  text-decoration: none;
 }
 
 .game-match-card .module-number {
@@ -4595,7 +3754,6 @@ body::after {
   }
 }
 
-
 @media (max-width: 480px) {
   .game-round-bar {
     flex-direction: column;
@@ -4636,40 +3794,93 @@ body::after {
   }
 }
 
+
 /* =========================================================
    SHONEN NEXUS // AURA SYSTEM
    ========================================================= */
 
 .aura-grid {
   display: grid;
-  grid-template-columns: repeat(4, minmax(0, 1fr));
+  grid-template-columns: repeat(3, minmax(0, 1fr));
   gap: 14px;
   padding: 18px;
 }
 
 .aura-card {
   position: relative;
-  min-height: 170px;
+  min-height: 150px;
   overflow: hidden;
-  border: 1px solid rgba(255,255,255,.12);
+  border: 1px solid rgba(255, 255, 255, 0.12);
+  color: #fff;
   background: #101014;
   cursor: pointer;
+  text-align: left;
   transition:
-    transform .25s ease,
-    border-color .25s ease,
-    box-shadow .25s ease;
+    transform 0.25s ease,
+    border-color 0.25s ease,
+    box-shadow 0.25s ease,
+    filter 0.25s ease;
 }
 
 .aura-card:hover {
   transform: translateY(-5px);
+  border-color: rgba(255, 255, 255, 0.45);
+  filter: brightness(1.08);
 }
 
 .aura-card.selected {
   transform: translateY(-7px);
-  border-color: rgba(255,255,255,.65);
+  border-color: #fff;
   box-shadow:
-    0 0 0 1px rgba(255,255,255,.08),
-    0 20px 45px rgba(0,0,0,.45);
+    0 0 0 1px rgba(255, 255, 255, 0.15),
+    0 20px 45px rgba(0, 0, 0, 0.45);
+}
+
+.aura-card.selected::after {
+  content: "ACTIVE";
+  position: absolute;
+  top: 14px;
+  right: 14px;
+  z-index: 5;
+  font-family: var(--mono);
+  font-size: 0.6rem;
+  letter-spacing: 0.12em;
+  opacity: 0.8;
+}
+
+.aura-number {
+  position: absolute;
+  top: 14px;
+  left: 16px;
+  z-index: 3;
+  font-family: var(--mono);
+  font-size: 0.7rem;
+  opacity: 0.5;
+}
+
+.aura-name {
+  position: absolute;
+  left: 16px;
+  top: 16px;
+  z-index: 3;
+  max-width: 80%;
+  color: rgba(255, 255, 255, 0.95);
+  font-family: var(--font-display);
+  font-size: 12px;
+  font-weight: 900;
+  font-style: italic;
+  letter-spacing: 0.1em;
+}
+
+.aura-description {
+  position: absolute;
+  left: 16px;
+  bottom: 16px;
+  z-index: 3;
+  font-family: var(--mono);
+  font-size: 0.55rem;
+  letter-spacing: 0.12em;
+  opacity: 0.45;
 }
 
 .aura-symbol {
@@ -4677,11 +3888,11 @@ body::after {
   left: 16px;
   bottom: 14px;
   z-index: 3;
-  font-family: var(--font-display);
+  font-family: var(--mono);
   font-size: 1.5rem;
   font-weight: 700;
-  color: rgba(255,255,255,.85);
-  letter-spacing: .08em;
+  color: rgba(255, 255, 255, 0.75);
+  letter-spacing: 0.08em;
 }
 
 .aura-glow {
@@ -4692,57 +3903,91 @@ body::after {
   top: -70px;
   border-radius: 50%;
   filter: blur(35px);
-  opacity: .65;
-  transition: transform .35s ease;
+  opacity: 0.65;
+  transition:
+    transform 0.35s ease,
+    opacity 0.35s ease;
 }
 
 .aura-card:hover .aura-glow {
-  transform: scale(1.25);
+  transform: scale(1.3);
+  opacity: 0.9;
+}
+
+.aura-intro {
+  display: flex;
+  align-items: center;
+  gap: 16px;
+  margin: 20px 0 5px;
+}
+
+.aura-intro strong {
+  display: block;
+  font-family: var(--font-display);
+  font-size: 1.2rem;
+  letter-spacing: 0.08em;
+}
+
+.aura-intro p {
+  margin: 5px 0 0;
+  opacity: 0.45;
+  font-size: 0.85rem;
+}
+
+.aura-intro-orb {
+  width: 46px;
+  height: 46px;
+  flex: 0 0 46px;
+  border-radius: 50%;
+  background:
+    radial-gradient(
+      circle at 35% 30%,
+      #fff,
+      var(--accent-2) 25%,
+      var(--accent) 60%,
+      transparent 72%
+    );
+  box-shadow: 0 0 25px rgba(255, 255, 255, 0.15);
+}
+
+.aura-status {
+  margin-top: 8px;
+  padding-top: 16px;
+  border-top: 1px solid var(--border);
+  font-family: var(--mono);
+  font-size: 0.65rem;
+  letter-spacing: 0.1em;
+  color: var(--accent-2);
+  opacity: 0.75;
 }
 
 
-/* WIND */
+/* =========================================================
+   AURA THEMES
+   ========================================================= */
 
-.aura-wind {
+.aura-wind,
+.aura-windbreaker {
   background:
     linear-gradient(
       135deg,
-      #07131f,
-      #123b57 48%,
-      #091017
+      #06111a,
+      #15516e 48%,
+      #071017
     );
 }
 
-.aura-wind .aura-glow {
-  background: #4ca6d8;
+.aura-wind .aura-glow,
+.aura-windbreaker .aura-glow {
+  background: #42b9ff;
 }
-
-
-/* BLEACH */
-
-.aura-bleach {
-  background:
-    linear-gradient(
-      135deg,
-      #09090d,
-      #25243c 48%,
-      #09090d
-    );
-}
-
-.aura-bleach .aura-glow {
-  background: #8177ff;
-}
-
-
-/* JJK */
 
 .aura-jjk {
   background:
     linear-gradient(
       135deg,
       #10081c,
-      #35185b 48%,
+      #3b1765 48%,
       #09070f
     );
 }
@@ -4751,8 +3996,19 @@ body::after {
   background: #a855f7;
 }
 
+.aura-bleach {
+  background:
+    linear-gradient(
+      135deg,
+      #090a0e,
+      #343844 48%,
+      #09090d
+    );
+}
 
-/* ONE PIECE */
+.aura-bleach .aura-glow {
+  background: #aeb9ff;
+}
 
 .aura-onepiece {
   background:
@@ -4768,9 +4024,6 @@ body::after {
   background: #f0b429;
 }
 
-
-/* NARUTO */
-
 .aura-naruto {
   background:
     linear-gradient(
@@ -4784,9 +4037,6 @@ body::after {
 .aura-naruto .aura-glow {
   background: #ff7a18;
 }
-
-
-/* SPY */
 
 .aura-spy {
   background:
@@ -4802,8 +4052,35 @@ body::after {
   background: #ff6f91;
 }
 
+.aura-demon,
+.aura-demonslayer {
+  background:
+    linear-gradient(
+      135deg,
+      #06130f,
+      #145a43 48%,
+      #071016
+    );
+}
 
-/* FIRE */
+.aura-demon .aura-glow,
+.aura-demonslayer .aura-glow {
+  background: #35c98a;
+}
+
+.aura-aot {
+  background:
+    linear-gradient(
+      135deg,
+      #101109,
+      #57552e 48%,
+      #16160f
+    );
+}
+
+.aura-aot .aura-glow {
+  background: #b7a84b;
+}
 
 .aura-fire {
   background:
@@ -4819,126 +4096,18 @@ body::after {
   background: #ff4d1c;
 }
 
-
-/* SAMURAI */
-
 .aura-samurai {
   background:
     linear-gradient(
       135deg,
-      #0b0c0e,
-      #35373b 48%,
-      #171313
+      #0c0c0d,
+      #343438 48%,
+      #281817
     );
 }
 
 .aura-samurai .aura-glow {
-  background: #d7d7d7;
-}
-
-
-/* =========================================================
-   BIRTHDAY
-   ========================================================= */
-
-.birthday-system {
-  padding: 24px;
-}
-
-.birthday-intro {
-  display: flex;
-  align-items: center;
-  gap: 18px;
-  margin-bottom: 28px;
-}
-
-.birthday-intro strong {
-  display: block;
-  font-family: var(--font-display);
-  font-size: 1.2rem;
-  letter-spacing: .08em;
-}
-
-.birthday-intro p {
-  margin: 5px 0 0;
-  opacity: .55;
-}
-
-.birthday-orb {
-  width: 52px;
-  height: 52px;
-  flex: 0 0 52px;
-  border-radius: 50%;
-  background:
-    radial-gradient(
-      circle at 35% 30%,
-      #fff,
-      var(--accent-2) 25%,
-      var(--accent) 65%,
-      transparent 70%
-    );
-  box-shadow:
-    0 0 25px rgba(255,255,255,.15);
-}
-
-.birthday-form {
-  display: flex;
-  align-items: center;
-  gap: 20px;
-  flex-wrap: wrap;
-}
-
-.birthday-fields {
-  display: flex;
-  align-items: center;
-  gap: 8px;
-}
-
-.birthday-fields span {
-  opacity: .35;
-  font-weight: 700;
-}
-
-.birthday-fields input {
-  width: 82px;
-  height: 46px;
-  border: 1px solid var(--border);
-  background: rgba(0,0,0,.28);
-  color: var(--text);
-  text-align: center;
-  font-family: var(--font-display);
-  font-size: 1rem;
-  outline: none;
-}
-
-.birthday-fields input:last-child {
-  width: 100px;
-}
-
-.birthday-fields input:focus {
-  border-color: var(--accent-2);
-  box-shadow:
-    0 0 0 1px var(--accent-2),
-    0 0 20px rgba(255,255,255,.05);
-}
-
-.birthday-status {
-  margin-top: 20px;
-  min-height: 20px;
-  font-family: var(--font-mono);
-  font-size: .75rem;
-  letter-spacing: .08em;
-  opacity: .55;
-}
-
-.birthday-status.success {
-  color: var(--success);
-  opacity: 1;
-}
-
-.birthday-status.error {
-  color: var(--danger);
-  opacity: 1;
+  background: #d6b28c;
 }
 
 
@@ -4946,16 +4115,13 @@ body::after {
    AURA RESPONSIVE
    ========================================================= */
 
-@media (max-width: 900px) {
-
+@media (max-width: 1000px) {
   .aura-grid {
     grid-template-columns: repeat(2, minmax(0, 1fr));
   }
-
 }
 
 @media (max-width: 560px) {
-
   .aura-grid {
     grid-template-columns: 1fr;
   }
@@ -4963,22 +4129,15 @@ body::after {
   .aura-card {
     min-height: 130px;
   }
+}
 
-  .birthday-system {
-    padding: 18px;
-  }
 
-  .birthday-form {
-    align-items: stretch;
-    flex-direction: column;
-  }
+/* =========================================================
+   AURA // SELECTION
+   ========================================================= */
 
-  .birthday-fields {
-    justify-content: center;
-  }
-
-  .birthday-submit {
-    width: 100%;
-  }
-
+.youtube-interface ::selection,
+.youtube-embed-wrap ::selection {
+  background: #b11226;
+  color: #fff;
 }

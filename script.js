@@ -2722,205 +2722,257 @@ function renderAura() {
     <section class="system-panel aura-panel">
 
       <div class="panel-label">
-
-        <span>
-          VISUAL PROTOCOL
-        </span>
-
-        <span>
-          AURA-08
-        </span>
-
+        <span>VISUAL PROTOCOL</span>
+        <span>AURA-08</span>
       </div>
 
+      <div class="aura-grid" data-aura-grid>
 
-      <div
-        class="aura-grid"
-        data-aura-grid
-      >
-
-        <button
-          type="button"
-          class="aura-card aura-wind"
-          data-aura="wind"
-        >
+        <button type="button" class="aura-card aura-wind" data-aura="wind-breaker">
+          <span class="aura-name">WIND BREAKER</span>
           <span class="aura-symbol">01</span>
           <span class="aura-glow"></span>
         </button>
 
-
-        <button
-          type="button"
-          class="aura-card aura-bleach"
-          data-aura="bleach"
-        >
+        <button type="button" class="aura-card aura-jjk" data-aura="jjk">
+          <span class="aura-name">JUJUTSU KAISEN</span>
           <span class="aura-symbol">02</span>
           <span class="aura-glow"></span>
         </button>
 
-
-        <button
-          type="button"
-          class="aura-card aura-jjk"
-          data-aura="jjk"
-        >
+        <button type="button" class="aura-card aura-bleach" data-aura="bleach">
+          <span class="aura-name">BLEACH</span>
           <span class="aura-symbol">03</span>
           <span class="aura-glow"></span>
         </button>
 
-
-        <button
-          type="button"
-          class="aura-card aura-onepiece"
-          data-aura="onepiece"
-        >
+        <button type="button" class="aura-card aura-onepiece" data-aura="one-piece">
+          <span class="aura-name">ONE PIECE</span>
           <span class="aura-symbol">04</span>
           <span class="aura-glow"></span>
         </button>
 
-
-        <button
-          type="button"
-          class="aura-card aura-naruto"
-          data-aura="naruto"
-        >
+        <button type="button" class="aura-card aura-naruto" data-aura="naruto">
+          <span class="aura-name">NARUTO</span>
           <span class="aura-symbol">05</span>
           <span class="aura-glow"></span>
         </button>
 
-
-        <button
-          type="button"
-          class="aura-card aura-spy"
-          data-aura="spy"
-        >
+        <button type="button" class="aura-card aura-spy" data-aura="spy-x-family">
+          <span class="aura-name">SPY × FAMILY</span>
           <span class="aura-symbol">06</span>
           <span class="aura-glow"></span>
         </button>
 
-
-        <button
-          type="button"
-          class="aura-card aura-fire"
-          data-aura="fire"
-        >
+        <button type="button" class="aura-card aura-demon" data-aura="demon-slayer">
+          <span class="aura-name">DEMON SLAYER</span>
           <span class="aura-symbol">07</span>
           <span class="aura-glow"></span>
         </button>
 
-
-        <button
-          type="button"
-          class="aura-card aura-samurai"
-          data-aura="samurai"
-        >
+        <button type="button" class="aura-card aura-aot" data-aura="attack-on-titan">
+          <span class="aura-name">ATTACK ON TITAN</span>
           <span class="aura-symbol">08</span>
           <span class="aura-glow"></span>
         </button>
 
-      </div>
-
-    </section>
-
-
-    <section class="system-panel birthday-panel">
-
-      <div class="panel-label">
-
-        <span>
-          NEXUS BIRTHDAY REGISTRY
-        </span>
-
-        <span>
-          FIREBASE
-        </span>
-
-      </div>
-
-
-      <div class="birthday-system">
-
-        <div class="birthday-intro">
-
-          <div class="birthday-orb"></div>
-
-          <div>
-            <strong>
-              PERSONAL DATE REGISTRATION
-            </strong>
-
-            <p>
-              Register your birthday with the Nexus.
-            </p>
-          </div>
-
-        </div>
-
-
-        <form
-          class="birthday-form"
-          data-birthday-form
-        >
-
-          <div class="birthday-fields">
-
-            <input
-              type="number"
-              min="1"
-              max="12"
-              placeholder="MM"
-              inputmode="numeric"
-              data-birthday-month
-              required
-            >
-
-            <span>/</span>
-
-            <input
-              type="number"
-              min="1"
-              max="31"
-              placeholder="DD"
-              inputmode="numeric"
-              data-birthday-day
-              required
-            >
-
-            <span>/</span>
-
-            <input
-              type="number"
-              min="1900"
-              max="2100"
-              placeholder="YYYY"
-              inputmode="numeric"
-              data-birthday-year
-              required
-            >
-
-          </div>
-
-
-          <button
-            type="submit"
-            class="system-button birthday-submit"
-          >
-            REGISTER BIRTHDAY
-          </button>
-
-        </form>
-
-
-        <div
-          class="birthday-status"
-          data-birthday-status
-          aria-live="polite"
-        >
-          AWAITING REGISTRATION
-        </div>
+        <button type="button" class="aura-card aura-fire" data-aura="fire-force">
+          <span class="aura-name">FIRE FORCE</span>
+          <span class="aura-symbol">09</span>
+          <span class="aura-glow"></span>
+        </button>
 
       </div>
 
     </section>
   `;
+}
+
+/* =========================================================
+   SHONEN NEXUS // AURA ENGINE
+   ========================================================= */
+
+const AURA_STORAGE_KEY = "shonen-nexus-aura";
+
+const AURA_THEMES = {
+  "wind-breaker": "WIND BREAKER",
+  "jjk": "JUJUTSU KAISEN",
+  "bleach": "BLEACH",
+  "one-piece": "ONE PIECE",
+  "naruto": "NARUTO",
+  "spy-x-family": "SPY × FAMILY",
+  "demon-slayer": "DEMON SLAYER",
+  "attack-on-titan": "ATTACK ON TITAN",
+  "fire-force": "FIRE FORCE"
+};
+
+
+/* ---------------------------------------------------------
+   APPLY AURA
+   --------------------------------------------------------- */
+
+function applyAura(theme) {
+  if (!AURA_THEMES[theme]) {
+    theme = "wind-breaker";
+  }
+
+  document.documentElement.dataset.theme =
+    theme;
+
+  document.body.dataset.auraTheme =
+    theme;
+
+  localStorage.setItem(
+    AURA_STORAGE_KEY,
+    theme
+  );
+
+  updateAuraButtons(theme);
+  updateAuraStatus(theme);
+}
+
+
+/* ---------------------------------------------------------
+   UPDATE AURA BUTTONS
+   --------------------------------------------------------- */
+
+function updateAuraButtons(theme) {
+  $$("[data-aura]").forEach(button => {
+    const selected =
+      button.dataset.aura === theme;
+
+    button.classList.toggle(
+      "selected",
+      selected
+    );
+
+    button.setAttribute(
+      "aria-pressed",
+      selected
+        ? "true"
+        : "false"
+    );
+  });
+}
+
+
+/* ---------------------------------------------------------
+   UPDATE AURA STATUS
+   --------------------------------------------------------- */
+
+function updateAuraStatus(theme) {
+  const status =
+    $("[data-aura-status]");
+
+  if (!status) {
+    return;
+  }
+
+  status.textContent =
+    `AURA STATUS // ${AURA_THEMES[theme]}`;
+}
+
+
+/* ---------------------------------------------------------
+   RESTORE SAVED AURA
+   --------------------------------------------------------- */
+
+function loadSavedAura() {
+  const saved =
+    localStorage.getItem(
+      AURA_STORAGE_KEY
+    );
+
+  applyAura(
+    saved || "wind-breaker"
+  );
+}
+
+
+/* ---------------------------------------------------------
+   AURA EVENT DELEGATION
+   --------------------------------------------------------- */
+
+document.addEventListener(
+  "click",
+  event => {
+    const button =
+      event.target.closest(
+        "[data-aura]"
+      );
+
+    if (!button) {
+      return;
+    }
+
+    const theme =
+      button.dataset.aura;
+
+    applyAura(theme);
+  }
+);
+
+
+/* ---------------------------------------------------------
+   INITIALIZE AURA
+   --------------------------------------------------------- */
+
+loadSavedAura();
+
+
+/* =========================================================
+   STARTUP
+   ========================================================= */
+
+function init() {
+  initNavigation();
+
+  window.addEventListener(
+    "hashchange",
+    render
+  );
+
+  render();
+}
+
+
+/* =========================================================
+   BOOT
+   ========================================================= */
+
+function bootShonenNexus() {
+  console.log(
+    "%c SHONEN NEXUS ",
+    "color:#b11226;font-weight:900;font-size:14px;"
+  );
+
+  console.log(
+    "%c NEXUS OS // SYSTEM ONLINE ",
+    "color:#4bdd91;font-weight:800;"
+  );
+
+  console.log(
+    "Club:",
+    SHONEN_NEXUS.clubUrl
+  );
+
+  console.log(
+    "Modules:",
+    SHONEN_NEXUS.sections.join(" / ")
+  );
+
+  init();
+}
+
+
+if (
+  document.readyState === "loading"
+) {
+  document.addEventListener(
+    "DOMContentLoaded",
+    bootShonenNexus,
+    { once: true }
+  );
+} else {
+  bootShonenNexus();
 }
